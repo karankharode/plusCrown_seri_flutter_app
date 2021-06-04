@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 
 class UpdateCustomerResponse {
   final bool status;
+  // ignore: non_constant_identifier_names
   final String Error;
 
+  // ignore: non_constant_identifier_names
   const UpdateCustomerResponse({this.status, this.Error});
 
   factory UpdateCustomerResponse.getUpdateCustomerResponseData(

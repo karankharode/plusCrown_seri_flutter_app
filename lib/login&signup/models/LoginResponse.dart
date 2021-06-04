@@ -10,7 +10,9 @@ class LoginResponse {
   final String refresh;
   final String access;
   final String loggedIn;
+  // ignore: non_constant_identifier_names
   final String Firstname;
+  // ignore: non_constant_identifier_names
   final String Lastname;
 
   LoginResponse(
@@ -23,7 +25,9 @@ class LoginResponse {
         this.refresh,
         this.access,
         this.loggedIn,
+        // ignore: non_constant_identifier_names
         this.Firstname,
+        // ignore: non_constant_identifier_names
         this.Lastname});
 
   factory LoginResponse.getLoginResponseFromHttpResponse(

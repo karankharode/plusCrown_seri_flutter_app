@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore: camel_case_types
 class S_21 extends StatelessWidget {
   const S_21({Key key}) : super(key: key);
 

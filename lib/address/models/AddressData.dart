@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-
+// ignore_for_file: non_constant_identifier_names
 class AddressData {
   final int id;
   final String name;

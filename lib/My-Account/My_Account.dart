@@ -1,23 +1,21 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/services/routes/bottomRouter.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/contact-us/screens/aboutUsPage.dart';
 import 'package:seri_flutter_app/faq/screens/faq_screen.dart';
 import 'package:seri_flutter_app/homescreen/others/update_screen.dart';
 import 'package:seri_flutter_app/login&signup/controller/login_controller.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginData.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
+import 'package:seri_flutter_app/my-orders/screens/myOrdersPage.dart';
 import 'package:seri_flutter_app/policy/T&C.dart';
 import 'package:seri_flutter_app/policy/orderCancellation.dart';
 import 'package:seri_flutter_app/return&exchange/screens/return_and_exchange_policy.dart';
-import 'package:sizer/sizer.dart';
-
 import '../address/screens/address-book-page.dart';
-import '../cart/carts.dart';
 
 class MyAccount extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -58,88 +56,14 @@ class _MyAccountState extends State<MyAccount> {
     super.initState();
   }
 
+  navigator(destinationRoute) {
+    Navigator.push(context, bottomRouter(destinationRoute));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 54, 111),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/icons/leftarrowwhite.png',
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
-            ),
-          ),
-          title: Text(
-            "My Account",
-            style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) => EmptyCartPage(
-                                            loginResponse,
-                                            cartData,
-                                          )))
-                                  : Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) => Cart(
-                                            loginResponse,
-                                            cartData,
-                                          )));
-                            },
-                            child: Badge(
-                                position: BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: MediaQuery.of(context).size.width / 35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width: MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        appBar: buildTextAppBar(context, "My Account", loginResponse, true, false),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -236,265 +160,27 @@ class _MyAccountState extends State<MyAccount> {
               ),
               Column(
                 children: [
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Cart(loginResponse, cartData)));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   Orders",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddressBookPage(loginResponse, cartData)));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   Address Book",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AboutUsPage(loginResponse, cartData)));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   About Us",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Terms(
-                                      loginResponse,
-                                      cartData,
-                                    )));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   Terms and Conditions",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ReturnAndExchangePolicy(
-                                      loginResponse: loginResponse,
-                                      cartData: cartData,
-                                    )));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   Return and Exchange Policy",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrderCancellation(
-                                      loginResponse: loginResponse,
-                                      cartData: cartData,
-                                    )));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   Order Cancellation Policy",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
-                  Divider(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    height: 15,
-                    thickness: 0.05,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FAQSection(loginResponse, cartData)));
-                      },
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text("   FAQ's",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                fontSize: MediaQuery.of(context).size.width / 18)),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              size: MediaQuery.of(context).size.width / 22,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            )
-                          ],
-                        ),
-                      ]),
-                    ),
-                  ),
+                  buildMyAccountTile(context, "My Orders", MyOrdersPage(loginResponse, cartData)),
+                  buildMyAccountTile(
+                      context, "Address Book", AddressBookPage(loginResponse, cartData)),
+                  buildMyAccountTile(context, "About Us", AboutUsPage(loginResponse, cartData)),
+                  buildMyAccountTile(
+                      context, "Terms and Conditions", Terms(loginResponse, cartData)),
+                  buildMyAccountTile(
+                      context,
+                      "Return and Exchange Policy",
+                      ReturnAndExchangePolicy(
+                        loginResponse: loginResponse,
+                        cartData: cartData,
+                      )),
+                  buildMyAccountTile(
+                      context,
+                      "Order Cancellation Policy",
+                      OrderCancellation(
+                        loginResponse: loginResponse,
+                        cartData: cartData,
+                      )),
+                  buildMyAccountTile(context, "FAQ's", FAQSection(loginResponse, cartData)),
                   Divider(
                     color: Color.fromARGB(255, 71, 54, 111),
                     height: 15,
@@ -505,5 +191,45 @@ class _MyAccountState extends State<MyAccount> {
             ],
           ),
         ));
+  }
+
+  Column buildMyAccountTile(BuildContext context, title, destination) {
+    return Column(
+      children: [
+        Divider(
+          color: Color.fromARGB(255, 71, 54, 111),
+          height: 15,
+          thickness: 0.05,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0, left: 16),
+          child: GestureDetector(
+            onTap: () {
+              navigator(destination);
+            },
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text("   $title",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 71, 54, 111),
+                      fontFamily: 'GothamMedium',
+                      fontWeight: FontWeight.w600,
+                      fontSize: MediaQuery.of(context).size.width / 18)),
+              Row(
+                children: [
+                  Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: Color.fromARGB(255, 71, 54, 111),
+                    size: MediaQuery.of(context).size.width / 22,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  )
+                ],
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
   }
 }

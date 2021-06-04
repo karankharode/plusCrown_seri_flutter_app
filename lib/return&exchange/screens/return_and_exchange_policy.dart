@@ -1,12 +1,10 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
 
 class ReturnAndExchangePolicy extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -48,93 +46,7 @@ class _ReturnAndExchangePolicyState extends State<ReturnAndExchangePolicy> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 54, 111),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/icons/leftarrowwhite.png',
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
-            ),
-          ),
-          title: Text(
-            "Return & Exchange Policy",
-            style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              EmptyCartPage(
-                                                loginResponse,
-                                                cartData,
-                                              )))
-                                  : Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Cart(
-                                                loginResponse,
-                                                cartData,
-                                              )));
-                            },
-                            child: Badge(
-                                position:
-                                    BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        appBar: buildTextAppBar(context, "Return & Exchange Policy", loginResponse, true, false),
         backgroundColor: Color.fromARGB(255, 249, 249, 249),
         body: SingleChildScrollView(
           child: Container(
@@ -265,19 +177,20 @@ class _ReturnAndExchangePolicyState extends State<ReturnAndExchangePolicy> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 10.0, 15.0, 10.0),
-                        alignment: Alignment.bottomRight,
-                        child: Image.asset(
-                          'assets/images/bottom_logo.jpg',
-                          width: (queryData.size.width / 2.5),
-                        )),
-                  ],
-                ),
+                buildBottomAlignedLogo(context)
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.end,
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     Container(
+                //         padding: EdgeInsets.fromLTRB(0.0, 10.0, 15.0, 10.0),
+                //         alignment: Alignment.bottomRight,
+                //         child: Image.asset(
+                //           'assets/images/bottom_logo.jpg',
+                //           width: (queryData.size.width / 2.5),
+                //         )),
+                //   ],
+                // ),
               ],
             ),
           ),

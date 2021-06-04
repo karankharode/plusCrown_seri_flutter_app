@@ -11,6 +11,7 @@ import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore_for_file: camel_case_types
 class Otp_page extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;

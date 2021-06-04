@@ -1,12 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intent/action.dart' as android_action;
 import 'package:intent/intent.dart' as android_intent;
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
@@ -73,90 +70,7 @@ class _ContactUsState extends State<ContactUs> {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
-      appBar: buildTextAppBar(context, "Contact Us", loginResponse, true, true),
-
-      // AppBar(
-      //   backgroundColor: Color.fromARGB(255, 71, 54, 111),
-      //   leading: GestureDetector(
-      //     onTap: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(12.0),
-      //       child: Image.asset(
-      //         'assets/icons/leftarrowwhite.png',
-      //         width: MediaQuery.of(context).size.width * 0.07,
-      //       ),
-      //     ),
-      //   ),
-      //   title: Text(
-      //     "Contact Us",
-      //     style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-      //   ),
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.symmetric(vertical: 12),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //         children: [
-      //           GestureDetector(
-      //             onTap: () {},
-      //             child: Image.asset(
-      //               'assets/icons/search3.png',
-      //               width: MediaQuery.of(context).size.width * 0.07,
-      //             ),
-      //           ),
-      //           SizedBox(
-      //             width: 10,
-      //           ),
-      //           FutureBuilder(
-      //               future: futureForCart,
-      //               builder: (context, snapshot) {
-      //                 if (snapshot.hasData) {
-      //                   CartData cartData = snapshot.data;
-      //                   return GestureDetector(
-      //                     onTap: () {
-      //                       cartData.cartProducts.length == 0
-      //                           ? Navigator.of(context).push(MaterialPageRoute(
-      //                               builder: (BuildContext context) =>
-      //                                   EmptyCartPage(
-      //                                     loginResponse,
-      //                                     cartData,
-      //                                   )))
-      //                           : Navigator.of(context).push(MaterialPageRoute(
-      //                               builder: (BuildContext context) => Cart(
-      //                                     loginResponse,
-      //                                     cartData,
-      //                                   )));
-      //                     },
-      //                     child: Badge(
-      //                         position: BadgePosition.topEnd(top: -8, end: -10),
-      //                         badgeColor: Colors.white,
-      //                         badgeContent: Text(
-      //                           cartData.cartProducts.length.toString(),
-      //                           style: TextStyle(
-      //                               color: Colors.red,
-      //                               fontSize:
-      //                                   MediaQuery.of(context).size.width / 35),
-      //                         ),
-      //                         child: Image.asset(
-      //                           'assets/icons/cart1.png',
-      //                           width: MediaQuery.of(context).size.width * 0.07,
-      //                         )),
-      //                   );
-      //                 } else {
-      //                   return Container();
-      //                 }
-      //               }),
-      //           SizedBox(
-      //             width: 15,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ],
-      // ),
-
+      appBar: buildTextAppBar(context, "Contact Us", loginResponse, true, false),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
@@ -116,13 +117,21 @@ class _ProductListState extends State<ProductList> {
               child: Container(
                 height: size.height * 0.18,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: kPrimaryColor.withOpacity(0.5),
-                  ),
-                ),
+                    // border: Border.all(
+                    //   color: kPrimaryColor.withOpacity(0.5),
+                    // ),
+                    ),
                 // child: widget.myProduct.img != null? Image.asset(widget.myProduct.img, fit: BoxFit.fill,): Container()
                 child: CachedNetworkImage(
                   imageUrl: myProduct.img,
+                  placeholder: (BuildContext context, s) {
+                    return Lottie.asset(
+                      'assets/animations/imageLoader.json',
+                      // width: 180,
+                      height: 90,
+                      fit: BoxFit.scaleDown,
+                    );
+                  },
                   errorWidget: (context, url, error) => Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(Icons.error),

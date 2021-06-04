@@ -6,7 +6,7 @@ import 'package:seri_flutter_app/listing-pages/screens/combosCard.dart';
 Container buildHorizontalProductList(
     Size size, List<ProductData> proList, loginResponse, cartData) {
   return Container(
-    height: size.height * 0.32,
+    height: size.height * 0.33,
     child: ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
@@ -23,7 +23,7 @@ Container buildHorizontalProductList(
 
 Container buildHorizontalCombosList(Size size, List<ProductData> proList, loginResponse, cartData) {
   return Container(
-    height: size.height * 0.32,
+    height: size.height * 0.33,
     child: ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,

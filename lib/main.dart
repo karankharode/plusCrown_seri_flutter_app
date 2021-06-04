@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +9,6 @@ import 'package:seri_flutter_app/login&signup/screens/login.dart';
 import 'package:seri_flutter_app/update_customer/controller/update_controller.dart';
 import 'package:seri_flutter_app/update_customer/password/controller/password_controller.dart';
 import 'package:sizer/sizer.dart';
-
 import 'cart/controller/CartController.dart';
 import 'cart/models/AddToCartData.dart';
 import 'homescreen/controller/products_controller.dart';

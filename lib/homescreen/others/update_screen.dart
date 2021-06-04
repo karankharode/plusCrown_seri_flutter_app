@@ -153,7 +153,7 @@ class _UpdateState extends State<Update> {
 }
 
 class UpdateForm extends StatefulWidget {
-  LoginResponse loginResponse;
+  final LoginResponse loginResponse;
 
   UpdateForm({this.loginResponse});
 
@@ -341,7 +341,7 @@ class _UpdateFormState extends State<UpdateForm> {
                     borderRadius: BorderRadius.circular(10),
                   ),
 
-                  child: FlatButton(
+                  child: MaterialButton(
                     color: kPrimaryColor,
                     onPressed: () {},
                     child: Text(
@@ -451,7 +451,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   borderRadius: BorderRadius.circular(10),
                 ),
 
-                child: FlatButton(
+                child: MaterialButton(
                   color: kPrimaryColor,
                   onPressed: () {},
                   child: Text(
@@ -587,7 +587,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   borderRadius: BorderRadius.circular(10),
                 ),
 
-                child: FlatButton(
+                child: MaterialButton(
                   color: kPrimaryColor,
                   onPressed: () {},
                   child: Text(
@@ -698,7 +698,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   borderRadius: BorderRadius.circular(10),
                 ),
 
-                child: FlatButton(
+                child: MaterialButton(
                   color: kPrimaryColor,
                   onPressed: () {
                     //  _showModalBSForVerification(

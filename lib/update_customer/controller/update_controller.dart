@@ -15,7 +15,6 @@ class UpdateController {
   }
 
   Future<bool> _httpPostRequest(String url, FormData formData) async {
-    String authToken;
     bool isAuthorized = false;
     try {
       var response = await dio.put(url, data: formData);

@@ -119,13 +119,21 @@ class CustomDrawer extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Delivery not available\nat this pincode',
+                                        !true
+                                            ? 'Delivery not available\nat this pincode'
+                                            : "Delievery available\nat 442342",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: 'GothamMedium',
-                                            fontSize: 12.sp,
-                                            color: Colors.red.withOpacity(0.7),
-                                            fontWeight: FontWeight.bold),
+                                        style: !true
+                                            ? TextStyle(
+                                                fontFamily: 'GothamMedium',
+                                                fontSize: 12.sp,
+                                                color: Colors.red.withOpacity(0.8),
+                                                fontWeight: FontWeight.bold)
+                                            : TextStyle(
+                                                fontFamily: 'GothamMedium',
+                                                fontSize: 12.sp,
+                                                color: Colors.green.withOpacity(0.8),
+                                                fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 String urlToAppend = "https://swaraj.pythonanywhere.com";
-
+// ignore_for_file: non_constant_identifier_names
 class CategoryData {
   final int id;
   final String name;

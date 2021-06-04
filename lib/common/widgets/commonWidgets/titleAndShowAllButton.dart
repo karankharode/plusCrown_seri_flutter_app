@@ -16,7 +16,7 @@ Padding buildTitleandShowAllRow(
         Container(
           alignment: Alignment.centerLeft,
           child: Text(
-            title,
+            title.split('-').first ?? title,
             style: TextStyle(
               fontFamily: 'GothamMedium',
               color: Color.fromARGB(255, 71, 54, 111),

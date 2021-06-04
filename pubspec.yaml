@@ -76,5 +76,6 @@ flutter:
     - assets/stationary/
     - assets/Logo/
     - assets/
+    - assets/animations/sharingRocket.json
     - assets/animations/
 

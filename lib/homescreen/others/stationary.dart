@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/listingPoster.dart';

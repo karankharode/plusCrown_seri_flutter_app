@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/counter_box.dart';
-import 'package:seri_flutter_app/cart/models/DeleteFromCartData.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:seri_flutter_app/my-order-detail-page/screens/myOrderDetailPage.dart';
 import 'package:sizer/sizer.dart';
-
 import '../empty-wishlist/wishlist/WishListPage.dart';
 import 'models/CartData.dart';
-
+// ignore_for_file: non_constant_identifier_names
 class CartList extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;

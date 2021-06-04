@@ -6,11 +6,9 @@ import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/cart/order-confirmation.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
-
 import '../models/order.dart';
 import '../models/orderItem.dart';
 import '../models/orderList_array.dart';
@@ -43,7 +41,6 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     ));
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,37 +87,29 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                         return GestureDetector(
                           onTap: () {
                             cartData.cartProducts.length == 0
-                                ? Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EmptyCartPage(
+                                ? Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => EmptyCartPage(
                                           loginResponse,
                                           cartData,
                                         )))
-                                : Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        Cart(
+                                : Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => Cart(
                                           loginResponse,
                                           cartData,
                                         )));
                           },
                           child: Badge(
-                              position:
-                              BadgePosition.topEnd(top: -8, end: -10),
+                              position: BadgePosition.topEnd(top: -8, end: -10),
                               badgeColor: Colors.white,
                               badgeContent: Text(
                                 cartData.cartProducts.length.toString(),
                                 style: TextStyle(
                                     color: Colors.red,
-                                    fontSize:
-                                    MediaQuery.of(context).size.width /
-                                        35),
+                                    fontSize: MediaQuery.of(context).size.width / 35),
                               ),
                               child: Image.asset(
                                 'assets/icons/cart1.png',
-                                width: MediaQuery.of(context).size.width *
-                                    0.07,
+                                width: MediaQuery.of(context).size.width * 0.07,
                               )),
                         );
                       } else {
@@ -146,14 +135,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       ),
     );
   }
-}
 
-List<Widget> getOrders(BuildContext context) {
-  List<Widget> orders = [];
-  for (Order order in orderList) {
-    orders.add(getOrder(order, context));
+  List<Widget> getOrders(BuildContext context) {
+    List<Widget> orders = [];
+    for (Order order in orderList) {
+      orders.add(getOrder(order, context));
+    }
+    return orders;
   }
-  return orders;
 }
 
 Widget getOrder(Order order, BuildContext context) {
@@ -210,8 +199,7 @@ Widget getOrderItem(OrderItem _orderItem, BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     constraints: BoxConstraints(maxWidth: 10.w),
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: _orderItem.orderImage)),
+                    decoration: BoxDecoration(image: DecorationImage(image: _orderItem.orderImage)),
                   ),
                 ),
               ),
@@ -245,16 +233,12 @@ Widget getOrderItem(OrderItem _orderItem, BuildContext context) {
               Spacer(),
               GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => OrderConfirmation()));
+                  // Navigator.push(context, commonRouter(MyOrdersDetailPage(loginResponse: ,)));
                 },
                 child: Container(
                   constraints: BoxConstraints(maxWidth: 8.w),
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/icons/rightarrow.png')),
+                    image: DecorationImage(image: AssetImage('assets/icons/rightarrow.png')),
                   ),
                 ),
               ),

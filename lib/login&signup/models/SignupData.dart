@@ -9,12 +9,7 @@ class SignupData {
   final String userName;
 
   const SignupData(
-      {this.firstName,
-      this.lastName,
-      this.email,
-      this.phoneNumber,
-      this.password,
-      this.userName});
+      {this.firstName, this.lastName, this.email, this.phoneNumber, this.password, this.userName});
 
   FormData getFormData(SignupData signupData) {
     return FormData.fromMap({
@@ -23,7 +18,7 @@ class SignupData {
       'number': signupData.phoneNumber,
       'password': signupData.password,
       'username': signupData.userName,
-      'lname': "Mayuresh"
+      'lname': signupData.lastName
     });
   }
 

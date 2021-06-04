@@ -25,7 +25,7 @@ import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/return&exchange/screens/return_and_exchange_policy.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
-
+// ignore_for_file: non_constant_identifier_names
 class PageOne extends StatefulWidget {
   final ProductData myProduct;
   final LoginResponse loginResponse;
@@ -268,7 +268,7 @@ class _PageOneState extends State<PageOne> {
                     style: TextStyle(
                         fontFamily: 'GothamMedium',
                         color: kPrimaryColor,
-                        fontSize: 15,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -712,9 +712,10 @@ class _PageOneState extends State<PageOne> {
                                       text: "Click Here",
                                       recognizer: new TapGestureRecognizer()
                                         ..onTap = () {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  ReturnAndExchangePolicy()));
+                                          Navigator.of(context).push(commonRouter(
+                                              ReturnAndExchangePolicy(
+                                                  loginResponse: loginResponse,
+                                                  cartData: cartData)));
                                         },
                                       style: TextStyle(
                                         fontFamily: 'GothamMedium',
@@ -812,23 +813,27 @@ class _PageOneState extends State<PageOne> {
           children: [
             GestureDetector(
               onTap: () {
-                setState(() {
-                  AddToCartData add = new AddToCartData(
-                    customerId: loginResponse.id,
-                    productId: myProduct.id,
-                  );
-                  addProductToCart(add);
-                });
+                // setState(() {
+                //   AddToCartData add = new AddToCartData(
+                //     customerId: loginResponse.id,
+                //     productId: myProduct.id,
+                //   );
+                //   addProductToCart(add);
+                // });
               },
               child: Container(
                 margin: EdgeInsets.only(left: 2, right: 2, bottom: 2),
                 padding: EdgeInsets.all(1.0),
                 height: MediaQuery.of(context).size.height * 0.045,
                 width: MediaQuery.of(context).size.width * 0.35,
-
-                // ignore: deprecated_member_use
-                child: RaisedButton(
-                  onPressed: () {},
+                child: MaterialButton(
+                  onPressed: () {
+                    AddToCartData add = new AddToCartData(
+                      customerId: loginResponse.id,
+                      productId: myProduct.id,
+                    );
+                    addProductToCart(add);
+                  },
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: Colors.grey, width: 0.2.w),

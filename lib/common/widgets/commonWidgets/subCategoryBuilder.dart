@@ -4,8 +4,7 @@ import 'package:seri_flutter_app/common/widgets/commonWidgets/titleAndShowAllBut
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 
 FutureBuilder<dynamic> subcategoryBuilder(
-    loginResponse, cartData,
-    context, Size size, future, subCattitle, catId, subCatId) {
+    loginResponse, cartData, context, Size size, future, String subCattitle, catId, subCatId) {
   return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -22,7 +21,7 @@ FutureBuilder<dynamic> subcategoryBuilder(
                   children: [
                     buildTitleandShowAllRow(
                         context, subCattitle, loginResponse, cartData, catId, subCatId),
-                    (subCattitle == "Combos")
+                    (subCattitle.split('-').first == "Combos")
                         ? buildHorizontalCombosList(size, proList, loginResponse, cartData)
                         : buildHorizontalProductList(size, proList, loginResponse, cartData),
                     SizedBox(
@@ -44,7 +43,12 @@ FutureBuilder<dynamic> subcategoryBuilder(
 }
 
 Column buildCategoryProductList(
-    BuildContext context, Size size, List<ProductData> proList, title, catId, subCatId,
+  BuildContext context,
+  Size size,
+  List<ProductData> proList,
+  title,
+  catId,
+  subCatId,
   loginResponse,
   cartData,
 ) {

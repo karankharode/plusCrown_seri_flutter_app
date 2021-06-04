@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 String urlToAppend = "https://swaraj.pythonanywhere.com";
-
+// ignore_for_file: non_constant_identifier_names
 class ProductData {
   final int id;
   final String title;
@@ -31,7 +31,6 @@ class ProductData {
   final int category_id;
   final String catId;
   final String subCatId;
-
   ProductData(
       {this.id,
       this.title,

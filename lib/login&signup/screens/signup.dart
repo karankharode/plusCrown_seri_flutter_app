@@ -3,15 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/S_38.dart';
-import 'package:seri_flutter_app/common/screens/otp/main_otp.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/login&signup/controller/login_controller.dart';
 import 'package:seri_flutter_app/login&signup/models/SignupData.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../common/screens/S_13.dart';
 import 'login.dart';
 
 class SignupPage extends StatefulWidget {

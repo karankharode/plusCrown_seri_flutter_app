@@ -5,8 +5,6 @@ import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/cartPageRouter.dart';
 
-import '../../../constants.dart';
-
 Widget cartwithBadge(loginResponse) {
   return SafeArea(
     child: FutureBuilder(

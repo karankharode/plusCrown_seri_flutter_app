@@ -42,6 +42,7 @@ class _BodyState extends State<Body> {
   String lastError = "";
   String lastStatus = "";
   String _currentLocaleId = "";
+  // ignore: unused_field
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
 

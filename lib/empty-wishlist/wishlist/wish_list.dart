@@ -8,6 +8,7 @@ import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
 import 'package:seri_flutter_app/empty-wishlist/models/WishListData.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 
+// ignore_for_file: non_constant_identifier_names
 class WishList extends StatefulWidget {
   final LoginResponse loginResponse;
 
@@ -66,7 +67,7 @@ class _WishListState extends State<WishList> {
                           return SingleProdWL(
                               prodName: wishListData.wishlistProducts[index].productName,
                               //cartList[index]['productName'],
-//              TODO: Set images for the product
+                              // TODO: Set images for the product
                               image: "assets/images/first_page.png",
                               //    image: offer_list[index]['image'],
                               percentOff: "30",

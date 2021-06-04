@@ -1,19 +1,12 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/components/CustomDrawer.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
-import 'package:seri_flutter_app/common/widgets/appBars/cartwithBadge.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
-import 'package:seri_flutter_app/common/widgets/commonWidgets/horizontalProductList.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/listingPoster.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/subCategoryBuilder.dart';
-import 'package:seri_flutter_app/common/widgets/commonWidgets/titleAndShowAllButton.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
@@ -71,6 +64,13 @@ class _ListingPageForClassesState extends State<ListingPageForClasses>
     "5": 'assets/icons/10th standard.gif',
     "3": 'assets/icons/11th Standard.png',
     "4": 'assets/icons/12th standard.gif',
+  };
+  Map<String, String> categoryClass = {
+    "1": '8th Std',
+    "2": '9th Std',
+    "5": '10th Std',
+    "3": '11th Std',
+    "4": '12th Std',
   };
 
   bool fetched = false;
@@ -215,7 +215,7 @@ class _ListingPageForClassesState extends State<ListingPageForClasses>
                       height: 0.0,
                       width: 0.0,
                     ),
-              buildListingPoster(context, categoryBannerMap[widget.catId],widget.catId),
+              buildListingPoster(context, categoryBannerMap[widget.catId], widget.catId),
               Padding(
                 padding: const EdgeInsets.only(left: 3, right: 3),
                 child: TabBar(
@@ -250,40 +250,124 @@ class _ListingPageForClassesState extends State<ListingPageForClasses>
                         children: [
                           ListView(
                             children: [
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab1Subcat1, "Combos", widget.catId, "13"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab1Subcat2, "TextBook", widget.catId, "1"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab1Subcat3, "Digest", widget.catId, "2"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab1Subcat4, "Helping Hands", widget.catId, "4"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab1Subcat1,
+                                  "Combos-${categoryClass[widget.catId]}(${!widget.above10th ? "English" : "Science"})",
+                                  widget.catId,
+                                  "13"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab1Subcat2,
+                                  "TextBook-${categoryClass[widget.catId]}(${!widget.above10th ? "English" : "Science"})",
+                                  widget.catId,
+                                  "1"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab1Subcat3,
+                                  "Digest-${categoryClass[widget.catId]}(${!widget.above10th ? "English" : "Science"})",
+                                  widget.catId,
+                                  "2"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab1Subcat4,
+                                  "Helping Hands-${categoryClass[widget.catId]}(${!widget.above10th ? "English" : "Science"})",
+                                  widget.catId,
+                                  "4"),
                               SizedBox(height: 14.h)
                             ],
                           ),
                           ListView(
                             children: [
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab2Subcat1, "Combos", widget.catId, "13"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab2Subcat2, "TextBook", widget.catId, "1"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab2Subcat3, "Digest", widget.catId, "2"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab2Subcat4, "Helping Hands", widget.catId, "4"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab2Subcat1,
+                                  "Combos-${categoryClass[widget.catId]}(${!widget.above10th ? "Marathi" : "Commerce"})",
+                                  widget.catId,
+                                  "13"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab2Subcat2,
+                                  "TextBook-${categoryClass[widget.catId]}(${!widget.above10th ? "Marathi" : "Commerce"})",
+                                  widget.catId,
+                                  "1"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab2Subcat3,
+                                  "Digest-${categoryClass[widget.catId]}(${!widget.above10th ? "Marathi" : "Commerce"})",
+                                  widget.catId,
+                                  "2"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab2Subcat4,
+                                  "Helping Hands-${categoryClass[widget.catId]}(${!widget.above10th ? "Marathi" : "Commerce"})",
+                                  widget.catId,
+                                  "4"),
                               SizedBox(height: 14.h)
                             ],
                           ),
                           ListView(
                             children: [
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab3Subcat1, "Combos", widget.catId, "13"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab3Subcat2, "TextBook", widget.catId, "1"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab3Subcat3, "Digest", widget.catId, "2"),
-                              subcategoryBuilder(loginResponse, cartData, context, size,
-                                  futureForTab3Subcat4, "Helping Hands", widget.catId, "4"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab3Subcat1,
+                                  "Combos-${categoryClass[widget.catId]}(${!widget.above10th ? "Hindi" : "Arts"})",
+                                  widget.catId,
+                                  "13"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab3Subcat2,
+                                  "TextBook-${categoryClass[widget.catId]}(${!widget.above10th ? "Hindi" : "Arts"})",
+                                  widget.catId,
+                                  "1"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab3Subcat3,
+                                  "Digest-${categoryClass[widget.catId]}(${!widget.above10th ? "Hindi" : "Arts"})",
+                                  widget.catId,
+                                  "2"),
+                              subcategoryBuilder(
+                                  loginResponse,
+                                  cartData,
+                                  context,
+                                  size,
+                                  futureForTab3Subcat4,
+                                  "Helping Hands-${categoryClass[widget.catId]}(${!widget.above10th ? "Hindi" : "Arts"})",
+                                  widget.catId,
+                                  "4"),
                               SizedBox(height: 14.h)
                             ],
                           ),

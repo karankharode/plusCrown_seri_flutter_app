@@ -1,10 +1,7 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,15 +23,15 @@ class _FAQSectionState extends State<FAQSection> {
 
   _FAQSectionState(this.loginResponse, this.cartData);
 
-  Future futureForCart;
+  // Future futureForCart;
 
   var cartController = CartController();
 
   @override
   void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
-    ));
+    // futureForCart = cartController.getCartDetails(AddToCartData(
+    //   customerId: loginResponse.id,
+    // ));
     super.initState();
   }
 
@@ -65,81 +62,73 @@ class _FAQSectionState extends State<FAQSection> {
             "FAQ's",
             style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              EmptyCartPage(
-                                                loginResponse,
-                                                cartData,
-                                              )))
-                                  : Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Cart(
-                                                loginResponse,
-                                                cartData,
-                                              )));
-                            },
-                            child: Badge(
-                                position:
-                                    BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 12),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //       children: [
+          //         GestureDetector(
+          //           onTap: () {},
+          //           child: Image.asset(
+          //             'assets/icons/search3.png',
+          //             width: MediaQuery.of(context).size.width * 0.07,
+          //           ),
+          //         ),
+          //         SizedBox(
+          //           width: 10,
+          //         ),
+          //         FutureBuilder(
+          //             future: futureForCart,
+          //             builder: (context, snapshot) {
+          //               if (snapshot.hasData) {
+          //                 CartData cartData = snapshot.data;
+          //                 return GestureDetector(
+          //                   onTap: () {
+          //                     cartData.cartProducts.length == 0
+          //                         ? Navigator.of(context).push(MaterialPageRoute(
+          //                             builder: (BuildContext context) => EmptyCartPage(
+          //                                   loginResponse,
+          //                                   cartData,
+          //                                 )))
+          //                         : Navigator.of(context).push(MaterialPageRoute(
+          //                             builder: (BuildContext context) => Cart(
+          //                                   loginResponse,
+          //                                   cartData,
+          //                                 )));
+          //                   },
+          //                   child: Badge(
+          //                       position: BadgePosition.topEnd(top: -8, end: -10),
+          //                       badgeColor: Colors.white,
+          //                       badgeContent: Text(
+          //                         cartData.cartProducts.length.toString(),
+          //                         style: TextStyle(
+          //                             color: Colors.red,
+          //                             fontSize: MediaQuery.of(context).size.width / 35),
+          //                       ),
+          //                       child: Image.asset(
+          //                         'assets/icons/cart1.png',
+          //                         width: MediaQuery.of(context).size.width * 0.07,
+          //                       )),
+          //                 );
+          //               } else {
+          //                 return Container();
+          //               }
+          //             }),
+          //         SizedBox(
+          //           width: 15,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ],
         ),
         backgroundColor: Color.fromARGB(255, 249, 249, 249),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.fromLTRB(
               5,
-              30,
+              20,
               10,
               5,
             ),
@@ -198,8 +187,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "You can shop easily by visiting our website, But we recommend creating an account on pluscrown. With minimum details required. You can keep the track of your wishlist, receive the daily updates, offers and discounts just for you.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -261,8 +249,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "There are many ways you can make payments and you can trust our payment gateways system. You can also opt. for cash on delivery methods, We also accept visa, debit and credit cards.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -324,8 +311,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "Delivery charges are the same for all products if you buy products worth Rs.300, You will not have to pay shipping charges and If you purchase the product less than 300rs then you have to pay a delivery fee of Rs.40.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -388,8 +374,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "We will thrive to deliver your product within 2 working days.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -452,8 +437,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "Once you login into your account, You can check the order you want to track and then select view order to see details after that click on track shipment.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -517,8 +501,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "You can cancel your order within 48hrs after placing it. Go to my orders, select the product and click on cancel order option.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -582,8 +565,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "If you receive a defective or wrong product, You will have to go to your account and select the order you want to return and just click the return option, We will collect the product from you.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -648,8 +630,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "You can find our contact details on our Contact Us page, Along with the Customer Support no.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -714,8 +695,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "Products value ranging below Rs.100 are not eligible for Return.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -778,8 +758,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "You can write to 'email to be inserted' for your Corporate order requirements.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -844,8 +823,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "Your order will be delivered within the next day of your current delivery date, before that we give a call to the customer and if you missed it we will contact you for the same.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -910,8 +888,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "We send orders within 1-2 days before the delivery date so that they can reach you in time but if there is some problem delivering the products from our end we will inform you accordingly.  Even after that if you don’t receive the order then you can contact our Customer Support.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -976,8 +953,7 @@ class _FAQSectionState extends State<FAQSection> {
                                 "An confirmation email & SMS will be sent to your registered mobile no. once you've successfully placed your order. We'll also let you know as soon as we ship the product to you along with the tracking Id. You can track the order from My Orders tab.",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
                                 ),
@@ -1041,8 +1017,7 @@ class _FAQSectionState extends State<FAQSection> {
                               child: Text(
                                 "By knowing your pincode, We can easily deliver products to your location, And you can find out whether particular product delivery is available at your location or not.",
                                 style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontFamily: 'GothamMedium',
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
@@ -1107,8 +1082,7 @@ class _FAQSectionState extends State<FAQSection> {
                               child: Text(
                                 "You will receive the refund amount within 48hrs, As soon as we collect the product from you.",
                                 style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22,
+                                  fontSize: MediaQuery.of(context).size.width / 22,
                                   fontFamily: 'GothamMedium',
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 71, 54, 111),
@@ -1121,20 +1095,24 @@ class _FAQSectionState extends State<FAQSection> {
                     ],
                   ),
                 ),
-                new Spacer(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 20.0, 15.0, 10.0),
-                        alignment: Alignment.bottomRight,
-                        child: Image.asset(
-                          'assets/images/bottom_logo.jpg',
-                          width: (queryData.size.width / 3),
-                        )),
-                  ],
+                // new Spacer(),
+                SizedBox(
+                  height: 50,
                 ),
+                buildBottomAlignedLogo(context)
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.end,
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     Container(
+                //         padding: EdgeInsets.fromLTRB(0.0, 20.0, 15.0, 10.0),
+                //         alignment: Alignment.bottomRight,
+                //         child: Image.asset(
+                //           'assets/images/bottom_logo.jpg',
+                //           width: (queryData.size.width / 3),
+                //         )),
+                //   ],
+                // ),
               ],
             ),
           ),

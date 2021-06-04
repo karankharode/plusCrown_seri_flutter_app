@@ -16,6 +16,7 @@ class PasswordController {
   }
 
   Future<bool> _httpPostChangeRequest(String url, FormData formData) async {
+    // ignore: unused_local_variable
     String authToken;
     bool isAuthorized = false;
     try {
@@ -48,7 +49,6 @@ class PasswordController {
   }
 
   Future<bool> _httpPostRequest(String url, FormData formData) async {
-    String authToken;
     bool isAuthorized = false;
     try {
       var response = await dio.put(url, data: formData);

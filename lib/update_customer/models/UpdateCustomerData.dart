@@ -7,8 +7,7 @@ class UpdateCustomerData {
   final String lastname;
   final int number;
 
-  const UpdateCustomerData(
-      {this.email, this.username, this.firstName, this.lastname, this.number});
+  const UpdateCustomerData({this.email, this.username, this.firstName, this.lastname, this.number});
 
   FormData getFormData(UpdateCustomerData updateCustomerData) {
     return FormData.fromMap({
@@ -24,7 +23,7 @@ class UpdateCustomerData {
     return FormData.fromMap({
       'email': 'sabby@gmail.com',
       'username': 'swaraj1997',
-      'fname': 'MayureshCheck',
+      'fname': 'kk4',
       'lname': 'Test1Check',
       'number': '7756788067',
     });

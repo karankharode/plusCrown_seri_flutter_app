@@ -9,7 +9,7 @@ import 'carts.dart';
 import 'controller/CartController.dart';
 import 'models/AddToCartData.dart';
 import 'models/CartData.dart';
-
+// ignore_for_file: non_constant_identifier_names
 class OrderConfirmation extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;

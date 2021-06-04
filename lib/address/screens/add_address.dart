@@ -1,7 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddAddressData.dart';
 import 'package:seri_flutter_app/cart/carts.dart';
@@ -11,9 +10,7 @@ import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../constants.dart';
-import 'address-book-page.dart';
 
 class Address extends StatefulWidget {
   final LoginResponse loginResponse;

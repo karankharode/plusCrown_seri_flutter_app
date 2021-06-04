@@ -1,12 +1,5 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
-import 'package:seri_flutter_app/common/widgets/appBars/appBar.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
@@ -66,7 +59,7 @@ class _ShowViewState extends State<ShowView> {
                     widget.title,
                     style: TextStyle(
                       color: kPrimaryColor,
-                      fontSize: 18.sp,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'GothamMedium',
                     ),
@@ -89,7 +82,7 @@ class _ShowViewState extends State<ShowView> {
                                   // height: (prolist.length / 2) * ((size.width / 2.8) * 2),
                                   child: GridView.count(
                                 crossAxisCount: 2,
-                                childAspectRatio: 2 / 2.7,
+                                childAspectRatio: 2 / 2.9,
                                 mainAxisSpacing: 5.0,
                                 shrinkWrap: true,
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
