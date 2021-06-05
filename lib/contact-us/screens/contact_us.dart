@@ -70,58 +70,63 @@ class _ContactUsState extends State<ContactUs> {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
-      appBar: buildTextAppBar(context, "Contact Us", loginResponse, true, false),
+      appBar: buildTextAppBar(context, "Contact Us", loginResponse, true, false, null),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Container(
-            //  height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height - 100,
             child: Column(
               // mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //  new Spacer(),
-                SizedBox(height: 10),
-                contactUsInfoRowBuilder('assets/icons/call.png', '9960622176', callAction),
-                SizedBox(height: 10),
-                contactUsInfoRowBuilder(
-                    'assets/icons/location.png',
-                    '627, Dream House, Kansai\nsection, Ambernath (E), \nPincode - 421501, Dist- Thane',
-                    locationAction),
-
-                SizedBox(height: 10),
-                contactUsInfoRowBuilder(
-                    'assets/icons/mail.png', 'pluscrown58@gmail.com', emailAction),
-                SizedBox(height: 10),
-                contactUsInfoRowBuilder(
-                    'assets/icons/whatsapp icon.png', '9960622176', whatsAppAction),
-                // new Spacer(),
-                SizedBox(height: 30),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0.0, 80.0, 10.0, 0.0),
-                  alignment: Alignment.bottomRight,
-                  child: Image.asset(
-                    'assets/icons/contact_us_bottom_image.jpg',
-                    height: (queryData.size.width / 2 + 20),
-                  ),
+                Column(
+                  children: [
+                    SizedBox(height: 10),
+                    contactUsInfoRowBuilder('assets/icons/call.png', '9960622176', callAction),
+                    SizedBox(height: 10),
+                    contactUsInfoRowBuilder(
+                        'assets/icons/location.png',
+                        '627, Dream House, Kansai\nsection, Ambernath (E), \nPincode - 421501, Dist- Thane',
+                        locationAction),
+                    SizedBox(height: 10),
+                    contactUsInfoRowBuilder(
+                        'assets/icons/mail.png', 'pluscrown58@gmail.com', emailAction),
+                    SizedBox(height: 10),
+                    contactUsInfoRowBuilder(
+                        'assets/icons/whatsapp icon.png', '9960622176', whatsAppAction),
+                  ],
                 ),
-                buildBottomAlignedLogo(context),
-                // SizedBox(height: 5),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.end,
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     Container(
-                //         alignment: Alignment.bottomRight,
-                //         child: Image.asset(
-                //           'assets/images/bottom_logo.jpg',
-                //           width: (queryData.size.width / 2.2),
-                //         )),
-                //   ],
-                // )
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      child: Image.asset(
+                        'assets/icons/contact_us_bottom_image.jpg',
+                        height: (queryData.size.width / 1.205),
+                      ),
+                    ),
+                    // buildBottomAlignedLogo(context),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                            alignment: Alignment.bottomRight,
+                            padding: EdgeInsets.only(right: 15, bottom: 10),
+                            child: Image.asset(
+                              'assets/images/PlusCrown.png',
+                              width: (queryData.size.width / 2.05),
+                            )),
+                      ],
+                    )
+                  ],
+                ),
               ],
             ),
           ),

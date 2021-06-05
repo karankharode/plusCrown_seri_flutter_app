@@ -94,7 +94,7 @@ class _EmptyCartPageState extends State<EmptyCartPage> {
                               ),
                               child: Image.asset(
                                 'assets/icons/cart1.png',
-                                width: MediaQuery.of(context).size.width * 0.07,
+                                width: MediaQuery.of(context).size.width * 0.09,
                               )),
                         );
                       } else {

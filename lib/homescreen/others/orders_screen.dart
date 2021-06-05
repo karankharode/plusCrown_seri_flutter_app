@@ -86,8 +86,7 @@ class _OrdersState extends State<Orders> {
                           onTap: () {
                             cartData.cartProducts.length == 0
                                 ? Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EmptyCartPage(
+                                    builder: (BuildContext context) => EmptyCartPage(
                                           loginResponse,
                                           cartData,
                                         )))
@@ -104,8 +103,7 @@ class _OrdersState extends State<Orders> {
                                 cartData.cartProducts.length.toString(),
                                 style: TextStyle(
                                     color: Colors.red,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width / 35),
+                                    fontSize: MediaQuery.of(context).size.width / 35),
                               ),
                               child: Image.asset(
                                 'assets/icons/cart1.png',
@@ -124,7 +122,6 @@ class _OrdersState extends State<Orders> {
           ),
         ],
       ),
-      // drawer: MyDrawer(),
       body: ListView(
         children: [
           Container(
@@ -208,17 +205,12 @@ class _OrdersState extends State<Orders> {
                   children: [
                     Column(
                       children: [
-                        orderStatus(
-                            'Order Approved', "Fri, 02nd Mar'22", true, 1),
-                        orderStatus(
-                            'Order delivered', "Fri, 08th Mar'22", false, 2),
+                        orderStatus('Order Approved', "Fri, 02nd Mar'22", true, 1),
+                        orderStatus('Order delivered', "Fri, 08th Mar'22", false, 2),
                         orderStatus('Return', "Fri, 09th Mar'22", false, 3),
-                        orderStatus(
-                            'Return Approved', "Fri, 09th Mar'22", false, 4),
-                        orderStatus(
-                            'Pickup', "Expected by, 12th Mar'22", false, 5),
-                        orderStatus(
-                            'Refund', "Expected by, 15th Mar'22", false, 6),
+                        orderStatus('Return Approved', "Fri, 09th Mar'22", false, 4),
+                        orderStatus('Pickup', "Expected by, 12th Mar'22", false, 5),
+                        orderStatus('Refund', "Expected by, 15th Mar'22", false, 6),
                       ],
                     )
                   ],

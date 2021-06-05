@@ -5,6 +5,7 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
@@ -43,85 +44,7 @@ class _AddressBookPageState extends State<AddressBookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 71, 54, 111),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Image.asset(
-              'assets/icons/leftarrowwhite.png',
-              width: MediaQuery.of(context).size.width * 0.07,
-            ),
-          ),
-        ),
-        title: Text(
-          "Address Book",
-          style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    'assets/icons/search3.png',
-                    width: MediaQuery.of(context).size.width * 0.07,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                FutureBuilder(
-                    future: futureForCart,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        CartData cartData = snapshot.data;
-                        return GestureDetector(
-                          onTap: () {
-                            cartData.cartProducts.length == 0
-                                ? Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => EmptyCartPage(
-                                          loginResponse,
-                                          cartData,
-                                        )))
-                                : Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => Cart(
-                                          loginResponse,
-                                          cartData,
-                                        )));
-                          },
-                          child: Badge(
-                              position: BadgePosition.topEnd(top: -8, end: -10),
-                              badgeColor: Colors.white,
-                              badgeContent: Text(
-                                cartData.cartProducts.length.toString(),
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: MediaQuery.of(context).size.width / 35),
-                              ),
-                              child: Image.asset(
-                                'assets/icons/cart1.png',
-                                width: MediaQuery.of(context).size.width * 0.07,
-                              )),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
-                SizedBox(
-                  width: 15,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      appBar: buildTextAppBar(context, "Address Book", loginResponse, false, false, null),
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

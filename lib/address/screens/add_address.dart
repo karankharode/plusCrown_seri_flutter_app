@@ -8,6 +8,7 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 import '../../constants.dart';
@@ -104,93 +105,61 @@ class _AddressState extends State<Address> {
 
   bool checkValue = false;
 
+  InputDecoration getInputDecoration(String labelText) {
+    return InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Color.fromARGB(255, 71, 54, 111),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(5),
+          gapPadding: 10,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Color.fromARGB(255, 71, 54, 111),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(5),
+          gapPadding: 10,
+        ),
+        border: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Color.fromARGB(255, 71, 54, 111),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(5),
+          gapPadding: 10,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: kDefaultPadding,
+          vertical: kDefaultPadding / 2,
+        ),
+        labelText: labelText,
+        labelStyle: TextStyle(
+          color: Color.fromARGB(255, 71, 54, 111),
+          fontFamily: 'GothamMedium',
+        ));
+  }
+
+  SizedBox gapBox = SizedBox(
+    height: kDefaultPadding,
+  );
+
   @override
   Widget build(BuildContext context) {
+    TextStyle formFieldTextStyle = TextStyle(
+      color: Color.fromARGB(255, 71, 54, 111),
+      fontFamily: 'GothamMedium',
+      fontSize: MediaQuery.of(context).size.width / 22,
+    );
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 54, 111),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/icons/leftarrowwhite.png',
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
-            ),
-          ),
-          title: Text(
-            "Add Address",
-            style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) => EmptyCartPage(
-                                            loginResponse,
-                                            cartData,
-                                          )))
-                                  : Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) => Cart(
-                                            loginResponse,
-                                            cartData,
-                                          )));
-                            },
-                            child: Badge(
-                                position: BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: MediaQuery.of(context).size.width / 35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width: MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        appBar: buildTextAppBar(context, "Add Address", loginResponse, false, false, null),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 11.0, right: 11, top: 18, bottom: 18),
+            padding: const EdgeInsets.only(left: 15.0, right: 15, top: 18, bottom: 18),
             child: Form(
               key: formKey,
               child: Column(
@@ -201,114 +170,37 @@ class _AddressState extends State<Address> {
                           style: TextStyle(
                               color: Color.fromARGB(255, 71, 54, 111),
                               fontFamily: 'GothamMedium',
-                              fontSize: MediaQuery.of(context).size.width / 15,
+                              fontSize: MediaQuery.of(context).size.width / 18,
                               fontWeight: FontWeight.bold))),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   TextFormField(
                     controller: nameTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
+                    style: formFieldTextStyle,
                     validator: (val) {
                       return val.length > 2 ? null : "Please provide name";
                     },
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding,
-                        ),
-                        labelText: 'Name',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
+                    decoration: getInputDecoration("Name"),
                   ),
-                  SizedBox(height: 8),
+                  gapBox,
                   TextFormField(
-                    validator: (val) {
-                      return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
-                          ? null
-                          : "Please provide valid number";
-                    },
-                    controller: numberTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
+                      validator: (val) {
+                        return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
+                            ? null
+                            : "Please provide valid number";
+                      },
+                      controller: numberTextEditingController,
+                      style: formFieldTextStyle,
+                      decoration: getInputDecoration('Phone Number')),
+                  gapBox,
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Address Info",
                           style: TextStyle(
                               color: Color.fromARGB(255, 71, 54, 111),
                               fontFamily: 'GothamMedium',
-                              fontSize: MediaQuery.of(context).size.width / 15,
+                              fontSize: MediaQuery.of(context).size.width / 19,
                               fontWeight: FontWeight.bold))),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.min,
@@ -324,41 +216,8 @@ class _AddressState extends State<Address> {
                                     : "Please provide valid PinCode";
                               },
                               controller: pinCodeTextEditingController,
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                                fontSize: MediaQuery.of(context).size.width / 19,
-                              ),
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    gapPadding: 10,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    gapPadding: 10,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    gapPadding: 10,
-                                  ),
-                                  labelText: 'PinCode',
-                                  labelStyle: TextStyle(
-                                    color: Color.fromARGB(255, 71, 54, 111),
-                                    fontFamily: 'GothamMedium',
-                                  )),
+                              style: formFieldTextStyle,
+                              decoration: getInputDecoration('PinCode'),
                             ),
                           ),
                           SizedBox(
@@ -375,246 +234,53 @@ class _AddressState extends State<Address> {
                                 : null;
                           },
                           controller: cityTextEditingController,
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            fontFamily: 'GothamMedium',
-                            fontSize: MediaQuery.of(context).size.width / 19,
-                          ),
-                          decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                gapPadding: 10,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                gapPadding: 10,
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(5),
-                                gapPadding: 10,
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding,
-                                vertical: kDefaultPadding,
-                              ),
-                              labelText: 'City',
-                              labelStyle: TextStyle(
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontFamily: 'GothamMedium',
-                              )),
+                          style: formFieldTextStyle,
+                          decoration: getInputDecoration('City'),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   TextFormField(
                     validator: (val) {
                       return val.isEmpty || val.length < 2 ? "Please Provide valid District" : null;
                     },
                     controller: districtTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding,
-                        ),
-                        labelText: 'District',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
+                    style: formFieldTextStyle,
+                    decoration: getInputDecoration('District'),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   TextFormField(
                     validator: (val) {
                       return val.isEmpty ? "Please Provide Flat No / Building Name " : null;
                     },
                     controller: flatNoTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding,
-                        ),
-                        labelText: 'Flat No / Building Name',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
+                    style: formFieldTextStyle,
+                    decoration: getInputDecoration('Flat No/Building Name'),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   TextFormField(
                     validator: (val) {
                       return val.isEmpty ? "Please Provide Locality / Area / Street " : null;
                     },
                     controller: areaTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding,
-                        ),
-                        labelText: 'Locality / Area / Street',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
+                    style: formFieldTextStyle,
+                    decoration: getInputDecoration('Locality/Area/Street'),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  gapBox,
                   TextFormField(
                     controller: landmarkTextEditingController,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontSize: MediaQuery.of(context).size.width / 19,
-                    ),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 71, 54, 111),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                          gapPadding: 10,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding,
-                        ),
-                        labelText: 'Landmark(Optional)',
-                        labelStyle: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontFamily: 'GothamMedium',
-                        )),
+                    style: formFieldTextStyle,
+                    decoration: getInputDecoration('Landmark(Optional)'),
                   ),
-                  SizedBox(height: 8),
+                  gapBox,
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Type of Address",
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
                               color: Color.fromARGB(255, 71, 54, 111),
-                              fontSize: MediaQuery.of(context).size.width / 15,
+                              fontSize: MediaQuery.of(context).size.width / 19,
                               fontWeight: FontWeight.bold))),
                   SizedBox(
                     height: 8,
@@ -657,16 +323,18 @@ class _AddressState extends State<Address> {
                               fontSize: MediaQuery.of(context).size.width / 20)),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 3, top: 3.0),
+                          padding: const EdgeInsets.only(left: 20, top: 3.0),
                           child: SizedBox(
-                            height: 8,
-                            width: 8,
+                            height: 7,
+                            width: 7,
                             child: Transform.scale(
                               scale: 1,
                               child: Checkbox(
@@ -682,13 +350,13 @@ class _AddressState extends State<Address> {
                           ),
                         ),
                         SizedBox(
-                          width: 15,
+                          width: 12,
                         ),
-                        Text("Mark as default Address",
+                        Text("  Mark as default Address",
                             style: TextStyle(
                                 fontFamily: 'GothamMedium',
                                 color: Color.fromARGB(255, 71, 54, 111),
-                                fontSize: MediaQuery.of(context).size.width / 19)),
+                                fontSize: MediaQuery.of(context).size.width / 21)),
                       ]),
                   SizedBox(
                     height: 18,
@@ -698,7 +366,7 @@ class _AddressState extends State<Address> {
                         style: TextStyle(
                             fontFamily: 'GothamMedium',
                             color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width / 19)),
+                            fontSize: MediaQuery.of(context).size.width / 21)),
                     onPressed: () {
                       if (formKey.currentState.validate()) {
                         addAddress(AddAddressData(

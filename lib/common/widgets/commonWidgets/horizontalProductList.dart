@@ -23,7 +23,7 @@ Container buildHorizontalProductList(
 
 Container buildHorizontalCombosList(Size size, List<ProductData> proList, loginResponse, cartData) {
   return Container(
-    height: size.height * 0.33,
+    height: size.height * 0.43,
     child: ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,

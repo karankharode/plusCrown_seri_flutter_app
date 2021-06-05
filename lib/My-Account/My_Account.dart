@@ -63,7 +63,7 @@ class _MyAccountState extends State<MyAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildTextAppBar(context, "My Account", loginResponse, true, false),
+        appBar: buildTextAppBar(context, "My Account", loginResponse, true, false, null),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(

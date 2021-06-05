@@ -1,87 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
+import 'package:sizer/sizer.dart';
 
-class OrderCancellation extends StatefulWidget {
+class OrderCancellation extends StatelessWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
 
   OrderCancellation({this.loginResponse, this.cartData});
 
-  @override
-  _OrderCancellationState createState() => _OrderCancellationState(loginResponse, cartData);
-}
+  String orderCancellation =
+      '''
+  • You can cancel your order, Before it is accepted by you.
 
-class _OrderCancellationState extends State<OrderCancellation> {
-  final LoginResponse loginResponse;
-  final CartData cartData;
+  • You can cancel your order, Before it is shipped or Dispatched along with a reason for cancellation.
 
-  _OrderCancellationState(this.loginResponse, this.cartData);
-
-  Future futureForCart;
-
-  var cartController = CartController();
-
-  @override
-  void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
-    ));
-    super.initState();
-  }
+  • Those Who return any product, The amount will be credited automatically in your bank account within 48 hours. Those items which are to be returned or exchanged must be unused.(check and add)
+  ''';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildTextAppBar(context, "Order Cancellation Policy", loginResponse, true, false),
+        appBar:
+            buildTextAppBar(context, "Order Cancellation Policy", loginResponse, true, false, null),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(18),
-          child: Column(
-            children: [
-              SizedBox(height: 25),
-              Container(
-                child: Text(
-                  "• You can cancel your order, Before it is accepted by you.",
-                  style: TextStyle(
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width / 22,
-                      color: Color.fromARGB(255, 71, 54, 111)),
-                ),
-              ),
-              SizedBox(height: 25),
-              Container(
+          child: Container(
+            height: MediaQuery.of(context).size.height - 115,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
                   child: Text(
-                "• You can cancel your order, Before it is shipped or Dispatched along with a reason for cancellation.",
-                style: TextStyle(
-                    fontFamily: 'GothamMedium',
-                    fontWeight: FontWeight.bold,
-                    fontSize: MediaQuery.of(context).size.width / 22,
-                    color: Color.fromARGB(255, 71, 54, 111)),
-              )),
-              SizedBox(height: 25),
-              Container(
-                child: Text(
-                  "• Those Who return any product, The amount will be credited automatically in your bank account within 48 hours. Those items which are to be returned or exchanged must be unused.(check and add)",
-                  style: TextStyle(
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width / 22,
-                      color: Color.fromARGB(255, 71, 54, 111)),
+                    orderCancellation,
+                    style: TextStyle(
+                        fontFamily: 'GothamMedium',
+                        fontSize: 2.1.h,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF23124A)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
-                child: buildBottomAlignedLogo(context),
-              )
-            ],
+                buildBottomAlignedLogo(context)
+              ],
+            ),
           ),
         )));
   }

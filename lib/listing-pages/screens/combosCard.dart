@@ -6,8 +6,10 @@ import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/homescreen/others/page_one.dart';
 import 'package:sizer/sizer.dart';
 
-Widget combosCard(BuildContext context, int index, ProductData productData,  loginResponse, cartData) {
+Widget combosCard(
+    BuildContext context, int index, ProductData productData, loginResponse, cartData) {
   bool wishlist = false;
+  double width = MediaQuery.of(context).size.width / 1.5;
   return Padding(
     padding: const EdgeInsets.all(10.0),
     child: GestureDetector(
@@ -24,7 +26,7 @@ Widget combosCard(BuildContext context, int index, ProductData productData,  log
           border: Border.all(color: Colors.black54),
           borderRadius: BorderRadius.circular(20),
         ),
-        width: 180,
+        width: width + 10,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -38,7 +40,7 @@ Widget combosCard(BuildContext context, int index, ProductData productData,  log
                           decoration: BoxDecoration(
                               color: productData.label == 'P' ? Colors.green : Colors.red),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+                            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5),
                             child: Text(
                               productData.label,
                               style: TextStyle(
@@ -67,8 +69,8 @@ Widget combosCard(BuildContext context, int index, ProductData productData,  log
               ),
               Container(
                 decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
-                height: 100,
-                width: 150,
+                height: width / 1.5,
+                width: width / 1.5,
                 child: CachedNetworkImage(
                   imageUrl: productData.img,
                   errorWidget: (context, url, error) => Icon(Icons.error),
@@ -76,6 +78,8 @@ Widget combosCard(BuildContext context, int index, ProductData productData,  log
               ),
               Text(
                 productData.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   // fontSize: size.width * 0.03,
@@ -91,8 +95,8 @@ Widget combosCard(BuildContext context, int index, ProductData productData,  log
                         children: [
                           TextSpan(
                               text: '\u20B9 ${productData.price} ',
-                              style:
-                                  TextStyle(fontFamily: 'GothamMedium', fontWeight: FontWeight.w900)),
+                              style: TextStyle(
+                                  fontFamily: 'GothamMedium', fontWeight: FontWeight.w900)),
                           TextSpan(
                             text: '${productData.mrp}',
                             style: TextStyle(

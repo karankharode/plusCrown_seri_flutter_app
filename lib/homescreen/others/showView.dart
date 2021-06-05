@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
+import 'package:seri_flutter_app/listing-pages/screens/combosCard.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 import 'package:seri_flutter_app/constants.dart';
@@ -16,8 +18,10 @@ class ShowView extends StatefulWidget {
   final String title;
   final String catId;
   final String subcatId;
+  final Future future;
 
-  const ShowView({this.title, this.cartData, this.loginResponse, this.catId, this.subcatId});
+  const ShowView(
+      {this.title, this.cartData, this.loginResponse, this.catId, this.subcatId, this.future});
 
   @override
   _ShowViewState createState() => _ShowViewState(loginResponse: loginResponse, cartData: cartData);
@@ -27,6 +31,7 @@ class _ShowViewState extends State<ShowView> {
   final LoginResponse loginResponse;
   final CartData cartData;
   bool search = false;
+  Future futureForShowAll;
 
   searchAction() {
     setState(() {
@@ -35,22 +40,42 @@ class _ShowViewState extends State<ShowView> {
   }
 
   _ShowViewState({this.loginResponse, this.cartData});
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.future == null) {
+      futureForShowAll = ProductController().getProductBySubCategory(
+          ProductData(catId: widget.catId.toString(), subCatId: widget.subcatId.toString()));
+    } else {
+      futureForShowAll = widget.future;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: search == false
-          ? buildAppBarWithSearch(context, loginResponse, null)
+          ? buildAppBarWithSearch(context, loginResponse, searchAction)
           // ? buildAppBarWithSearch(context, loginResponse,searchAction)
           : null,
       drawer: CustomDrawer(loginResponse, cartData),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(2.5.w, 0.w, 2.5.w, 0),
-        child: Column(
-          children: [
-            Expanded(
+      body: Column(
+        children: [
+          search == true
+              ? buildSearchBar(context, size, () {
+                  setState(() {
+                    search = false;
+                  });
+                }, loginResponse, cartData)
+              : Container(),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(2.5.w, 0.w, 2.5.w, 0),
               child: ListView(
                 physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.zero,
                 children: [
                   SizedBox(
                     height: 2.5.w,
@@ -64,10 +89,8 @@ class _ShowViewState extends State<ShowView> {
                       fontFamily: 'GothamMedium',
                     ),
                   ),
-
                   FutureBuilder(
-                      future: ProductController().getProductBySubCategory(ProductData(
-                          catId: widget.catId.toString(), subCatId: widget.subcatId.toString())),
+                      future: futureForShowAll,
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
@@ -81,33 +104,22 @@ class _ShowViewState extends State<ShowView> {
                               return Container(
                                   // height: (prolist.length / 2) * ((size.width / 2.8) * 2),
                                   child: GridView.count(
-                                crossAxisCount: 2,
-                                childAspectRatio: 2 / 2.9,
+                                crossAxisCount:
+                                    (widget.title.split('-').first.toString() == "Combos") ? 1 : 2,
+                                childAspectRatio:
+                                    (widget.title.split('-').first.toString() == "Combos")
+                                        ? 0.85
+                                        : 2 / 2.9,
                                 mainAxisSpacing: 5.0,
                                 shrinkWrap: true,
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                padding: (widget.title.split('-').first.toString() == "Combos")
+                                    ? EdgeInsets.fromLTRB(29, 0, 29, 15)
+                                    : EdgeInsets.fromLTRB(0, 0, 0, 15),
                                 physics: NeverScrollableScrollPhysics(),
-                                children: [...getProducts(prolist, loginResponse, cartData)],
-                                // itemBuilder: (BuildContext context, int index) {
-                                //   return Padding(
-                                //     padding: const EdgeInsets.fromLTRB(20, 6, 20, 4),
-                                //     child:
-                                //         ProductList(prolist[index], loginResponse, cartData),
-                                //   );
-                                // }
-                              )
-                                  // child: ListView.builder(
-                                  //   physics: NeverScrollableScrollPhysics(),
-                                  //   padding: EdgeInsets.only(bottom: 50),
-                                  //   itemCount: prolist.length,
-                                  //   itemBuilder: (BuildContext context, int index) {
-                                  //     return Padding(
-                                  //       padding: const EdgeInsets.fromLTRB(20, 6, 20, 4),
-                                  //       child: ProductList(prolist[index], loginResponse, cartData),
-                                  //     );
-                                  //   },
-                                  // ),
-                                  );
+                                children: (widget.title.split('-').first.toString() == "Combos")
+                                    ? [...getCombos(context, 0, prolist, loginResponse, cartData)]
+                                    : [...getProducts(prolist, loginResponse, cartData)],
+                              ));
                             } else {
                               return Container();
                             }
@@ -116,15 +128,11 @@ class _ShowViewState extends State<ShowView> {
                             return bookLoader();
                         }
                       }),
-
-                  // Wrap(
-                  //   children: [...getProducts(context, loginResponse, cartData)],
-                  // )
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -135,6 +143,15 @@ List<Widget> getProducts(proListnew, loginResponse, cartData) {
   for (ProductData product in proListnew) {
     // products.add(Container(height: 40, color: Colors.blue));
     products.add(ProductList(product, loginResponse, cartData));
+  }
+  return products;
+}
+
+List<Widget> getCombos(context, index, proListnew, loginResponse, cartData) {
+  List<Widget> products = [];
+  for (ProductData product in proListnew) {
+    // products.add(Container(height: 40, color: Colors.blue));
+    products.add(combosCard(context, index, product, loginResponse, cartData));
   }
   return products;
 }

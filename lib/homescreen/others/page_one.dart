@@ -16,6 +16,7 @@ import 'package:seri_flutter_app/common/components/CustomDrawer.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/ProductScreenWidgets.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/horizontalProductList.dart';
 import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
@@ -25,6 +26,7 @@ import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/return&exchange/screens/return_and_exchange_policy.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+
 // ignore_for_file: non_constant_identifier_names
 class PageOne extends StatefulWidget {
   final ProductData myProduct;
@@ -175,94 +177,39 @@ class _PageOneState extends State<PageOne> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: search == false
-          ? buildAppBarWithSearch(context, loginResponse, () {
-              setState(() {
-                search = true;
-              });
-            })
+          ? buildAppBarWithSearch(
+              context,
+              loginResponse,
+              () {
+                setState(() {
+                  search = true;
+                });
+              },
+            )
           : null,
       drawer: CustomDrawer(loginResponse, cartData),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           search == true
-              ? Stack(
-                  children: <Widget>[
-                    Container(
-                      height: size.height * 0.1,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    Positioned(
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding,
-                          vertical: kDefaultPadding * 0.8,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding * 0.5,
-                        ),
-                        height: size.height * 0.05,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: kDefaultPadding,
-                              ),
-                              child: Image.asset(
-                                'assets/images/search.png',
-                                width: size.width * 0.06,
-                              ),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  // contentPadding:
-                                  //     EdgeInsets.only(top: kDefaultPadding * 0.05),
-                                  hintText: "SEARCH PRODUCTS",
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'GothamMedium',
-                                    color: kPrimaryColor.withOpacity(0.5),
-                                  ),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  search = false;
-                                });
-                              },
-                              child: Image.asset(
-                                'assets/images/cross_purple.png',
-                                width: size.width * 0.06,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
+              ? buildSearchBar(context, size, () {
+                  setState(() {
+                    search = false;
+                  });
+                }, loginResponse, cartData)
               : Container(
                   height: 0.0,
                   width: 0.0,
                 ),
           Expanded(
             child: ListView(
+              padding: EdgeInsets.zero,
               children: [
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kDefaultPadding, vertical: kDefaultPadding),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: kDefaultPadding, vertical: kDefaultPadding / 2.5),
                   child: Text(
                     myProduct.title,
                     style: TextStyle(
@@ -553,20 +500,12 @@ class _PageOneState extends State<PageOne> {
                     SizedBox(
                       width: 20,
                     ),
-                    Container(
-                      child: Checkbox(
-                        checkColor: Colors.white,
-                        activeColor: Color.fromARGB(255, 71, 54, 111),
-                        value: this.binding,
-                        onChanged: (bool value) {
-                          setState(() {
-                            this.binding = value;
-                          });
-                        },
-                      ),
+                    Image.asset(
+                      'assets/images/binding.png',
+                      width: MediaQuery.of(context).size.width * 0.09,
                     ),
                     SizedBox(
-                      height: 1.h,
+                      width: 16,
                     ),
                     Flexible(
                       child: Container(
@@ -578,7 +517,24 @@ class _PageOneState extends State<PageOne> {
                               fontFamily: 'GothamMedium',
                             )),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      width: 0.9.h,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.09,
+                      height: MediaQuery.of(context).size.width * 0.09,
+                      child: Checkbox(
+                        checkColor: Colors.white,
+                        activeColor: Color.fromARGB(255, 71, 54, 111),
+                        value: this.binding,
+                        onChanged: (bool value) {
+                          setState(() {
+                            this.binding = value;
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Divider(

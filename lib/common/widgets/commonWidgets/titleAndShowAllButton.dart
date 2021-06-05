@@ -4,7 +4,8 @@ import 'package:seri_flutter_app/homescreen/others/showView.dart';
 import 'package:sizer/sizer.dart';
 
 Padding buildTitleandShowAllRow(
-    BuildContext context, title, loginResponse, cartData, catId, subCatId) {
+    BuildContext context, title, loginResponse, cartData, catId, subCatId,
+    {future}) {
   return Padding(
     padding: EdgeInsets.only(
       right: 4.w,
@@ -48,6 +49,7 @@ Padding buildTitleandShowAllRow(
                 cartData: cartData,
                 catId: catId,
                 subcatId: subCatId,
+                future: future,
               )));
             },
             color: Color.fromARGB(255, 71, 54, 111),

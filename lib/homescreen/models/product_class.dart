@@ -69,6 +69,11 @@ class ProductData {
       'medium': product.medium
     });
   }
+   FormData getKeyword(String keyword) {
+    return FormData.fromMap({
+      'keyword': keyword,
+    });
+  }
 
   factory ProductData.getProduct(dynamic data) {
     return ProductData(

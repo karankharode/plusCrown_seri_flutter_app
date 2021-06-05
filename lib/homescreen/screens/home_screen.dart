@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    
     getCategoryData();
     getGlobalCartData();
     if (loginResponse == null) {

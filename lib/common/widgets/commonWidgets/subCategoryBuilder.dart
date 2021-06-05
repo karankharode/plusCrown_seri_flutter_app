@@ -20,7 +20,7 @@ FutureBuilder<dynamic> subcategoryBuilder(
                 return Column(
                   children: [
                     buildTitleandShowAllRow(
-                        context, subCattitle, loginResponse, cartData, catId, subCatId),
+                        context, subCattitle, loginResponse, cartData, catId, subCatId,future: future),
                     (subCattitle.split('-').first == "Combos")
                         ? buildHorizontalCombosList(size, proList, loginResponse, cartData)
                         : buildHorizontalProductList(size, proList, loginResponse, cartData),

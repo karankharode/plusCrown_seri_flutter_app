@@ -27,6 +27,12 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Future futureForCart;
 
   var cartController = CartController();
+  TextStyle textStyle = TextStyle(
+    fontFamily: 'GothamMedium',
+    fontSize: 2.1.h,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF23124A),
+  );
 
   @override
   void initState() {
@@ -39,72 +45,30 @@ class _AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildTextAppBar(context, "About Us", loginResponse, true, false),
+      appBar: buildTextAppBar(context, "About Us", loginResponse, true, false, null),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 5.h),
             Text(
-              '• Pluscrown is an e-commerce web portal where we thrive to provide educational related materials and stationary from local retailers and suppliers for the students to have easy access to educational products.',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
+                '• Pluscrown is an e-commerce web portal where we thrive to provide educational related materials and stationary from local retailers and suppliers for the students to have easy access to educational products.',
+                style: textStyle),
+            SizedBox(height: 2.h),
+            Text('• We provide all stream books for 11th & 12th stds. (for 8-10 and 11, 12)',
+                style: textStyle),
+            SizedBox(height: 2.h),
+            Text('• We deliver the products at your door steps.', style: textStyle),
             SizedBox(height: 2.h),
             Text(
-              '• We provide all stream books for 11th & 12th stds. (for 8-10 and 11, 12)',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
+                '• If you are facing any trouble finding any books or stationary then you Contact Us or mail us.',
+                style: textStyle),
             SizedBox(height: 2.h),
             Text(
-              '• We deliver the products at your door steps.',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
+                '• We strive to achieve customer satisfaction by completing easy user-friendly websites, Quick and user-friendly payment methods and easy tracking options.',
+                style: textStyle),
             SizedBox(height: 2.h),
-            Text(
-              '• If you are facing any trouble finding any books or stationary then you Contact Us or mail us.',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
-            SizedBox(height: 2.h),
-            Text(
-              '• We strive to achieve customer satisfaction by completing easy user-friendly websites, Quick and user-friendly payment methods and easy tracking options.',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
-            SizedBox(height: 2.h),
-            Text(
-              'Thanks for visiting our website.',
-              style: TextStyle(
-                fontFamily: 'GothamMedium',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 71, 54, 111),
-              ),
-            ),
+            Text('Thanks for visiting our website.', style: textStyle),
             Spacer(),
             buildBottomAlignedLogo(context),
             // Container(

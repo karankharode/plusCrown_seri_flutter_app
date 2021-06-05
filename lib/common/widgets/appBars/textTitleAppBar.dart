@@ -5,7 +5,7 @@ import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
 AppBar buildTextAppBar(
-    BuildContext context, title, LoginResponse loginResponse, bool leading, bool actions) {
+    BuildContext context, title, LoginResponse loginResponse, bool leading, bool actions,searchActioin) {
   return AppBar(
     backgroundColor: kPrimaryColor,
     leading: leading
@@ -35,7 +35,7 @@ AppBar buildTextAppBar(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: searchActioin,
                     child: Image.asset(
                       'assets/icons/search3.png',
                       width: MediaQuery.of(context).size.width * 0.07,

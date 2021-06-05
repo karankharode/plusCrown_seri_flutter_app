@@ -8,6 +8,7 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/update_customer/controller/update_controller.dart';
 import 'package:seri_flutter_app/update_customer/models/UpdateCustomerData.dart';
@@ -22,8 +23,7 @@ class Update extends StatefulWidget {
   Update(this.loginResponse, this.cartData);
 
   @override
-  _UpdateState createState() =>
-      _UpdateState(loginResponse: loginResponse, cartData: cartData);
+  _UpdateState createState() => _UpdateState(loginResponse: loginResponse, cartData: cartData);
 }
 
 class _UpdateState extends State<Update> {
@@ -49,93 +49,7 @@ class _UpdateState extends State<Update> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 54, 111),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/icons/leftarrowwhite.png',
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
-            ),
-          ),
-          title: Text(
-            "Add Address",
-            style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              EmptyCartPage(
-                                                loginResponse,
-                                                cartData,
-                                              )))
-                                  : Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Cart(
-                                                loginResponse,
-                                                cartData,
-                                              )));
-                            },
-                            child: Badge(
-                                position:
-                                    BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        appBar: buildTextAppBar(context, "Edit Info", loginResponse, false, false, null),
         body: ListView(
           children: [
             Padding(
@@ -158,8 +72,7 @@ class UpdateForm extends StatefulWidget {
   UpdateForm({this.loginResponse});
 
   @override
-  _UpdateFormState createState() =>
-      _UpdateFormState(loginResponse: loginResponse);
+  _UpdateFormState createState() => _UpdateFormState(loginResponse: loginResponse);
 }
 
 class _UpdateFormState extends State<UpdateForm> {
@@ -333,8 +246,7 @@ class _UpdateFormState extends State<UpdateForm> {
                       )),
                 ),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: kDefaultPadding * 0.5),
+                  padding: EdgeInsets.symmetric(vertical: kDefaultPadding * 0.5),
                   // margin: EdgeInsets.symmetric(vertical: kDefaultPadding),
                   width: size.width,
                   decoration: BoxDecoration(
@@ -560,8 +472,7 @@ class _UpdateFormState extends State<UpdateForm> {
                           selectedFieldDecoration: pinPutDecoration,
                           followingFieldDecoration: pinPutDecoration,
                           pinAnimationType: PinAnimationType.scale,
-                          textStyle: const TextStyle(
-                              color: kPrimaryColor, fontSize: 20.0),
+                          textStyle: const TextStyle(color: kPrimaryColor, fontSize: 20.0),
                         ),
                       )),
                   SizedBox(
@@ -569,10 +480,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   ),
                   Text(
                     'Resend OTP',
-                    style: TextStyle(
-                        fontFamily: 'GothamMedium',
-                        color: Colors.red,
-                        fontSize: 15.0),
+                    style: TextStyle(fontFamily: 'GothamMedium', color: Colors.red, fontSize: 15.0),
                   )
                 ],
               ),
@@ -706,8 +614,7 @@ class _UpdateFormState extends State<UpdateForm> {
                     //     phoneNumberController.text,
                     //     size,
                     //   );
-                    _showModalBSForVerification(
-                        context, phoneNumberController.text, size);
+                    _showModalBSForVerification(context, phoneNumberController.text, size);
                   },
                   child: Text(
                     'Send OTP for Verification',
@@ -747,7 +654,7 @@ class _UpdateFormState extends State<UpdateForm> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: kDefaultPadding,
-                  vertical: kDefaultPadding,
+                  vertical: kDefaultPadding / 2,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -782,7 +689,6 @@ class _UpdateFormState extends State<UpdateForm> {
                   fontFamily: 'GothamMedium',
                 ),
                 labelText: loginResponse.Firstname,
-                
               ),
             ),
             SizedBox(
@@ -797,7 +703,7 @@ class _UpdateFormState extends State<UpdateForm> {
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: kDefaultPadding,
-                    vertical: kDefaultPadding,
+                    vertical: kDefaultPadding / 2,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -854,7 +760,7 @@ class _UpdateFormState extends State<UpdateForm> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: kDefaultPadding,
-                  vertical: kDefaultPadding,
+                  vertical: kDefaultPadding / 2,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -890,8 +796,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   fontFamily: 'GothamMedium',
                 ),
                 suffixIcon: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
+                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
                   child: GestureDetector(
                     onTap: () {
                       _showModalBottomSheetForEmail(context, size);
@@ -917,7 +822,7 @@ class _UpdateFormState extends State<UpdateForm> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: kDefaultPadding,
-                  vertical: kDefaultPadding,
+                  vertical: kDefaultPadding / 2,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -957,8 +862,7 @@ class _UpdateFormState extends State<UpdateForm> {
                     _showModalBottomSheetForPass(context, size);
                   },
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
+                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
                     child: SvgPicture.asset(
                       'assets/images/edit.svg',
                       width: 5,
@@ -980,7 +884,7 @@ class _UpdateFormState extends State<UpdateForm> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: kDefaultPadding,
-                  vertical: kDefaultPadding,
+                  vertical: kDefaultPadding / 2,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -1016,8 +920,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   fontFamily: 'GothamMedium',
                 ),
                 suffixIcon: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
+                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
                   child: Image.asset(
                     'assets/images/downward_arrow.png',
                     width: 5,
@@ -1037,7 +940,7 @@ class _UpdateFormState extends State<UpdateForm> {
                     color: kPrimaryColor,
                     fontFamily: 'GothamMedium',
                     fontWeight: FontWeight.w300,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
                 Row(
@@ -1059,7 +962,7 @@ class _UpdateFormState extends State<UpdateForm> {
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
                               color: kPrimaryColor,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w300),
                         ),
                       ],
@@ -1080,7 +983,7 @@ class _UpdateFormState extends State<UpdateForm> {
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
                               color: kPrimaryColor,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w300),
                         ),
                       ],
@@ -1099,7 +1002,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: kDefaultPadding,
-                      vertical: kDefaultPadding,
+                      vertical: kDefaultPadding / 2,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -1126,9 +1029,7 @@ class _UpdateFormState extends State<UpdateForm> {
                       gapPadding: 10,
                     ),
                     hintText: 'Phone Number',
-                    labelText: loginResponse.phoneNo == ""
-                        ? 'Phone Number'
-                        : loginResponse.phoneNo,
+                    labelText: loginResponse.phoneNo == "" ? 'Phone Number' : loginResponse.phoneNo,
                     labelStyle: TextStyle(
                       color: kPrimaryColor,
                     ),
@@ -1137,8 +1038,7 @@ class _UpdateFormState extends State<UpdateForm> {
                       fontFamily: 'GothamMedium',
                     ),
                     suffixIcon: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding / 1.5),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
                       child: GestureDetector(
                         onTap: () {
                           _showModalBottomSheet(context, size);
@@ -1156,13 +1056,12 @@ class _UpdateFormState extends State<UpdateForm> {
             ),
             GestureDetector(
               onTap: () async {
-                bool todo = await updateController
-                    .updateCustomer(new UpdateCustomerData());
+                bool todo = await updateController.updateCustomer(new UpdateCustomerData());
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: kDefaultPadding * 0.5),
                 margin: EdgeInsets.symmetric(vertical: kDefaultPadding),
-                width: size.width / 2,
+                width: size.width / 2.4,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(13),
                   color: kPrimaryColor,
@@ -1173,7 +1072,7 @@ class _UpdateFormState extends State<UpdateForm> {
                     style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'GothamMedium',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

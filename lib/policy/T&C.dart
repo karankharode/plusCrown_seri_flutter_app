@@ -3,33 +3,35 @@ import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
+import 'package:sizer/sizer.dart';
 
 class Terms extends StatelessWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
 
-  const Terms(this.loginResponse, this.cartData);
+  Terms(this.loginResponse, this.cartData);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildTextAppBar(context, "Terms & Conditions", loginResponse, true, false),
+        appBar: buildTextAppBar(context, "Terms & Conditions", loginResponse, true, false, null),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.all(22),
+          padding: const EdgeInsets.all(18),
           child: Column(
             children: [
-              SizedBox(height: 15),
               Container(
                 child: Text(
                   "-- Welcome to Pluscrown --",
                   style: TextStyle(
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width / 22,
-                      color: Color.fromARGB(255, 71, 54, 111)),
+                    fontFamily: 'GothamMedium',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 2.1.h,
+                    color: Color(0xFF23124A),
+                    // color: Color.fromARGB(255, 71, 54, 111)
+                  ),
                 ),
               ),
               SizedBox(height: 15),
@@ -54,8 +56,8 @@ class Terms extends StatelessWidget {
                       ''',
                   style: TextStyle(
                       fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width / 22,
+                      fontWeight: FontWeight.w500,
+                      fontSize: MediaQuery.of(context).size.width / 24,
                       color: Color.fromARGB(255, 71, 54, 111)),
                 ),
               ),

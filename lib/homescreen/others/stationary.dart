@@ -1,4 +1,5 @@
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/listingPoster.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/subCategoryBuilder.dart';
@@ -11,7 +12,6 @@ import 'package:seri_flutter_app/homescreen/controller/products_controller.dart'
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import '../../constants.dart';
-
 
 class Stationary extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -81,80 +81,20 @@ class _StationaryState extends State<Stationary> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               search == true
-                  ? Stack(
-                      children: <Widget>[
-                        Container(
-                          height: size.height * 0.1,
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                        Positioned(
-                          child: Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding,
-                              vertical: kDefaultPadding * 0.8,
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding * 0.5,
-                            ),
-                            height: size.height * 0.05,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    right: kDefaultPadding,
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/search.png',
-                                    width: size.width * 0.06,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      // contentPadding:
-                                      //     EdgeInsets.only(top: kDefaultPadding * 0.05),
-                                      hintText: "SEARCH PRODUCTS",
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'GothamMedium',
-                                        color: kPrimaryColor.withOpacity(0.5),
-                                      ),
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      search = false;
-                                    });
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/cross_purple.png',
-                                    width: size.width * 0.06,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                  ? buildSearchBar(
+                      context,
+                      size,
+                      () {
+                        setState(() {
+                          search = false;
+                        });
+                      }, loginResponse, cartData
                     )
-                  : Container(
-                      height: 0.0,
-                      width: 0.0,
-                    ),
+                  : Container(),
               SizedBox(
                 height: 2,
               ),
-              buildListingPoster(context, 'assets/stationary/stationary.png',"7"),
+              buildListingPoster(context, 'assets/stationary/stationary.png', "7"),
               SizedBox(
                 height: 5,
               ),

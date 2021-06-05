@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/cartwithBadge.dart';
 
-AppBar buildAppBarWithSearch(BuildContext context, loginResponse, searchAction) {
+import '../../../constants.dart';
+
+// bool search;
+AppBar buildAppBarWithSearch(
+  BuildContext context,
+  loginResponse,
+  searchAction,
+) {
   return AppBar(
     automaticallyImplyLeading: true,
     backgroundColor: Color.fromARGB(255, 71, 54, 111),

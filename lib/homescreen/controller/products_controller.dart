@@ -14,6 +14,16 @@ class ProductController {
         await _httpPostRequestForGetProductsByCategory(endPointUrl, parameters);
     return productsList;
   }
+
+  Future<List<ProductData>> getProductByKeyword(String keyword) async {
+    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/search/";
+    final parameters = ProductData().getKeyword(keyword);
+
+    List<ProductData> productsList =
+        await _httpPostRequestForGetProductsByCategory(endPointUrl, parameters);
+    return productsList;
+  }
+
   Future<List<ProductData>> getProductByMedium(ProductData productData) async {
     const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/get_product_by_medium/";
     final parameters = productData.getFormData(productData);
@@ -45,7 +55,7 @@ class ProductController {
         return null;
       }
     } catch (e) {
-      throw new Exception('Error');
+      return null;
     }
   }
 }

@@ -59,189 +59,184 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
-      },
-      child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 249, 249, 249),
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 71, 54, 111),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/icons/leftarrowwhite.png',
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 249, 249, 249),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 71, 54, 111),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Image.asset(
+              'assets/icons/leftarrowwhite.png',
+              width: MediaQuery.of(context).size.width * 0.07,
             ),
           ),
-          title: Text(
-            "Return/Exchange",
-            style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      'assets/icons/search3.png',
-                      width: MediaQuery.of(context).size.width * 0.07,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  FutureBuilder(
-                      future: futureForCart,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          CartData cartData = snapshot.data;
-                          return GestureDetector(
-                            onTap: () {
-                              cartData.cartProducts.length == 0
-                                  ? Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              EmptyCartPage(
-                                                loginResponse,
-                                                cartData,
-                                              )))
-                                  : Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Cart(
-                                                loginResponse,
-                                                cartData,
-                                              )));
-                            },
-                            child: Badge(
-                                position:
-                                    BadgePosition.topEnd(top: -8, end: -10),
-                                badgeColor: Colors.white,
-                                badgeContent: Text(
-                                  cartData.cartProducts.length.toString(),
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              35),
-                                ),
-                                child: Image.asset(
-                                  'assets/icons/cart1.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                )),
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
-                  SizedBox(
-                    width: 15,
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
+        title: Text(
+          "Return/Exchange",
+          style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.fromLTRB(20, 20, 10, 15),
-                  child: Text(
-                    'Order ID: $orderId',
-                    style: TextStyle(
-                      fontSize: 11.0.sp,
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(255, 71, 54, 111),
-                    ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Image.asset(
+                    'assets/icons/search3.png',
+                    width: MediaQuery.of(context).size.width * 0.07,
                   ),
                 ),
-                Container(
-                  width: queryData.size.width,
-                  height: queryData.size.height / 5.2,
-                  margin: EdgeInsets.fromLTRB(queryData.size.width / 25, 5,
-                      queryData.size.width / 25, 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                    ),
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            'assets/images/firstpage.png',
-                            height: queryData.size.width / 3.3,
-                            width: queryData.size.width / 4.3,
-                          ),
-                        ),
-                        SizedBox(
-                          width: queryData.size.width / 35,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Text(
-                                'CRAFT CLUB Love Printed diary in euro binding A5 Diaries (Multicolor).',
-                                style: TextStyle(
-                                  fontSize: 11.0.sp,
-                                  fontFamily: 'GothamMedium',
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                ),
-                              ),
-                              width: queryData.size.width / 1.8,
-                            ),
-                            Container(
-                              child: Text(
-                                'Rs 999',
-                                style: TextStyle(
-                                  fontSize: 11.0.sp,
-                                  fontFamily: 'GothamMedium',
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                SizedBox(
+                  width: 10,
                 ),
-                showExchangeAndReturnButtons
-                    ? _buildExchangeAndReturnButtons(queryData)
-                    : Container(),
-                showExchangeInfo ? _buildExchangeInfo(queryData) : Container(),
-                showReturnInfo ? _buildReturnInfo(queryData) : Container(),
-                showReturnAddressScreen
-                    ? _buildFinalReturnAddressScreen(queryData)
-                    : Container(),
-                showExchangeAddressScreen
-                    ? _buildFinalExchangeAddressScreen(queryData)
-                    : Container(),
+                FutureBuilder(
+                    future: futureForCart,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        CartData cartData = snapshot.data;
+                        return GestureDetector(
+                          onTap: () {
+                            cartData.cartProducts.length == 0
+                                ? Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            EmptyCartPage(
+                                              loginResponse,
+                                              cartData,
+                                            )))
+                                : Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Cart(
+                                              loginResponse,
+                                              cartData,
+                                            )));
+                          },
+                          child: Badge(
+                              position:
+                                  BadgePosition.topEnd(top: -8, end: -10),
+                              badgeColor: Colors.white,
+                              badgeContent: Text(
+                                cartData.cartProducts.length.toString(),
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width /
+                                            35),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/cart1.png',
+                                width:
+                                    MediaQuery.of(context).size.width * 0.07,
+                              )),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+                SizedBox(
+                  width: 15,
+                ),
               ],
             ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.fromLTRB(20, 20, 10, 15),
+                child: Text(
+                  'Order ID: $orderId',
+                  style: TextStyle(
+                    fontSize: 11.0.sp,
+                    fontFamily: 'GothamMedium',
+                    fontWeight: FontWeight.w600,
+                    color: Color.fromARGB(255, 71, 54, 111),
+                  ),
+                ),
+              ),
+              Container(
+                width: queryData.size.width,
+                height: queryData.size.height / 5.2,
+                margin: EdgeInsets.fromLTRB(queryData.size.width / 25, 5,
+                    queryData.size.width / 25, 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    color: Color.fromARGB(255, 71, 54, 111),
+                  ),
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        child: Image.asset(
+                          'assets/images/firstpage.png',
+                          height: queryData.size.width / 3.3,
+                          width: queryData.size.width / 4.3,
+                        ),
+                      ),
+                      SizedBox(
+                        width: queryData.size.width / 35,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              'CRAFT CLUB Love Printed diary in euro binding A5 Diaries (Multicolor).',
+                              style: TextStyle(
+                                fontSize: 11.0.sp,
+                                fontFamily: 'GothamMedium',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 71, 54, 111),
+                              ),
+                            ),
+                            width: queryData.size.width / 1.8,
+                          ),
+                          Container(
+                            child: Text(
+                              'Rs 999',
+                              style: TextStyle(
+                                fontSize: 11.0.sp,
+                                fontFamily: 'GothamMedium',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 71, 54, 111),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              showExchangeAndReturnButtons
+                  ? _buildExchangeAndReturnButtons(queryData)
+                  : Container(),
+              showExchangeInfo ? _buildExchangeInfo(queryData) : Container(),
+              showReturnInfo ? _buildReturnInfo(queryData) : Container(),
+              showReturnAddressScreen
+                  ? _buildFinalReturnAddressScreen(queryData)
+                  : Container(),
+              showExchangeAddressScreen
+                  ? _buildFinalExchangeAddressScreen(queryData)
+                  : Container(),
+            ],
           ),
         ),
       ),

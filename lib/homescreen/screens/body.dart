@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
+import 'package:seri_flutter_app/common/screens/searchScreen/SearchScreen.dart';
 import 'package:seri_flutter_app/common/services/productListServices/productListSortService.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
@@ -134,12 +135,13 @@ class _BodyState extends State<Body> {
   }
 
   void resultListener(SpeechRecognitionResult result) {
-    _playVoice(result.recognizedWords.toString());
+    // _playVoice(result.recognizedWords.toString());
     setState(() {
       // Input can be shown here
       _queryController.text = result.recognizedWords;
     });
     Navigator.pop(context);
+    FocusScope.of(context).requestFocus();
   }
 
   void soundLevelListener(double level) {
@@ -177,7 +179,7 @@ class _BodyState extends State<Body> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          height: size.height * 0.065,
+          height: size.height * 0.055,
           decoration: BoxDecoration(
             color: kPrimaryColor,
           ),
@@ -191,12 +193,13 @@ class _BodyState extends State<Body> {
                   // vertical: kDefaultPadding * 0.8,
                 ),
                 padding: EdgeInsets.only(left: kDefaultPadding * 0.4),
-                height: size.height * 0.05,
+                height: size.height * 0.044,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.white,
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
@@ -204,14 +207,22 @@ class _BodyState extends State<Body> {
                       ),
                       child: Image.asset(
                         'assets/images/search.png',
-                        width: size.width * 0.06,
+                        width: size.width * 0.056,
                       ),
                     ),
                     Expanded(
                       child: TextFormField(
                         controller: _queryController,
+                        textAlign: TextAlign.left,
+                        onEditingComplete: () {
+                          Navigator.push(
+                              context,
+                              commonRouter(
+                                  SearchScreen(loginResponse, cartData, _queryController.text)));
+                          // print(_queryController.text);
+                        },
                         decoration: InputDecoration(
-                          // contentPadding: EdgeInsets.all(kDefaultPadding * 0.05),
+                          contentPadding: EdgeInsets.only(bottom: 11, top: 11),
                           hintText: "SEARCH PRODUCTS",
                           hintStyle: TextStyle(
                             fontFamily: 'GothamMedium',
@@ -247,10 +258,10 @@ class _BodyState extends State<Body> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: kDefaultPadding / 1.6,
-                        vertical: kDefaultPadding / 2,
+                        vertical: kDefaultPadding / 1.9,
                       ),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 4,
+                        height: MediaQuery.of(context).size.height / 4.27,
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           child: new Carousel(
@@ -286,39 +297,39 @@ class _BodyState extends State<Body> {
                       //     )
                       //     ),
                     ),
-                    Positioned(
-                      right: MediaQuery.of(context).size.width / 14,
-                      bottom: MediaQuery.of(context).size.height / 20,
-                      // right: 28,
-                      // bottom: 28,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(commonRouter(ListingPageForClasses(
-                            loginResponse: loginResponse,
-                            cartData: cartData,
-                            above10th: true,
-                            catId: "1",
-                          )));
-                        },
-                        child: Container(
-                          height: size.height * 0.05,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: kPrimaryColor,
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Buy Now',
-                              style: TextStyle(
-                                fontFamily: 'GothamMedium',
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   right: MediaQuery.of(context).size.width / 14,
+                    //   bottom: MediaQuery.of(context).size.height / 20,
+                    //   // right: 28,
+                    //   // bottom: 28,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Navigator.of(context).push(commonRouter(ListingPageForClasses(
+                    //         loginResponse: loginResponse,
+                    //         cartData: cartData,
+                    //         above10th: true,
+                    //         catId: "1",
+                    //       )));
+                    //     },
+                    //     child: Container(
+                    //       height: size.height * 0.05,
+                    //       width: 80,
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         color: kPrimaryColor,
+                    //       ),
+                    //       child: Center(
+                    //         child: Text(
+                    //           'Buy Now',
+                    //           style: TextStyle(
+                    //             fontFamily: 'GothamMedium',
+                    //             color: Colors.white,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
                   SizedBox(height: 8),
                   FutureBuilder(

@@ -4,6 +4,7 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/components/CustomDrawer.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/listingPoster.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/subCategoryBuilder.dart';
@@ -68,9 +69,9 @@ class _StoryState extends State<Story> {
 
   int _counter = 0;
 
+  bool search = false;
   @override
   Widget build(BuildContext context) {
-    bool search = false;
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -87,80 +88,20 @@ class _StoryState extends State<Story> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             search == true
-                ? Stack(
-                    children: <Widget>[
-                      Container(
-                        height: size.height * 0.1,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                      Positioned(
-                        child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.symmetric(
-                            horizontal: kDefaultPadding,
-                            vertical: kDefaultPadding * 0.8,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: kDefaultPadding * 0.5,
-                          ),
-                          height: size.height * 0.05,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: kDefaultPadding,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/search.png',
-                                  width: size.width * 0.06,
-                                ),
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    // contentPadding:
-                                    //     EdgeInsets.only(top: kDefaultPadding * 0.05),
-                                    hintText: "SEARCH PRODUCTS",
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'GothamMedium',
-                                      color: kPrimaryColor.withOpacity(0.5),
-                                    ),
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    search = false;
-                                  });
-                                },
-                                child: Image.asset(
-                                  'assets/images/cross_purple.png',
-                                  width: size.width * 0.06,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                ? buildSearchBar(
+                    context,
+                    size,
+                    () {
+                      setState(() {
+                        search = false;
+                      });
+                    }, loginResponse, cartData
                   )
-                : Container(
-                    height: 0.0,
-                    width: 0.0,
-                  ),
+                : Container(),
             SizedBox(
               height: 3,
             ),
-            buildListingPoster(context, 'assets/images/story_books.png',"10"),
+            buildListingPoster(context, 'assets/images/story_books.png', "10"),
             fetched
                 ? Expanded(
                     child: ListView(
