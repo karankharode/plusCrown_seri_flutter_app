@@ -36,7 +36,7 @@ SafeArea buildSearchBar(
                 ),
                 child: Image.asset(
                   'assets/images/search.png',
-                  width: size.width * 0.06,
+                  width: size.width * 0.056,
                 ),
               ),
               Expanded(
@@ -50,8 +50,7 @@ SafeArea buildSearchBar(
                             SearchScreen(loginResponse, cartData, _searchController.text)));
                   },
                   decoration: InputDecoration(
-                    // contentPadding:
-                    //     EdgeInsets.only(top: kDefaultPadding * 0.05),
+                    contentPadding: EdgeInsets.only(bottom: 11),
                     hintText: "SEARCH PRODUCTS",
                     hintStyle: TextStyle(
                       fontFamily: 'GothamMedium',

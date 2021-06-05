@@ -88,8 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           setState(() {});
                         },
                         decoration: InputDecoration(
-                          // contentPadding:
-                          //     EdgeInsets.only(top: kDefaultPadding * 0.05),
+                          contentPadding: EdgeInsets.only(bottom: 11),
                           hintText: "SEARCH PRODUCTS",
                           hintStyle: TextStyle(
                             fontFamily: 'GothamMedium',
