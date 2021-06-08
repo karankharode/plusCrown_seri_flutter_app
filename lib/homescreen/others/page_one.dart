@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
@@ -18,7 +17,10 @@ import 'package:seri_flutter_app/common/widgets/ProductScreenWidgets.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/horizontalProductList.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/constants.dart';
+import 'package:seri_flutter_app/empty-wishlist/controller/wishListController.dart';
+import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
 import 'package:seri_flutter_app/homescreen/data/title.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
@@ -148,29 +150,41 @@ class _PageOneState extends State<PageOne> {
       bool response = await cartController.addToCart(addToCartData);
       print(response);
       if (response) {
-        Flushbar(
-          margin: EdgeInsets.all(8),
-          borderRadius: 8,
-          message: "Added Successfully",
-          icon: Icon(
-            Icons.info_outline,
-            size: 20,
-            color: Colors.lightBlue[800],
-          ),
-          duration: Duration(seconds: 2),
-        )..show(context);
+        showCustomFlushBar(context, "Added Successfully", 2);
       } else {
-        Flushbar(
-          margin: EdgeInsets.all(8),
-          borderRadius: 8,
-          message: "Error adding to Cart",
-          icon: Icon(
-            Icons.info_outline,
-            size: 20,
-            color: Colors.lightBlue[800],
-          ),
-          duration: Duration(seconds: 2),
-        )..show(context);
+        showCustomFlushBar(context, "Error adding to Cart", 2);
+      }
+    }
+
+    addToWishList(productId) async {
+      setState(() {
+        wishlist = true;
+      });
+      bool response = await WishlistController()
+          .addToWishlist(AddToWishlistData(customerId: loginResponse.id, productId: productId));
+      setState(() {
+        wishlist = response;
+      });
+      if (response) {
+        showCustomFlushBar(context, "Added Successfully", 2);
+      } else {
+        showCustomFlushBar(context, "Error Adding to WishList", 2);
+      }
+    }
+
+    removeFromWishList(productId) async {
+      setState(() {
+        wishlist = false;
+      });
+      bool response = await WishlistController().removeFromWishlist(
+          AddToWishlistData(customerId: loginResponse.id, productId: productId));
+      setState(() {
+        wishlist = !response;
+      });
+      if (response) {
+        showCustomFlushBar(context, "Removed Product", 2);
+      } else {
+        showCustomFlushBar(context, "Error removing from WishList", 2);
       }
     }
 
@@ -194,7 +208,7 @@ class _PageOneState extends State<PageOne> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           search == true
-              ? buildSearchBar(context, size, () {
+              ? SearchBar(context, size, () {
                   setState(() {
                     search = false;
                   });
@@ -274,14 +288,9 @@ class _PageOneState extends State<PageOne> {
                                     )));
                               },
                               child: Center(
-                                child: PinchZoom(
-                                  image: CachedNetworkImage(
-                                    imageUrl: _currentImage == "" ? myProduct.img : _currentImage,
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
-                                  ),
-                                  zoomedBackgroundColor: Colors.black.withOpacity(0.5),
-                                  resetDuration: const Duration(milliseconds: 100),
-                                  maxScale: 2.5,
+                                child: CachedNetworkImage(
+                                  imageUrl: _currentImage == "" ? myProduct.img : _currentImage,
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
                                 ),
                               ),
                             ),
@@ -293,9 +302,10 @@ class _PageOneState extends State<PageOne> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    wishlist = wishlist == false ? true : false;
-                                  });
+                                  if (wishlist == false)
+                                    addToWishList(myProduct.id);
+                                  else
+                                    removeFromWishList(myProduct.id);
                                 },
                                 child: Container(
                                   child: wishlist == true
@@ -502,10 +512,11 @@ class _PageOneState extends State<PageOne> {
                     ),
                     Image.asset(
                       'assets/images/binding.png',
-                      width: MediaQuery.of(context).size.width * 0.09,
+                      fit: BoxFit.fill,
+                      width: MediaQuery.of(context).size.width * 0.08,
                     ),
                     SizedBox(
-                      width: 16,
+                      width: 10,
                     ),
                     Flexible(
                       child: Container(

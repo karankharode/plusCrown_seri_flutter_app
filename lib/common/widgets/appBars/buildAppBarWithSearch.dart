@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/cartwithBadge.dart';
 
-import '../../../constants.dart';
-
 // bool search;
 AppBar buildAppBarWithSearch(
   BuildContext context,

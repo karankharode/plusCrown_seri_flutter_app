@@ -5,6 +5,7 @@ import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
+import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,12 +28,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
   Future futureForCart;
 
   var cartController = CartController();
-  TextStyle textStyle = TextStyle(
-    fontFamily: 'GothamMedium',
-    fontSize: 2.1.h,
-    fontWeight: FontWeight.w500,
-    color: Color(0xFF23124A),
-  );
 
   @override
   void initState() {
@@ -51,9 +46,15 @@ class _AboutUsPageState extends State<AboutUsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-                '• Pluscrown is an e-commerce web portal where we thrive to provide educational related materials and stationary from local retailers and suppliers for the students to have easy access to educational products.',
-                style: textStyle),
+            RichText(
+                text: TextSpan(style: textStyle, children: [
+              TextSpan(text: "•"),
+              TextSpan(text: " Pluscrown", style: heading),
+              TextSpan(
+                text:
+                    ' is an e-commerce web portal where we thrive to provide educational related materials and stationary from local retailers and suppliers for the students to have easy access to educational products.',
+              ),
+            ])),
             SizedBox(height: 2.h),
             Text('• We provide all stream books for 11th & 12th stds. (for 8-10 and 11, 12)',
                 style: textStyle),
@@ -68,7 +69,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                 '• We strive to achieve customer satisfaction by completing easy user-friendly websites, Quick and user-friendly payment methods and easy tracking options.',
                 style: textStyle),
             SizedBox(height: 2.h),
-            Text('Thanks for visiting our website.', style: textStyle),
+            Text('Thanks for visiting our Application.', style: textStyle),
             Spacer(),
             buildBottomAlignedLogo(context),
             // Container(

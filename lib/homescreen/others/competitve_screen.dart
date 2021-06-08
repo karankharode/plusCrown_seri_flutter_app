@@ -11,7 +11,6 @@ import 'package:seri_flutter_app/common/widgets/commonWidgets/subCategoryBuilder
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-
 import '../../constants.dart';
 
 class Competitive extends StatefulWidget {
@@ -81,15 +80,11 @@ class _CompetitiveState extends State<Competitive> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             search == true
-                ? buildSearchBar(
-                    context,
-                    size,
-                    () {
-                      setState(() {
-                        search = false;
-                      });
-                    }, loginResponse, cartData
-                  )
+                ? SearchBar(context, size, () {
+                    setState(() {
+                      search = false;
+                    });
+                  }, loginResponse, cartData)
                 : Container(),
             buildListingPoster(context, 'assets/images/competitive.png', "6"),
             fetched

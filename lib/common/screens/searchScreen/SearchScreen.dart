@@ -1,6 +1,6 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/404builder.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
@@ -10,6 +10,9 @@ import 'package:seri_flutter_app/homescreen/data/product_list.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class SearchScreen extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -30,10 +33,108 @@ class _SearchScreenState extends State<SearchScreen> {
   String searchKeyWord;
   Future futureForSearch;
   TextEditingController _searchController;
+  bool _hasSpeech = false;
+  double level = 0.0;
+  double minSoundLevel = 50000;
+  double maxSoundLevel = -50000;
+  String lastWords = "";
+  String lastError = "";
+  String lastStatus = "";
+  String _currentLocaleId = "";
+  // ignore: unused_field
+  List<LocaleName> _localeNames = [];
+  final SpeechToText speech = SpeechToText();
+  void errorListener(SpeechRecognitionError error) {
+    // print("Received error status: $error, listening: ${speech.isListening}");
+    setState(() {
+      lastError = "${error.errorMsg} - ${error.permanent}";
+    });
+  }
+
+  void statusListener(String status) {
+    // print(
+    // "Received listener status: $status, listening: ${speech.isListening}");
+    setState(() {
+      lastStatus = "$status";
+    });
+  }
+
+  void initSpeech() async {
+    bool hasSpeech = await speech.initialize(onError: errorListener, onStatus: statusListener);
+    if (hasSpeech) {
+      _localeNames = await speech.locales();
+
+      var systemLocale = await speech.systemLocale();
+      _currentLocaleId = systemLocale.localeId;
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _hasSpeech = hasSpeech;
+    });
+  }
+
+  bool first = false;
+
+  void startListening() {
+    lastWords = "";
+    lastError = "";
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Lottie.asset(
+                        'assets/animations/listen.json',
+                        // width: 180,
+                        // height: 180,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
+    speech.listen(
+        onResult: resultListener,
+        listenFor: Duration(seconds: 10),
+        localeId: _currentLocaleId,
+        onSoundLevelChange: soundLevelListener,
+        cancelOnError: true,
+        partialResults: false,
+        onDevice: true,
+        pauseFor: Duration(seconds: 2),
+        listenMode: ListenMode.confirmation);
+    setState(() {});
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    Navigator.pop(context);
+    _searchController.text = result.recognizedWords;
+    searchKeyWord = _searchController.text;
+    futureForSearch = ProductController().getProductByKeyword(searchKeyWord);
+    setState(() {});
+  }
+
+  void soundLevelListener(double level) {
+    minSoundLevel = min(minSoundLevel, level);
+    maxSoundLevel = max(maxSoundLevel, level);
+    // print("sound level $level: $minSoundLevel - $maxSoundLevel ");
+    setState(() {
+      this.level = level;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    initSpeech();
     searchKeyWord = widget.keyword;
     _searchController = TextEditingController(text: widget.keyword);
     futureForSearch = ProductController().getProductByKeyword(widget.keyword);
@@ -57,9 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   horizontal: kDefaultPadding,
                   vertical: 10,
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding * 0.5,
-                ),
+                padding: EdgeInsets.only(left: kDefaultPadding * 0.5),
                 height: size.height * 0.044,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -99,13 +198,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => _searchController.clear(),
-                      child: Image.asset(
-                        'assets/images/cross_purple.png',
-                        width: size.width * 0.06,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: IconButton(
+                        onPressed: !_hasSpeech || speech.isListening ? null : startListening,
+                        icon: Image.asset(
+                          'assets/images/mic.png',
+                          width: size.width * 0.06,
+                        ),
                       ),
                     ),
+                    // GestureDetector(
+                    //   onTap: () => _searchController.clear(),
+                    //   child: Image.asset(
+                    //     'assets/images/cross_purple.png',
+                    //     width: size.width * 0.06,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

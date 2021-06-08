@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
@@ -54,15 +53,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   getPermission() async {
-    await [
-      Permission.manageExternalStorage,
-      Permission.storage,
-    ].request();
+    await Permission.manageExternalStorage.request();
+    Permission.storage.request();
   }
 
   @override
   void initState() {
-    
     getCategoryData();
     getGlobalCartData();
     if (loginResponse == null) {
@@ -75,6 +71,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     loginController = Provider.of<LoginController>(context);
+    print(loginResponse.id);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBar(context, loginResponse),

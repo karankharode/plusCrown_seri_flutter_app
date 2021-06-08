@@ -88,15 +88,11 @@ class _StoryState extends State<Story> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             search == true
-                ? buildSearchBar(
-                    context,
-                    size,
-                    () {
-                      setState(() {
-                        search = false;
-                      });
-                    }, loginResponse, cartData
-                  )
+                ? SearchBar(context, size, () {
+                    setState(() {
+                      search = false;
+                    });
+                  }, loginResponse, cartData)
                 : Container(),
             SizedBox(
               height: 3,

@@ -1,13 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
-import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
@@ -63,7 +59,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           child: Column(
             children: [
               search == true
-                  ? buildSearchBar(context,
+                  ? SearchBar(context,
                       size,
                       () {
                         setState(() {

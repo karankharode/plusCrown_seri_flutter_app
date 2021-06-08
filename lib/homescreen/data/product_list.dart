@@ -1,8 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/networkImageBuilder.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
+import 'package:seri_flutter_app/empty-wishlist/controller/wishListController.dart';
+import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/homescreen/others/page_one.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
@@ -34,6 +39,37 @@ class _ProductListState extends State<ProductList> {
   }
 
   bool wishlist = false;
+  addToWishList(productId) async {
+    setState(() {
+      wishlist = true;
+    });
+    bool response = await WishlistController()
+        .addToWishlist(AddToWishlistData(customerId: loginResponse.id, productId: productId));
+    setState(() {
+      wishlist = response;
+    });
+    if (response) {
+      showCustomFlushBar(context, "Added Successfully", 2);
+    } else {
+      showCustomFlushBar(context, "Error Adding to WishList", 2);
+    }
+  }
+
+  removeFromWishList(productId) async {
+    setState(() {
+      wishlist = false;
+    });
+    bool response = await WishlistController()
+        .removeFromWishlist(AddToWishlistData(customerId: loginResponse.id, productId: productId));
+    setState(() {
+      wishlist = !response;
+    });
+    if (response) {
+      showCustomFlushBar(context, "Removed Product", 2);
+    } else {
+      showCustomFlushBar(context, "Error removing from WishList", 2);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +125,10 @@ class _ProductListState extends State<ProductList> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        wishlist = wishlist == false ? true : false;
-                      });
+                      if (wishlist == false)
+                        addToWishList(myProduct.id);
+                      else
+                        removeFromWishList(myProduct.id);
                     },
                     child: Padding(
                       padding: EdgeInsets.only(right: kDefaultPadding / 2.7),
@@ -122,21 +159,7 @@ class _ProductListState extends State<ProductList> {
                     // ),
                     ),
                 // child: widget.myProduct.img != null? Image.asset(widget.myProduct.img, fit: BoxFit.fill,): Container()
-                child: CachedNetworkImage(
-                  imageUrl: myProduct.img,
-                  placeholder: (BuildContext context, s) {
-                    return Lottie.asset(
-                      'assets/animations/imageLoader.json',
-                      // width: 180,
-                      height: 90,
-                      fit: BoxFit.scaleDown,
-                    );
-                  },
-                  errorWidget: (context, url, error) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.error),
-                  ),
-                ),
+                child: coverPageimageBuilder(myProduct.img),
               ),
             ),
             SizedBox(height: size.height / 115),

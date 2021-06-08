@@ -81,7 +81,7 @@ class _StationaryState extends State<Stationary> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               search == true
-                  ? buildSearchBar(
+                  ? SearchBar(
                       context,
                       size,
                       () {

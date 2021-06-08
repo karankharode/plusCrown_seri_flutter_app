@@ -64,7 +64,7 @@ class _ShowViewState extends State<ShowView> {
       body: Column(
         children: [
           search == true
-              ? buildSearchBar(context, size, () {
+              ? SearchBar(context, size, () {
                   setState(() {
                     search = false;
                   });
@@ -108,12 +108,12 @@ class _ShowViewState extends State<ShowView> {
                                     (widget.title.split('-').first.toString() == "Combos") ? 1 : 2,
                                 childAspectRatio:
                                     (widget.title.split('-').first.toString() == "Combos")
-                                        ? 0.85
+                                        ? 0.89
                                         : 2 / 2.9,
                                 mainAxisSpacing: 5.0,
                                 shrinkWrap: true,
                                 padding: (widget.title.split('-').first.toString() == "Combos")
-                                    ? EdgeInsets.fromLTRB(29, 0, 29, 15)
+                                    ? EdgeInsets.fromLTRB(15, 0, 15, 15)
                                     : EdgeInsets.fromLTRB(0, 0, 0, 15),
                                 physics: NeverScrollableScrollPhysics(),
                                 children: (widget.title.split('-').first.toString() == "Combos")

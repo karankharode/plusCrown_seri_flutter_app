@@ -5,7 +5,6 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
-import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,7 +74,7 @@ class _ContactUsState extends State<ContactUs> {
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
           child: Container(
             height: MediaQuery.of(context).size.height - 100,
             child: Column(
@@ -108,7 +107,8 @@ class _ContactUsState extends State<ContactUs> {
                       alignment: Alignment.bottomRight,
                       child: Image.asset(
                         'assets/icons/contact_us_bottom_image.jpg',
-                        height: (queryData.size.width / 1.205),
+                        height: (queryData.size.width / 1.13),
+                        width: double.infinity,
                       ),
                     ),
                     // buildBottomAlignedLogo(context),
@@ -118,10 +118,10 @@ class _ContactUsState extends State<ContactUs> {
                       children: [
                         Container(
                             alignment: Alignment.bottomRight,
-                            padding: EdgeInsets.only(right: 15, bottom: 10),
+                            padding: EdgeInsets.only(right: 0, bottom: 0),
                             child: Image.asset(
                               'assets/images/PlusCrown.png',
-                              width: (queryData.size.width / 2.05),
+                              width: (queryData.size.width / 1.7),
                             )),
                       ],
                     )
@@ -153,7 +153,7 @@ class _ContactUsState extends State<ContactUs> {
                 fontFamily: 'GothamMedium',
                 color: Color.fromARGB(255, 71, 54, 111),
                 fontSize: 13.0.sp,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

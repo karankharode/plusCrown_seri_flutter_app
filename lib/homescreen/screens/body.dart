@@ -13,12 +13,10 @@ import 'package:seri_flutter_app/homescreen/controller/products_controller.dart'
 import 'package:seri_flutter_app/homescreen/data/product_data.dart';
 import 'package:seri_flutter_app/homescreen/data/title.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
-import 'package:seri_flutter_app/listing-pages/screens/8_std_page.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:flutter_text_to_speech/flutter_text_to_speech.dart';
 
 import '../../constants.dart';
 
@@ -35,6 +33,14 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final LoginResponse loginResponse;
   final CartData cartData;
+
+  _BodyState(this.cartData, this.loginResponse);
+
+  var productController;
+  Future futureForProducts;
+  TextEditingController _queryController = TextEditingController();
+  bool fetched = false;
+
   bool _hasSpeech = false;
   double level = 0.0;
   double minSoundLevel = 50000;
@@ -46,23 +52,6 @@ class _BodyState extends State<Body> {
   // ignore: unused_field
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
-
-  _BodyState(this.cartData, this.loginResponse);
-
-  var productController;
-  Future futureForProducts;
-  TextEditingController _queryController = TextEditingController();
-  bool fetched = false;
-
-  _playVoice(String message) {
-    _voiceController.init().then((_) {
-      _voiceController.speak(
-        message,
-        VoiceControllerOptions(),
-      );
-    });
-  }
-
   void errorListener(SpeechRecognitionError error) {
     // print("Received error status: $error, listening: ${speech.isListening}");
     setState(() {
@@ -93,7 +82,6 @@ class _BodyState extends State<Body> {
     });
   }
 
-  VoiceController _voiceController;
   bool first = false;
 
   void startListening() {

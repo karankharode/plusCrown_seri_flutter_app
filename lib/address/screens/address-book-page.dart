@@ -1,13 +1,9 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
 
 import 'add_address.dart';
 import 'address-book.dart';

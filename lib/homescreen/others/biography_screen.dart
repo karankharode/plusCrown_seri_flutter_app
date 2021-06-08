@@ -80,7 +80,7 @@ class _BiographyState extends State<Biography> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             search == true
-                ? buildSearchBar(
+                ? SearchBar(
                     context,
                     size,
                     () {

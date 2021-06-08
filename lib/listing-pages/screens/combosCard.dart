@@ -11,7 +11,7 @@ Widget combosCard(
   bool wishlist = false;
   double width = MediaQuery.of(context).size.width / 1.5;
   return Padding(
-    padding: const EdgeInsets.all(10.0),
+    padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () {
         Navigator.of(context).push(commonRouter(PageOne(productData, loginResponse, cartData)));
@@ -67,26 +67,33 @@ Widget combosCard(
                   ),
                 ],
               ),
-              Container(
-                decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
-                height: width / 1.5,
-                width: width / 1.5,
-                child: CachedNetworkImage(
-                  imageUrl: productData.img,
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                  // height: width / 1.5,
+                  width: double.infinity,
+                  child: CachedNetworkImage(
+                    imageUrl: productData.img,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
-              Text(
-                productData.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  // fontSize: size.width * 0.03,
-                  fontFamily: 'GothamMedium',
-                  color: kPrimaryColor,
-                  fontWeight: FontWeight.bold,
-                  // color: Color.fromARGB(255, 71, 54, 111),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(3, 5, 3, 5),
+                child: Text(
+                  productData.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    // fontSize: size.width * 0.03,
+                    fontFamily: 'GothamMedium',
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                    // color: Color.fromARGB(255, 71, 54, 111),
+                  ),
                 ),
               ),
               Text.rich(

@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/login&signup/controller/login_controller.dart';
 import 'package:seri_flutter_app/login&signup/models/SignupData.dart';
 import 'package:sizer/sizer.dart';
+import '../../constants.dart';
 import 'login.dart';
 
 class SignupPage extends StatefulWidget {
@@ -29,6 +31,10 @@ class _SignupPageState extends State<SignupPage> {
 
   SignupData signupData;
   bool result = false;
+
+  SizedBox gapBox = SizedBox(
+    height: kDefaultPadding / 1.5,
+  );
 
   void doSignup() async {
     if (_formKey.currentState.validate()) {
@@ -83,7 +89,7 @@ class _SignupPageState extends State<SignupPage> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
+          padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -91,10 +97,13 @@ class _SignupPageState extends State<SignupPage> {
                 child: Column(
                   children: <Widget>[
                     // backgroundImage: AssetImage("assets/PC 2.png"),
-                    Image.asset(
-                      'assets/images/login_top_image.png',
-                      height: 100,
-                      width: 100,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 25),
+                      child: Image.asset(
+                        'assets/images/login_top_image.png',
+                        height: MediaQuery.of(context).size.width * 0.4,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                      ),
                     ),
 
                     Align(
@@ -121,7 +130,7 @@ class _SignupPageState extends State<SignupPage> {
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: TextFormField(
                                 validator: (val) {
                                   return val.isEmpty || val.length < 2
@@ -130,67 +139,37 @@ class _SignupPageState extends State<SignupPage> {
                                 },
                                 onChanged: (value) => name = value,
                                 cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    labelText: "Name",
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'GothamMedium',
-                                      fontSize: 10.0.sp,
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    )),
+                                decoration: getInputDecoration("Name"),
                               ),
                             ),
+                            gapBox,
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: TextFormField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                validator: (val) {
-                                  return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
-                                      ? null
-                                      : "Please provide valid number";
-                                },
-                                onChanged: (value) {
-                                  phoneNumString = value;
-                                },
-                                cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    labelText: "Phone Number",
-                                    labelStyle: TextStyle(
-                                      fontSize: 10.0.sp,
-                                      fontFamily: 'GothamMedium',
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    )),
-                              ),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  validator: (val) {
+                                    return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
+                                        ? null
+                                        : "Please provide valid number";
+                                  },
+                                  onChanged: (value) {
+                                    phoneNumString = value;
+                                  },
+                                  cursorColor: Color.fromARGB(255, 71, 54, 111),
+                                  decoration: getInputDecoration("Phone Number")),
                             ),
+                            gapBox,
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: Form(
-                                autovalidateMode: AutovalidateMode.always,
                                 child: TextFormField(
                                   validator: (val) {
                                     return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val) ||
@@ -203,30 +182,16 @@ class _SignupPageState extends State<SignupPage> {
                                   },
                                   onChanged: (value) => email = value,
                                   cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                  decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: Color.fromARGB(255, 71, 54, 111),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      labelText: "Email Address",
-                                      labelStyle: TextStyle(
-                                        fontFamily: 'GothamMedium',
-                                        fontSize: 10.0.sp,
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      )),
+                                  decoration: getInputDecoration("Email Address"),
                                 ),
                               ),
                             ),
+                            gapBox,
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: TextFormField(
                                 validator: (val) {
                                   return RegExp("^(?=.{8,32}\$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*")
@@ -238,41 +203,60 @@ class _SignupPageState extends State<SignupPage> {
                                 onChanged: (value) => password = value,
                                 cursorColor: Color.fromARGB(255, 71, 54, 111),
                                 decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      width: 1,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
                                     ),
-                                  ),
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = !_obscureText;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        !_obscureText ? Icons.visibility : Icons.visibility_off,
-                                        color: !_obscureText
-                                            ? Color.fromARGB(255, 71, 54, 111)
-                                            : Colors.grey[500],
-                                      )),
-                                  labelText: "Password",
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'GothamMedium',
-                                    fontSize: 10.0.sp,
-                                    color: Color.fromARGB(255, 71, 54, 111),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
+                                    ),
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          !_obscureText ? Icons.visibility : Icons.visibility_off,
+                                          color: !_obscureText
+                                              ? Color.fromARGB(255, 71, 54, 111)
+                                              : Colors.grey[500],
+                                        )),
+                                    labelText: "Password",
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: kDefaultPadding,
+                                      vertical: kDefaultPadding / 2,
+                                    ),
+                                    labelStyle: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      fontFamily: 'GothamMedium',
+                                      color: Color.fromARGB(255, 71, 54, 111),
+                                    )),
                               ),
                             ),
+                            gapBox,
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: TextFormField(
                                 cursorColor: Color.fromARGB(255, 71, 54, 111),
                                 validator: (val) {
@@ -281,41 +265,60 @@ class _SignupPageState extends State<SignupPage> {
                                 obscureText: !_obscureText,
                                 onChanged: (value) => checkPass = value,
                                 decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      width: 1,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
                                     ),
-                                  ),
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _obscureText = !_obscureText;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        !_obscureText ? Icons.visibility : Icons.visibility_off,
-                                        color: !_obscureText
-                                            ? Color.fromARGB(255, 71, 54, 111)
-                                            : Colors.grey[500],
-                                      )),
-                                  labelText: "Retype Password",
-                                  labelStyle: TextStyle(
-                                    fontFamily: 'GothamMedium',
-                                    fontSize: 10.0.sp,
-                                    color: Color.fromARGB(255, 71, 54, 111),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      gapPadding: 10,
+                                    ),
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          !_obscureText ? Icons.visibility : Icons.visibility_off,
+                                          color: !_obscureText
+                                              ? Color.fromARGB(255, 71, 54, 111)
+                                              : Colors.grey[500],
+                                        )),
+                                    labelText: "Retype Password",
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: kDefaultPadding,
+                                      vertical: kDefaultPadding / 2,
+                                    ),
+                                    labelStyle: TextStyle(
+                                      fontSize: 10.0.sp,
+                                      fontFamily: 'GothamMedium',
+                                      color: Color.fromARGB(255, 71, 54, 111),
+                                    )),
                               ),
                             ),
+                            gapBox,
                             Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              height: 65,
+                              // height: 65,
                               child: TextFormField(
                                 validator: (val) {
                                   return RegExp(r'(^[1-9][0-9]{5}$)').hasMatch(val)
@@ -324,22 +327,7 @@ class _SignupPageState extends State<SignupPage> {
                                 },
                                 cursorColor: Color.fromARGB(255, 71, 54, 111),
                                 onChanged: (value) => pinCode,
-                                decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    labelText: "Pincode",
-                                    labelStyle: TextStyle(
-                                      fontSize: 10.0.sp,
-                                      fontFamily: 'GothamMedium',
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    )),
+                                decoration: getInputDecoration("Pincode"),
                               ),
                             ),
                           ],
@@ -381,8 +369,8 @@ class _SignupPageState extends State<SignupPage> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       padding: EdgeInsets.only(top: 0, left: 0),
-                      height: MediaQuery.of(context).size.height / 17,
-                      width: MediaQuery.of(context).size.width / 2.2,
+                      height: MediaQuery.of(context).size.height / 18,
+                      width: MediaQuery.of(context).size.width / 2.9,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border(

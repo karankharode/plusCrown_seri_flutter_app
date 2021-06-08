@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
+import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   final LoginResponse loginResponse;
@@ -13,20 +14,23 @@ class PrivacyPolicy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(
-        fontFamily: 'GothamMedium',
-        fontSize: 2.1.h,
-        fontWeight: FontWeight.w500,
-        color: Color(0xFF23124A));
     return Scaffold(
         appBar: buildTextAppBar(context, "Privacy Policy", loginResponse, true, false, null),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.fromLTRB(18, 5, 18, 2),
           child: Column(
             children: [
+              Lottie.asset(
+                "assets/animations/privacy.json",
+                repeat: true,
+                width: 190,
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 child: Text(
                   "• We are very glad that you love our work. Data protection is high priority for the management team of Pluscrown",
@@ -43,19 +47,24 @@ class PrivacyPolicy extends StatelessWidget {
               SizedBox(height: 5),
               Container(
                 child: Text(
-                  "\n• This Website includes Copyrighted Content, such as text, graphics, logos, icons, images and is property of Pluscrown.",
+                  "\n• This Application includes Copyrighted Content, such as text, graphics, logos, icons, images and is property of Pluscrown.",
                   style: textStyle,
                 ),
               ),
               SizedBox(height: 5),
               Container(
                 child: Text(
-                  '''\n• What information do we collect from our customers? \n---> When you use our Platform, we collect and store your information which is provided by you during Sign-up and Registration. In general, you can browse the Platform without any details or revealing any personal information about yourself. Once you Register with us, Our main objective behind this is to provide you a safe, efficient and customized shopping experience.
-We collect personal information such as --
+                  '''\n• What information do we collect from our customers?
+
+    When you use our Platform, we collect and store your information which is provided by you during Sign-up and Registration. In general, you can browse the Platform without any details or revealing any personal information about yourself. Once you Register with us, Our main objective behind this is to provide you a safe, efficient and customized shopping experience.
+
+We collect personal information such as :
+
      . Email address
      . First name and Last name
      . Phone number
-     . Address, State, Province, ZIP/Postal code, City
+     . Address, State, Province
+     . ZIP/Postal code, City
      . Cookies and Usage Data. ''',
                   style: textStyle,
                 ),
@@ -84,8 +93,8 @@ We collect personal information such as --
               SizedBox(height: 5),
               Container(
                 child: Text(
-                  "\nSecurity:",
-                  style: textStyle,
+                  "\n-- Security --",
+                  style: heading,
                 ),
               ),
               SizedBox(height: 5),
@@ -138,7 +147,6 @@ We collect personal information such as --
               Container(
                 child: Text(
                   '''• We work to protect the security of your personal information during transmission by using encryption protocols and software.
-
                   ''',
                   style: textStyle,
                 ),
@@ -172,7 +180,7 @@ We collect personal information such as --
                 child: Text(
                   '''-- Changes to this Privacy Policy --
                   ''',
-                  style: textStyle,
+                  style: heading,
                 ),
               ),
               SizedBox(height: 5),
@@ -188,7 +196,7 @@ We collect personal information such as --
                 child: Text(
                   '''-- Children Privacy --
                   ''',
-                  style: textStyle,
+                  style: heading,
                 ),
               ),
               SizedBox(height: 5),

@@ -3,8 +3,11 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
+import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
+import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class FAQSection extends StatelessWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
@@ -139,12 +142,7 @@ class FAQSection extends StatelessWidget {
               Flexible(
                 child: Text(
                   ques,
-                  style: TextStyle(
-                    fontFamily: 'GothamMedium',
-                    fontSize: MediaQuery.of(context).size.width / 22,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF23124A),
-                  ),
+                  style: heading,
                 ),
               ),
             ],
@@ -173,9 +171,9 @@ class FAQSection extends StatelessWidget {
                       ans,
                       style: TextStyle(
                         fontFamily: 'GothamMedium',
-                        fontSize: MediaQuery.of(context).size.width / 24,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF23124A),
+                        fontSize: 2.2.h,
+                        fontWeight: FontWeight.w400,
+                        color: kPrimaryColor.withOpacity(0.9),
                       ),
                     ),
                   ),

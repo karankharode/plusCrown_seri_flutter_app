@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/bottomAlignedLogo.dart';
+import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
 
 class Terms extends StatelessWidget {
   final LoginResponse loginResponse;
@@ -19,20 +19,11 @@ class Terms extends StatelessWidget {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
           child: Column(
             children: [
               Container(
-                child: Text(
-                  "-- Welcome to Pluscrown --",
-                  style: TextStyle(
-                    fontFamily: 'GothamMedium',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 2.1.h,
-                    color: Color(0xFF23124A),
-                    // color: Color.fromARGB(255, 71, 54, 111)
-                  ),
-                ),
+                child: Text("-- Welcome to Pluscrown --", style: heading),
               ),
               SizedBox(height: 15),
               Container(
@@ -52,13 +43,13 @@ class Terms extends StatelessWidget {
 • If you believe that your intellectual property rights have been unfairly used which gives rise to security concerns, please contact us for the correct information or inquiry.
 
 • The website is available only to those who can legally contract under applicable law. If you are under 18, you are prohibited from using purchasing contracting from this website.
-
-                      ''',
-                  style: TextStyle(
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.w500,
-                      fontSize: MediaQuery.of(context).size.width / 24,
-                      color: Color.fromARGB(255, 71, 54, 111)),
+''',
+                  style: textStyle,
+                  // style: TextStyle(
+                  //     fontFamily: 'GothamMedium',
+                  //     fontWeight: FontWeight.w500,
+                  //     fontSize: MediaQuery.of(context).size.width / 24,
+                  //     color: Color.fromARGB(255, 71, 54, 111)),
                 ),
               ),
               buildBottomAlignedLogo(context)

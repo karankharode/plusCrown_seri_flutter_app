@@ -41,10 +41,15 @@ class CustomDrawer extends StatelessWidget {
     Navigator.of(context).push(commonRouter(destinationRoute));
   }
 
+  // nullNavigator(context, destinationRoute) {
+  //   // Navigator.pop(context);
+  //   // Navigator.of(context).push(commonRouter(destinationRoute));
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 85.w,
+      width: 78.w,
       color: Colors.white,
       child: Column(
         children: [
@@ -76,7 +81,7 @@ class CustomDrawer extends StatelessWidget {
                                 border: Border.all(color: Colors.black38)),
                             child: CircleAvatar(
                               backgroundColor: Colors.white60,
-                              radius: 14.w,
+                              radius: 12.w,
                               child: Image.asset('assets/icons/profile - Copy.png'),
                             ),
                           ),
@@ -96,10 +101,12 @@ class CustomDrawer extends StatelessWidget {
                                     children: [
                                       Text(
                                         'Hello, ' + loginResponse.loggedIn,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                         style: TextStyle(
                                             fontFamily: 'GothamMedium',
                                             color: Colors.white,
-                                            fontSize: 17.sp,
+                                            fontSize: 16.sp,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
@@ -107,7 +114,7 @@ class CustomDrawer extends StatelessWidget {
                                         style: TextStyle(
                                             fontFamily: 'GothamMedium',
                                             color: Colors.white,
-                                            fontSize: 10.sp),
+                                            fontSize: 9.sp),
                                       )
                                     ],
                                   ),

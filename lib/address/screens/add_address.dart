@@ -1,16 +1,13 @@
-import 'package:badges/badges.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddAddressData.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
 import '../../constants.dart';
 
 class Address extends StatefulWidget {
@@ -81,66 +78,27 @@ class _AddressState extends State<Address> {
   TextEditingController districtTextEditingController = new TextEditingController();
 
   int _radioValue1 = 0;
-  String addressType = '';
+  String addressType = 'H';
 
   _AddressState(this.loginResponse, this.cartData);
 
   void _handleRadioValueChange1(int value) {
-    setState(() {
-      _radioValue1 = value;
+    _radioValue1 = value;
 
-      switch (_radioValue1) {
-        case 0:
-          addressType = 'H';
-          break;
-        case 1:
-          addressType = 'O';
-          break;
-        case 2:
-          addressType = 'W';
-          break;
-      }
-    });
+    switch (_radioValue1) {
+      case 0:
+        setState(() => addressType = 'H');
+        break;
+      case 1:
+        setState(() => addressType = 'O');
+        break;
+      case 2:
+        setState(() => addressType = 'W');
+        break;
+    }
   }
 
   bool checkValue = false;
-
-  InputDecoration getInputDecoration(String labelText) {
-    return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color.fromARGB(255, 71, 54, 111),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(5),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color.fromARGB(255, 71, 54, 111),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(5),
-          gapPadding: 10,
-        ),
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color.fromARGB(255, 71, 54, 111),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(5),
-          gapPadding: 10,
-        ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: kDefaultPadding,
-          vertical: kDefaultPadding / 2,
-        ),
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: Color.fromARGB(255, 71, 54, 111),
-          fontFamily: 'GothamMedium',
-        ));
-  }
 
   SizedBox gapBox = SizedBox(
     height: kDefaultPadding,
@@ -370,15 +328,16 @@ class _AddressState extends State<Address> {
                     onPressed: () {
                       if (formKey.currentState.validate()) {
                         addAddress(AddAddressData(
-                            addPincode: pinCodeTextEditingController.text,
-                            addType: addressType.toString(),
-                            city: cityTextEditingController.text,
-                            customer_id: loginResponse.id,
-                            name: nameTextEditingController.text,
-                            line1: flatNoTextEditingController.text,
-                            line2:
-                                areaTextEditingController.text + landmarkTextEditingController.text,
-                            line3: districtTextEditingController.text));
+                          addPincode: pinCodeTextEditingController.text,
+                          addType: addressType.toString(),
+                          city: cityTextEditingController.text,
+                          customer_id: loginResponse.id,
+                          name: nameTextEditingController.text,
+                          line1: flatNoTextEditingController.text,
+                          line2:
+                              areaTextEditingController.text + landmarkTextEditingController.text,
+                          line3: districtTextEditingController.text,
+                        ));
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(

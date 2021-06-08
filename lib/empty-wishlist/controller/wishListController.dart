@@ -15,8 +15,16 @@ class WishlistController {
     return serverMsg;
   }
 
+  Future<bool> removeFromWishlist(AddToWishlistData removeFromWishlist) async {
+    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/remove_from_wishlist/";
+    final parameters = removeFromWishlist.getFormData(removeFromWishlist);
+
+    bool serverMsg = await _httpRequestForRemoveWishlistData(endPointUrl, parameters);
+    return serverMsg;
+  }
+
   Future<WishlistData> getWishlistDetails(GetWishlistData getWishlistData) async {
-    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/get_Wishlist_details/";
+    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/get_wishlist/";
     final parameters = getWishlistData.getFormData(getWishlistData);
 
     WishlistData serverMsg = await _httpRequestForGetWishlistData(endPointUrl, parameters);
@@ -39,7 +47,7 @@ class WishlistController {
 
       if (response != null) {
         // addToWishlistResponse = AddToWishlistResponse.getWishlistResponseFromHttpResponse(response);
-        if (response.data['msg'] == "Item added to the Wishlist") {
+        if (response.data['msg'] == "Item added to the you Wishlist") {
           addedToWishlist = true;
         }
       }
@@ -47,6 +55,25 @@ class WishlistController {
       return addedToWishlist;
     } catch (e) {
       throw new Exception('Error');
+    }
+  }
+
+  Future<bool> _httpRequestForRemoveWishlistData(String url, FormData formData) async {
+    // AddToWishlistResponse addToWishlistResponse;
+    bool removedFromWishlist = false;
+    try {
+      var response = await dio.post(url, data: formData);
+
+      if (response != null) {
+        // addToWishlistResponse = AddToWishlistResponse.getWishlistResponseFromHttpResponse(response);
+        if (response.data['msg'] == "Item Removed From Wishlist") {
+          removedFromWishlist = true;
+        }
+      }
+
+      return removedFromWishlist;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -61,26 +88,6 @@ class WishlistController {
       }
 
       return cardData;
-    } catch (e) {
-      throw new Exception('Error');
-    }
-  }
-
-  Future<bool> _httpRequestForRemoveWishlistData(String url, FormData formData) async {
-    // DeleteFromWishlistResponse deleteFromWishlistResponse;
-    bool removeFromWishlist;
-    try {
-      var response = await dio.post(url, data: formData);
-
-      if (response != null) {
-        // deleteFromWishlistResponse =
-        // DeleteFromWishlistResponse.getRemoveWishlistResponseFromHttpResponse(response);
-        if (response.data['msg'] == "Item Deleted") {
-          removeFromWishlist = true;
-        }
-      }
-
-      return removeFromWishlist;
     } catch (e) {
       throw new Exception('Error');
     }

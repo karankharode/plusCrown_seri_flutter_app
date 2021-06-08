@@ -73,7 +73,7 @@ class _BooksState extends State<Books> {
         body: Column(
           children: [
             search == true
-                ? buildSearchBar(context, size, () {
+                ? SearchBar(context, size, () {
                     setState(() {
                       search = false;
                     });

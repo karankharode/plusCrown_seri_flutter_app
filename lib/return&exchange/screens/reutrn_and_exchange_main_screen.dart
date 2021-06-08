@@ -16,8 +16,7 @@ class ReturnAndExchange extends StatefulWidget {
   const ReturnAndExchange(this.loginResponse, this.cartData);
 
   @override
-  _ReturnAndExchangeState createState() =>
-      _ReturnAndExchangeState(loginResponse, cartData);
+  _ReturnAndExchangeState createState() => _ReturnAndExchangeState(loginResponse, cartData);
 }
 
 class _ReturnAndExchangeState extends State<ReturnAndExchange> {
@@ -103,37 +102,29 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                         return GestureDetector(
                           onTap: () {
                             cartData.cartProducts.length == 0
-                                ? Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            EmptyCartPage(
-                                              loginResponse,
-                                              cartData,
-                                            )))
-                                : Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            Cart(
-                                              loginResponse,
-                                              cartData,
-                                            )));
+                                ? Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => EmptyCartPage(
+                                          loginResponse,
+                                          cartData,
+                                        )))
+                                : Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) => Cart(
+                                          loginResponse,
+                                          cartData,
+                                        )));
                           },
                           child: Badge(
-                              position:
-                                  BadgePosition.topEnd(top: -8, end: -10),
+                              position: BadgePosition.topEnd(top: -8, end: -10),
                               badgeColor: Colors.white,
                               badgeContent: Text(
                                 cartData.cartProducts.length.toString(),
                                 style: TextStyle(
                                     color: Colors.red,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width /
-                                            35),
+                                    fontSize: MediaQuery.of(context).size.width / 35),
                               ),
                               child: Image.asset(
                                 'assets/icons/cart1.png',
-                                width:
-                                    MediaQuery.of(context).size.width * 0.07,
+                                width: MediaQuery.of(context).size.width * 0.07,
                               )),
                         );
                       } else {
@@ -168,8 +159,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
               Container(
                 width: queryData.size.width,
                 height: queryData.size.height / 5.2,
-                margin: EdgeInsets.fromLTRB(queryData.size.width / 25, 5,
-                    queryData.size.width / 25, 20),
+                margin: EdgeInsets.fromLTRB(
+                    queryData.size.width / 25, 5, queryData.size.width / 25, 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -184,7 +175,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                     children: [
                       Container(
                         child: Image.asset(
-                          'assets/images/firstpage.png',
+                          'assets/images/content.png',
                           height: queryData.size.width / 3.3,
                           width: queryData.size.width / 4.3,
                         ),
@@ -230,12 +221,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                   : Container(),
               showExchangeInfo ? _buildExchangeInfo(queryData) : Container(),
               showReturnInfo ? _buildReturnInfo(queryData) : Container(),
-              showReturnAddressScreen
-                  ? _buildFinalReturnAddressScreen(queryData)
-                  : Container(),
-              showExchangeAddressScreen
-                  ? _buildFinalExchangeAddressScreen(queryData)
-                  : Container(),
+              showReturnAddressScreen ? _buildFinalReturnAddressScreen(queryData) : Container(),
+              showExchangeAddressScreen ? _buildFinalExchangeAddressScreen(queryData) : Container(),
             ],
           ),
         ),
@@ -260,8 +247,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 0, queryData.size.width / 5, 15),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 0, queryData.size.width / 5, 15),
             alignment: Alignment.topLeft,
             child: Text(
               'Why are you Exchanging this Product?',
@@ -297,8 +284,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 12, queryData.size.width / 5, 10),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 12, queryData.size.width / 5, 10),
             alignment: Alignment.topLeft,
             child: Text(
               'Pick up address',
@@ -312,8 +299,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
           ),
           Container(
             width: queryData.size.width,
-            margin: EdgeInsets.fromLTRB(
-                queryData.size.width / 25, 5, queryData.size.width / 25, 20),
+            margin:
+                EdgeInsets.fromLTRB(queryData.size.width / 25, 5, queryData.size.width / 25, 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -322,8 +309,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
               ),
             ),
             child: Container(
-              margin: EdgeInsets.fromLTRB(
-                  mediaQueryData.size.width / 25, 15, 10, 10),
+              margin: EdgeInsets.fromLTRB(mediaQueryData.size.width / 25, 15, 10, 10),
               child: Column(
                 children: [
                   Container(
@@ -409,8 +395,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 primary: Color.fromARGB(255, 71, 54, 111),
                 shape: const BeveledRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                minimumSize: Size(
-                    (queryData.size.width / 2), (queryData.size.height / 25)),
+                minimumSize: Size((queryData.size.width / 2), (queryData.size.height / 25)),
               ),
               onPressed: () {
                 setState(() {});
@@ -448,8 +433,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 0, queryData.size.width / 5, 15),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 0, queryData.size.width / 5, 15),
             alignment: Alignment.topLeft,
             child: Text(
               'Why are you Returning this Product?',
@@ -485,8 +470,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 12, queryData.size.width / 5, 10),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 12, queryData.size.width / 5, 10),
             alignment: Alignment.topLeft,
             child: Text(
               'Pick up address',
@@ -500,8 +485,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
           ),
           Container(
             width: queryData.size.width,
-            margin: EdgeInsets.fromLTRB(
-                queryData.size.width / 25, 5, queryData.size.width / 25, 20),
+            margin:
+                EdgeInsets.fromLTRB(queryData.size.width / 25, 5, queryData.size.width / 25, 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -510,8 +495,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
               ),
             ),
             child: Container(
-              margin: EdgeInsets.fromLTRB(
-                  mediaQueryData.size.width / 25, 15, 10, 10),
+              margin: EdgeInsets.fromLTRB(mediaQueryData.size.width / 25, 15, 10, 10),
               child: Column(
                 children: [
                   Container(
@@ -597,8 +581,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 primary: Color.fromARGB(255, 71, 54, 111),
                 shape: const BeveledRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                minimumSize: Size(
-                    (queryData.size.width / 2), (queryData.size.height / 25)),
+                minimumSize: Size((queryData.size.width / 2), (queryData.size.height / 25)),
               ),
               onPressed: () {
                 setState(() {});
@@ -624,8 +607,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 0, queryData.size.width / 5, 15),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 0, queryData.size.width / 5, 15),
             alignment: Alignment.topLeft,
             child: Text(
               'Why are you Returning this Product?',
@@ -747,8 +730,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 10, queryData.size.width / 5, 10),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 10, queryData.size.width / 5, 10),
             alignment: Alignment.topLeft,
             child: Text(
               'Comments',
@@ -770,8 +753,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 hoverColor: Color.fromARGB(255, 71, 54, 111),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 71, 54, 111)),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 71, 54, 111)),
                   //borderSide: const BorderSide(),
                 ),
                 hintStyle: TextStyle(
@@ -807,8 +789,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 primary: Color.fromARGB(255, 71, 54, 111),
                 shape: const BeveledRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                minimumSize: Size(
-                    (queryData.size.width / 2), (queryData.size.height / 25)),
+                minimumSize: Size((queryData.size.width / 2), (queryData.size.height / 25)),
               ),
               onPressed: () {
                 setState(() {
@@ -836,8 +817,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 0, queryData.size.width / 5, 15),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 0, queryData.size.width / 5, 15),
             alignment: Alignment.topLeft,
             child: Text(
               'Why are you Exchanging this Product?',
@@ -956,8 +937,8 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(
-                queryData.size.width / 16, 10, queryData.size.width / 5, 10),
+            padding:
+                EdgeInsets.fromLTRB(queryData.size.width / 16, 10, queryData.size.width / 5, 10),
             alignment: Alignment.topLeft,
             child: Text(
               'Comments',
@@ -979,8 +960,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 hoverColor: Color.fromARGB(255, 71, 54, 111),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 71, 54, 111)),
+                  borderSide: BorderSide(color: Color.fromARGB(255, 71, 54, 111)),
                   //borderSide: const BorderSide(),
                 ),
                 hintStyle: TextStyle(
@@ -1016,8 +996,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                 primary: Color.fromARGB(255, 71, 54, 111),
                 shape: const BeveledRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                minimumSize: Size(
-                    (queryData.size.width / 2), (queryData.size.height / 25)),
+                minimumSize: Size((queryData.size.width / 2), (queryData.size.height / 25)),
               ),
               onPressed: () {
                 setState(() {
@@ -1073,8 +1052,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                         primary: Color.fromARGB(255, 255, 255, 255),
                         shape: const BeveledRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        minimumSize: Size((queryData.size.width / 3),
-                            (queryData.size.height / 25)),
+                        minimumSize: Size((queryData.size.width / 3), (queryData.size.height / 25)),
                       ),
                       child: Text(
                         'Exchange',
@@ -1104,8 +1082,7 @@ class _ReturnAndExchangeState extends State<ReturnAndExchange> {
                         primary: Color.fromARGB(255, 71, 54, 111),
                         shape: const BeveledRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        minimumSize: Size((queryData.size.width / 3),
-                            (queryData.size.height / 25)),
+                        minimumSize: Size((queryData.size.width / 3), (queryData.size.height / 25)),
                       ),
                       child: Text(
                         'Return',

@@ -13,7 +13,6 @@ import 'package:seri_flutter_app/homescreen/models/product_class.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../constants.dart';
 
 class ListingPageForClasses extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -132,13 +131,14 @@ class _ListingPageForClassesState extends State<ListingPageForClasses>
           : null,
       drawer: CustomDrawer(loginResponse, cartData),
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               search == true
-                  ? buildSearchBar(context, size, () {
+                  ? SearchBar(context, size, () {
                       setState(() {
                         search = false;
                       });
