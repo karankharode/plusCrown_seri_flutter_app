@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
@@ -18,6 +18,7 @@ import 'package:seri_flutter_app/common/widgets/appBars/buildAppBarWithSearch.da
 import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/horizontalProductList.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showLoadingDialog.dart';
 import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/empty-wishlist/controller/wishListController.dart';
 import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
@@ -152,6 +153,25 @@ class _PageOneState extends State<PageOne> {
       if (response) {
         showCustomFlushBar(context, "Added Successfully", 2);
       } else {
+        showCustomFlushBar(context, "Error adding to Cart", 2);
+      }
+    }
+
+    buyNow(AddToCartData addToCartData) async {
+      showLoadingDialog(context);
+      bool response = await cartController.addToCart(addToCartData);
+      print(response);
+      if (response) {
+        Navigator.pop(context);
+        Navigator.push(
+            context,
+            commonRouter(Cart(
+              loginResponse,
+              cartData,
+            )));
+        showCustomFlushBar(context, "Added Successfully", 2);
+      } else {
+        Navigator.pop(context);
         showCustomFlushBar(context, "Error adding to Cart", 2);
       }
     }
@@ -445,114 +465,142 @@ class _PageOneState extends State<PageOne> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: '\u20B9',
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontFamily: 'GothamMedium',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ),
+                myProduct.instock
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: kDefaultPadding,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextSpan(
-                              text: myProduct.price,
-                              style: TextStyle(
-                                color: kPrimaryColor,
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                            RichText(
+                              text: TextSpan(
+                                text: '\u20B9',
+                                style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontFamily: 'GothamMedium',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: myProduct.price,
+                                    style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontFamily: 'GothamMedium',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  TextSpan(text: " "),
+                                  TextSpan(
+                                    text: myProduct.mrp,
+                                    style: TextStyle(
+                                        fontFamily: 'GothamMedium',
+                                        decoration: TextDecoration.lineThrough,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 17),
+                                  ),
+                                  TextSpan(text: " "),
+                                  TextSpan(
+                                    text: "(" + myProduct.discount_per + '%' + "Off" + ")",
+                                    style: TextStyle(
+                                        fontFamily: 'GothamMedium',
+                                        color: Colors.green,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
                               ),
                             ),
-                            TextSpan(text: " "),
-                            TextSpan(
-                              text: myProduct.mrp,
+                            Text(
+                              "Price inclusive of all taxes",
                               style: TextStyle(
-                                  fontFamily: 'GothamMedium',
-                                  decoration: TextDecoration.lineThrough,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 17),
-                            ),
-                            TextSpan(text: " "),
-                            TextSpan(
-                              text: "(" + myProduct.discount_per + '%' + "Off" + ")",
-                              style: TextStyle(
-                                  fontFamily: 'GothamMedium',
-                                  color: Colors.green,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal),
-                            ),
+                                  fontFamily: 'GothamMedium', color: Colors.red, fontSize: 15),
+                            )
                           ],
                         ),
-                      ),
-                      Text(
-                        "Price inclusive of all taxes",
-                        style:
-                            TextStyle(fontFamily: 'GothamMedium', color: Colors.red, fontSize: 15),
                       )
-                    ],
-                  ),
-                ),
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(9, 5, 9, 5),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.red[200].withOpacity(0.7),
+                                  border: Border.all(color: Colors.grey[200]),
+                                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Text(
+                                  "  Currently  Unavailable  ",
+                                  style: TextStyle(
+                                      fontFamily: 'GothamMedium', fontSize: 14, color: Colors.red),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                 Divider(
                   height: kDefaultPadding,
                   indent: kDefaultPadding,
                   endIndent: kDefaultPadding,
                 ),
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Image.asset(
-                      'assets/images/binding.png',
-                      fit: BoxFit.fill,
-                      width: MediaQuery.of(context).size.width * 0.08,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      child: Container(
-                        child: Text('Add Book Binding',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 71, 54, 111),
-                              fontSize: 12.0.sp,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'GothamMedium',
-                            )),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 0.9.h,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.09,
-                      height: MediaQuery.of(context).size.width * 0.09,
-                      child: Checkbox(
-                        checkColor: Colors.white,
-                        activeColor: Color.fromARGB(255, 71, 54, 111),
-                        value: this.binding,
-                        onChanged: (bool value) {
-                          setState(() {
-                            this.binding = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  height: kDefaultPadding,
-                  indent: kDefaultPadding,
-                  endIndent: kDefaultPadding,
-                ),
+                myProduct.isBindable
+                    ? Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Image.asset(
+                            'assets/images/binding.png',
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width * 0.08,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Container(
+                              child: Text('Add Book Binding',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 71, 54, 111),
+                                    fontSize: 12.0.sp,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'GothamMedium',
+                                  )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 0.9.h,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.09,
+                            height: MediaQuery.of(context).size.width * 0.09,
+                            child: Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Color.fromARGB(255, 71, 54, 111),
+                              value: this.binding,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  this.binding = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                myProduct.isBindable
+                    ? Divider(
+                        height: kDefaultPadding,
+                        indent: kDefaultPadding,
+                        endIndent: kDefaultPadding,
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(
                     left: kDefaultPadding,
@@ -778,69 +826,65 @@ class _PageOneState extends State<PageOne> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GestureDetector(
-              onTap: () {
-                // setState(() {
-                //   AddToCartData add = new AddToCartData(
-                //     customerId: loginResponse.id,
-                //     productId: myProduct.id,
-                //   );
-                //   addProductToCart(add);
-                // });
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 2, right: 2, bottom: 2),
-                padding: EdgeInsets.all(1.0),
-                height: MediaQuery.of(context).size.height * 0.045,
-                width: MediaQuery.of(context).size.width * 0.35,
-                child: MaterialButton(
-                  onPressed: () {
-                    AddToCartData add = new AddToCartData(
-                      customerId: loginResponse.id,
-                      productId: myProduct.id,
-                    );
-                    addProductToCart(add);
-                  },
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey, width: 0.2.w),
-                      borderRadius: BorderRadius.circular(5)),
-                  textColor: Colors.white,
-                  child: Text(
-                    'Add To Cart',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10.sp,
-                    ),
+            Container(
+              margin: EdgeInsets.only(left: 2, right: 2, bottom: 2),
+              padding: EdgeInsets.all(1.0),
+              height: MediaQuery.of(context).size.height * 0.045,
+              width: MediaQuery.of(context).size.width * 0.35,
+              child: MaterialButton(
+                onPressed: () {
+                  AddToCartData add = new AddToCartData(
+                    customerId: loginResponse.id,
+                    productId: myProduct.id,
+                  );
+                  addProductToCart(add);
+                },
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey, width: 0.2.w),
+                    borderRadius: BorderRadius.circular(5)),
+                textColor: Colors.white,
+                child: Text(
+                  'Add To Cart',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 71, 54, 111),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.sp,
                   ),
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {});
-              },
-              child: Container(
-                padding: EdgeInsets.all(1.0),
-                height: MediaQuery.of(context).size.height * 0.045,
-                width: MediaQuery.of(context).size.width * 0.35,
+            Container(
+              padding: EdgeInsets.all(1.0),
+              height: MediaQuery.of(context).size.height * 0.045,
+              width: MediaQuery.of(context).size.width * 0.35,
 
-                // ignore: deprecated_member_use
-                child: RaisedButton(
-                  onPressed: () {},
-                  color: Color.fromARGB(255, 71, 54, 111),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Color.fromARGB(255, 71, 54, 111), width: 0.2.w),
-                      borderRadius: BorderRadius.circular(5)),
-                  textColor: Colors.white,
-                  child: Text(
-                    'Buy Now',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10.sp,
-                    ),
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                onPressed: () {
+                  if (myProduct.instock) {
+                    AddToCartData add = new AddToCartData(
+                      customerId: loginResponse.id,
+                      productId: myProduct.id,
+                    );
+                    buyNow(add);
+                  } else {
+                    showCustomFlushBar(context, "Currently Unavailable", 2);
+                  }
+                },
+                color: myProduct.instock
+                    ? Color.fromARGB(255, 71, 54, 111)
+                    : Colors.grey.withOpacity(0.7),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromARGB(255, 71, 54, 111), width: 0.2.w),
+                    borderRadius: BorderRadius.circular(5)),
+                textColor: Colors.white,
+                child: Text(
+                  'Buy Now',
+                  style: TextStyle(
+                    color: myProduct.instock ? Colors.white : Colors.grey[600],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.sp,
                   ),
                 ),
               ),

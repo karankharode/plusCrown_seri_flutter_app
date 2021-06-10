@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 String urlToAppend = "https://swaraj.pythonanywhere.com";
+
 // ignore_for_file: non_constant_identifier_names
 class ProductData {
   final int id;
@@ -31,8 +32,14 @@ class ProductData {
   final int category_id;
   final String catId;
   final String subCatId;
+  final String bind_price;
+  final bool isBindable;
+  final bool isBinding;
   ProductData(
-      {this.id,
+      {this.bind_price,
+      this.isBindable,
+      this.isBinding,
+      this.id,
       this.title,
       this.slug,
       this.desp,
@@ -69,43 +76,52 @@ class ProductData {
       'medium': product.medium
     });
   }
-   FormData getKeyword(String keyword) {
+
+  FormData getKeyword(String keyword) {
     return FormData.fromMap({
       'keyword': keyword,
     });
   }
 
+  FormData getId(int id) {
+    return FormData.fromMap({
+      'id': id,
+    });
+  }
+
   factory ProductData.getProduct(dynamic data) {
     return ProductData(
-      id: data['id'],
-      title: data['title'],
-      slug: data['slug'],
-      desp: data['desp'],
-      price: data['price'],
-      mrp: data['mrp'],
-      gst: data['gst'],
-      discount_per: data['discount_per'],
-      img: data['img'] == null ? "" : urlToAppend + data['img'],
-      img1: data['img1'] == null ? "" : urlToAppend + data['img1'],
-      img2: data['img2'] == null ? "" : urlToAppend + data['img2'],
-      img3: data['img3'] == null ? "" : urlToAppend + data['img3'],
-      thumbnail: data['thumbnail'],
-      dateadded: data['dateadded'],
-      pub_date: data['pub_date'],
-      edition: data['edition'],
-      medium: data['medium'],
-      label: data['label'],
-      instock: data['instock'],
-      isExchnageable: data['isExchnageable'],
-      isReturnable: data['isReturnable'],
-      isBestSeller: data['isBestSeller'],
-      isDealoftheday: data['isDealoftheday'],
-      Category: data['Category'],
-      subCategory: data['subCategory'],
-      category_id: data['category_id'],
-      catId: data['cat'],
-      subCatId: data['sub_cat'],
-    );
+        id: data['id'],
+        title: data['title'],
+        slug: data['slug'],
+        desp: data['desp'],
+        price: data['price'],
+        mrp: data['mrp'],
+        gst: data['gst'],
+        discount_per: data['discount_per'],
+        img: data['img'] == null ? "" : urlToAppend + data['img'],
+        img1: data['img1'] == null ? "" : urlToAppend + data['img1'],
+        img2: data['img2'] == null ? "" : urlToAppend + data['img2'],
+        img3: data['img3'] == null ? "" : urlToAppend + data['img3'],
+        thumbnail: data['thumbnail'],
+        dateadded: data['dateadded'],
+        pub_date: data['pub_date'],
+        edition: data['edition'],
+        medium: data['medium'],
+        label: data['label'],
+        instock: data['instock'],
+        isExchnageable: data['isExchnageable'],
+        isReturnable: data['isReturnable'],
+        isBestSeller: data['isBestSeller'],
+        isDealoftheday: data['isDealoftheday'],
+        Category: data['Category'],
+        subCategory: data['subCategory'],
+        category_id: data['category_id'],
+        catId: data['cat'],
+        subCatId: data['sub_cat'],
+        bind_price: data['bind_price'],
+        isBindable: data['isBindable'],
+        isBinding: data['isBinding']);
   }
 
   List<ProductData> getProducts(Response<dynamic> response) {
@@ -116,5 +132,12 @@ class ProductData {
       proList.add(product);
     });
     return proList;
+  }
+
+  ProductData getProductById(Response<dynamic> response) {
+    ProductData product;
+    product = ProductData.getProduct(response.data.first);
+
+    return product;
   }
 }

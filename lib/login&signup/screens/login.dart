@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -12,6 +11,7 @@ import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/constants.dart';
+import 'package:seri_flutter_app/forgotPass/forgot_password.dart';
 import 'package:seri_flutter_app/homescreen/screens/home_screen.dart';
 import 'package:seri_flutter_app/login&signup/controller/login_controller.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginData.dart';
@@ -244,16 +244,21 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             )),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              fontFamily: 'GothamMedium',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12.0.sp,
-                              color: Color.fromARGB(255, 71, 54, 111),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, commonRouter(ForgotPassword()));
+                          },
+                          child: Container(
+                            alignment: Alignment.bottomRight,
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Text(
+                              "Forgot password?",
+                              style: TextStyle(
+                                fontFamily: 'GothamMedium',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.0.sp,
+                                color: Color.fromARGB(255, 71, 54, 111),
+                              ),
                             ),
                           ),
                         ),

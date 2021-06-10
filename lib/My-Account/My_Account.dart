@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/bottomRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/mockuserDetailsData.dart';
 import 'package:seri_flutter_app/contact-us/screens/aboutUsPage.dart';
 import 'package:seri_flutter_app/faq/screens/faq_screen.dart';
 import 'package:seri_flutter_app/homescreen/others/update_screen.dart';
@@ -38,10 +37,6 @@ class _MyAccountState extends State<MyAccount> {
 
   _MyAccountState({this.loginResponse, this.cartData});
 
-  Future futureForCart;
-
-  var cartController = CartController();
-
   @override
   void initState() {
     loginController = Provider.of<LoginController>(context, listen: false);
@@ -49,9 +44,6 @@ class _MyAccountState extends State<MyAccount> {
       email: loginResponse.email,
       password: loginResponse.password,
       phoneNumber: loginResponse.phoneNo,
-    ));
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
     ));
     super.initState();
   }
@@ -71,98 +63,79 @@ class _MyAccountState extends State<MyAccount> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 11.0, right: 11, top: 18, bottom: 18),
+                padding: const EdgeInsets.only(left: 7.0, right: 7, top: 18, bottom: 18),
                 child: Card(
-                  elevation: 0.5,
-                  child: Container(
-                    //height: 80,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: AssetImage(
-                          "assets/images/profile.png",
-                        ),
-                        radius: MediaQuery.of(context).size.width / 12,
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FutureBuilder(
-                              future: futureForUserDetails,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  loginResponseForUserDetails = snapshot.data;
-                                  return Text(
-                                      loginResponseForUserDetails.Firstname +
-                                          " " +
-                                          loginResponseForUserDetails.Lastname,
+                  elevation: 3,
+                  child: FutureBuilder(
+                      future: futureForUserDetails,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          loginResponseForUserDetails = snapshot.data;
+                          return ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            leading: CircleAvatar(
+                              backgroundImage: AssetImage(
+                                "assets/images/profile.png",
+                              ),
+                              radius: MediaQuery.of(context).size.width / 12,
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    loginResponseForUserDetails.Firstname +
+                                        " " +
+                                        loginResponseForUserDetails.Lastname,
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        fontFamily: 'GothamMedium',
+                                        fontSize: MediaQuery.of(context).size.width / 16)),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Update(loginResponseForUserDetails, cartData)));
+                                  },
+                                  child: Text('Edit',
                                       style: TextStyle(
-                                          color: Color.fromARGB(255, 71, 54, 111),
                                           fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context).size.width / 16));
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Update(loginResponse, cartData)));
-                            },
-                            child: Text('Edit',
-                                style: TextStyle(
-                                    fontFamily: 'GothamMedium',
-                                    color: Color.fromARGB(255, 71, 54, 111),
-                                    fontSize: MediaQuery.of(context).size.width / 23)),
-                          ),
-                        ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 8,
-                          ),
-                          FutureBuilder(
-                              future: futureForUserDetails,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  loginResponseForUserDetails = snapshot.data;
-                                  return Text(loginResponseForUserDetails.email,
-                                      style: TextStyle(
                                           color: Color.fromARGB(255, 71, 54, 111),
-                                          fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context).size.width / 23));
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                          FutureBuilder(
-                              future: futureForUserDetails,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  loginResponseForUserDetails = snapshot.data;
-                                  return Text(loginResponseForUserDetails.phoneNo,
-                                      style: TextStyle(
-                                          color: Color.fromARGB(255, 71, 54, 111),
-                                          fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context).size.width / 23));
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
+                                          fontSize: MediaQuery.of(context).size.width / 23)),
+                                ),
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(loginResponseForUserDetails.email,
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        fontFamily: 'GothamMedium',
+                                        fontSize: MediaQuery.of(context).size.width / 23)),
+                                Text(loginResponseForUserDetails.phoneNo,
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 71, 54, 111),
+                                        fontFamily: 'GothamMedium',
+                                        fontSize: MediaQuery.of(context).size.width / 23)),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return buildMockUserDetails(context);
+                        }
+                      }),
                 ),
               ),
               Column(
                 children: [
                   buildMyAccountTile(context, "My Orders", MyOrdersPage(loginResponse, cartData)),
                   buildMyAccountTile(
-                      context, "Address Book", AddressBookPage(loginResponse, cartData)),
+                      context, "Address Book", AddressBookPage(loginResponse, cartData, false)),
                   buildMyAccountTile(context, "About Us", AboutUsPage(loginResponse, cartData)),
                   buildMyAccountTile(
                       context, "Terms and Conditions", Terms(loginResponse, cartData)),

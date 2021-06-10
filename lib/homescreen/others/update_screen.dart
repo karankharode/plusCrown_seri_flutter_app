@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
-import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
+import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/update_customer/controller/update_controller.dart';
@@ -27,18 +26,6 @@ class _UpdateState extends State<Update> {
   final CartData cartData;
 
   _UpdateState({this.loginResponse, this.cartData});
-
-  Future futureForCart;
-
-  var cartController = CartController();
-
-  @override
-  void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
-    ));
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +68,11 @@ class _UpdateFormState extends State<UpdateForm> {
   final _pinPutFocusNode = FocusNode();
   int selectedRadio;
 
-  final phoneNumberController = new TextEditingController();
-  final emailController = new TextEditingController();
-  final passController = new TextEditingController();
+  TextEditingController passController;
+  TextEditingController phoneNumberController;
+  TextEditingController emailController;
+  TextEditingController _firstNameController;
+  TextEditingController _lastNameController;
 
   final BoxDecoration pinPutDecoration = BoxDecoration(
     border: Border.all(
@@ -94,6 +83,12 @@ class _UpdateFormState extends State<UpdateForm> {
   @override
   void initState() {
     super.initState();
+    print(loginResponse.Firstname);
+    passController = new TextEditingController(text: loginResponse.password);
+    phoneNumberController = new TextEditingController(text: loginResponse.phoneNo);
+    emailController = new TextEditingController(text: loginResponse.email);
+    _firstNameController = new TextEditingController(text: loginResponse.Firstname);
+    _lastNameController = new TextEditingController(text: loginResponse.Lastname);
     selectedRadio = 0;
   }
 
@@ -158,7 +153,6 @@ class _UpdateFormState extends State<UpdateForm> {
                 ),
                 Spacer(),
                 TextFormField(
-                  controller: emailController,
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontFamily: 'GothamMedium',
@@ -201,7 +195,6 @@ class _UpdateFormState extends State<UpdateForm> {
                   height: kDefaultPadding,
                 ),
                 TextFormField(
-                  controller: passController,
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontFamily: 'GothamMedium',
@@ -308,7 +301,6 @@ class _UpdateFormState extends State<UpdateForm> {
               ),
               Spacer(),
               TextFormField(
-                controller: phoneNumberController,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
                   fontFamily: 'GothamMedium',
@@ -551,7 +543,6 @@ class _UpdateFormState extends State<UpdateForm> {
               ),
               Spacer(),
               TextFormField(
-                controller: phoneNumberController,
                 style: TextStyle(
                   fontFamily: 'GothamMedium',
                 ),
@@ -642,112 +633,29 @@ class _UpdateFormState extends State<UpdateForm> {
         child: Column(
           children: [
             TextFormField(
-              keyboardType: TextInputType.name,
-              style: TextStyle(
-                color: kPrimaryColor,
-                fontFamily: 'GothamMedium',
-              ),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding,
-                  vertical: kDefaultPadding / 2,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(5),
-                  gapPadding: 10,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(5),
-                  gapPadding: 10,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 71, 54, 111),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(5),
-                  gapPadding: 10,
-                ),
-                hintText: 'First Name',
-                labelStyle: TextStyle(
-                  color: kPrimaryColor,
-                ),
-                hintStyle: TextStyle(
+                controller: _firstNameController,
+                keyboardType: TextInputType.name,
+                style: TextStyle(
                   color: kPrimaryColor,
                   fontFamily: 'GothamMedium',
                 ),
-                labelText: loginResponse.Firstname,
-              ),
-            ),
+                decoration: getInputDecoration("First Name")),
             SizedBox(
               height: kDefaultPadding,
             ),
             TextFormField(
-              keyboardType: TextInputType.name,
-              style: TextStyle(
-                color: kPrimaryColor,
-                fontFamily: 'GothamMedium',
-              ),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding,
-                    vertical: kDefaultPadding / 2,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                    gapPadding: 10,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                    gapPadding: 10,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                    gapPadding: 10,
-                  ),
-                  hintText: 'Last Name',
-                  labelText: loginResponse.Lastname,
-                  labelStyle: TextStyle(
-                    color: kPrimaryColor,
-                  ),
-                  hintStyle: TextStyle(
-                    color: kPrimaryColor,
-                    fontFamily: 'GothamMedium',
-                  )
-                  // suffixIcon: Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-                  //   child: SvgPicture.asset(
-                  //     'assets/images/edit.svg',
-                  //     width: 5,
-                  //     height: 5,
-                  //   ),
-                  // ),
-                  ),
-            ),
+                controller: _lastNameController,
+                keyboardType: TextInputType.name,
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontFamily: 'GothamMedium',
+                ),
+                decoration: getInputDecoration("Last Name")),
             SizedBox(
               height: kDefaultPadding,
             ),
             TextFormField(
+              controller: emailController,
               keyboardType: TextInputType.emailAddress,
               style: TextStyle(
                 color: kPrimaryColor,
@@ -810,6 +718,7 @@ class _UpdateFormState extends State<UpdateForm> {
               height: kDefaultPadding,
             ),
             TextFormField(
+              controller: passController,
               obscureText: true,
               style: TextStyle(
                 color: kPrimaryColor,
@@ -990,6 +899,7 @@ class _UpdateFormState extends State<UpdateForm> {
                 //   height: kDefaultPadding,
                 // ),
                 TextFormField(
+                  controller: phoneNumberController,
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     color: kPrimaryColor,

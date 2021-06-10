@@ -33,7 +33,7 @@ Container buildHorizontalCombosList(Size size, List<ProductData> proList, loginR
       itemBuilder: (context, int index) {
         ProductData product = proList[index];
 
-        return combosCard(context, index, product, loginResponse, cartData);
+        return comboCard(cartData: cartData,index: index,loginResponse: loginResponse,productData: product,);
       },
     ),
   );

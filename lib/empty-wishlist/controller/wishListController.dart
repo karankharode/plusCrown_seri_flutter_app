@@ -23,6 +23,14 @@ class WishlistController {
     return serverMsg;
   }
 
+  Future<bool> removeAllFromWishlist(GetWishlistData removeAllFromWishlist) async {
+    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/empty_wishlist/";
+    final parameters = removeAllFromWishlist.getFormData(removeAllFromWishlist);
+
+    bool serverMsg = await _httpRequestForRemoveAllFromWishlist(endPointUrl, parameters);
+    return serverMsg;
+  }
+
   Future<WishlistData> getWishlistDetails(GetWishlistData getWishlistData) async {
     const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/get_wishlist/";
     final parameters = getWishlistData.getFormData(getWishlistData);
@@ -67,6 +75,25 @@ class WishlistController {
       if (response != null) {
         // addToWishlistResponse = AddToWishlistResponse.getWishlistResponseFromHttpResponse(response);
         if (response.data['msg'] == "Item Removed From Wishlist") {
+          removedFromWishlist = true;
+        }
+      }
+
+      return removedFromWishlist;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> _httpRequestForRemoveAllFromWishlist(String url, FormData formData) async {
+    // AddToWishlistResponse addToWishlistResponse;
+    bool removedFromWishlist = false;
+    try {
+      var response = await dio.post(url, data: formData);
+
+      if (response != null) {
+        // addToWishlistResponse = AddToWishlistResponse.getWishlistResponseFromHttpResponse(response);
+        if (response.data['msg'] == "All Item Removed From Wishlist") {
           removedFromWishlist = true;
         }
       }

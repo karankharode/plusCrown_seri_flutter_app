@@ -7,6 +7,10 @@ import '../models/CartData.dart';
 import '../models/DeleteFromCartData.dart';
 import '../models/DeleteFromCartResponse.dart';
 
+class OrderData
+{
+  
+}
 class CartController {
   static final _sharedPref = SharedPref.instance;
   final dio = Dio();

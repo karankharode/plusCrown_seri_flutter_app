@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/cart/counter_box.dart';
+import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/currentlyAvailable.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/networkImageBuilder.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showLoadingDialog.dart';
 import 'package:seri_flutter_app/empty-wishlist/controller/wishListController.dart';
 import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
+import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
+import 'package:seri_flutter_app/homescreen/others/page_one.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/my-order-detail-page/screens/myOrderDetailPage.dart';
 import 'package:sizer/sizer.dart';
-import '../empty-wishlist/wishlist/WishListPage.dart';
 import 'models/CartData.dart';
 
 // ignore_for_file: non_constant_identifier_names
@@ -118,13 +122,13 @@ class _SingleOfferState extends State<SingleOffer> {
         elevation: 0.0,
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyOrdersDetailPage(
-                          loginResponse: loginResponse,
-                          cartData: cartData,
-                        )));
+            showLoadingDialog(context);
+            Future futureForProductDetailsPage =
+                ProductController().getProductById(widget.cartProduct.productId);
+            futureForProductDetailsPage.then((value) {
+              Navigator.pop(context);
+              Navigator.push(context, commonRouter(PageOne(value, loginResponse, cartData)));
+            });
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 5),
@@ -157,7 +161,7 @@ class _SingleOfferState extends State<SingleOffer> {
                             Container(
                               alignment: Alignment.topLeft,
                               height: 100,
-                              width: MediaQuery.of(context).size.width / 5,
+                              width: MediaQuery.of(context).size.width / 5.15,
                               decoration: BoxDecoration(
                                 color: Colors.grey[50],
                                 borderRadius: BorderRadius.circular(5),
@@ -166,7 +170,9 @@ class _SingleOfferState extends State<SingleOffer> {
                                 //     image: NetworkImage(widget.cartProduct.product_image),
                                 //     fit: BoxFit.fill)
                               ),
-                              child: coverPageimageBuilder(widget.cartProduct.product_image),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: coverPageimageBuilder(widget.cartProduct.product_image)),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 14),
@@ -281,7 +287,7 @@ class _SingleOfferState extends State<SingleOffer> {
                                             "Price inclusive of all taxes",
                                             style: TextStyle(
                                                 fontFamily: 'GothamMedium',
-                                                fontSize: MediaQuery.of(context).size.width / 29,
+                                                fontSize: MediaQuery.of(context).size.width / 34,
                                                 color: Colors.red),
                                           ),
                                           // SizedBox(width: MediaQuery.of(context).size.width *0.2),
@@ -289,24 +295,7 @@ class _SingleOfferState extends State<SingleOffer> {
                                       ),
                                     ),
                                   if (widget.cartProduct.product_isavailable == false)
-                                    Container(
-                                      //  width: MediaQuery.of(context).size.width,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Colors.red[200],
-                                          border: Border.all(color: Colors.grey[200]),
-                                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text(
-                                          "  Unavailable  ",
-                                          style: TextStyle(
-                                              fontFamily: 'GothamMedium',
-                                              fontSize: MediaQuery.of(context).size.width / 22,
-                                              color: Colors.red),
-                                        ),
-                                      ),
-                                    )
+                                    currentlyUnavailableBuilder()
                                 ],
                               ),
                             )

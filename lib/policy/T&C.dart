@@ -35,14 +35,6 @@ class Terms extends StatelessWidget {
 • We request you to read this carefully.
 
 • You can visit websites and services. However, downloading or modifying any portion of the website is strictly prohibited, And you can not duplicate or copy.
-
-• All rights, including copyright and the trademark "Pluscrown" in this website are owned by or licensed to Pluscrown PRIVATE LIMITED.
-
-• All our communication would be conducted by e-mails or by posting notices and messages on the website.
-
-• If you believe that your intellectual property rights have been unfairly used which gives rise to security concerns, please contact us for the correct information or inquiry.
-
-• The website is available only to those who can legally contract under applicable law. If you are under 18, you are prohibited from using purchasing contracting from this website.
 ''',
                   style: textStyle,
                   // style: TextStyle(
@@ -51,6 +43,32 @@ class Terms extends StatelessWidget {
                   //     fontSize: MediaQuery.of(context).size.width / 24,
                   //     color: Color.fromARGB(255, 71, 54, 111)),
                 ),
+              ),
+              Text(
+                '''
+• All rights, including copyright and the trademark "Pluscrown" in this website are owned by or licensed to Pluscrown PRIVATE LIMITED.
+''',
+                style: heading,
+                // style: TextStyle(
+                //     fontFamily: 'GothamMedium',
+                //     fontWeight: FontWeight.w500,
+                //     fontSize: MediaQuery.of(context).size.width / 24,
+                //     color: Color.fromARGB(255, 71, 54, 111)),
+              ),
+              Text(
+                '''
+• All our communication would be conducted by e-mails or by posting notices and messages on the website.
+
+• If you believe that your intellectual property rights have been unfairly used which gives rise to security concerns, please contact us for the correct information or inquiry.
+
+• The website is available only to those who can legally contract under applicable law. If you are under 18, you are prohibited from using purchasing contracting from this website.
+''',
+                style: textStyle,
+                // style: TextStyle(
+                //     fontFamily: 'GothamMedium',
+                //     fontWeight: FontWeight.w500,
+                //     fontSize: MediaQuery.of(context).size.width / 24,
+                //     color: Color.fromARGB(255, 71, 54, 111)),
               ),
               buildBottomAlignedLogo(context)
             ],

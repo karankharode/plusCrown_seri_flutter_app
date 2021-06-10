@@ -64,6 +64,7 @@ class LoginController {
         response.data['Password'] = password;
         response.data['password'] = password;
         loginResponse = LoginResponse.getUserDetailsLoginResponseFromHttpResponse(response);
+       
         isAuthorized = true;
       }
 

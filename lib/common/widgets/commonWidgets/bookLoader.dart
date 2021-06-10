@@ -3,12 +3,12 @@ import 'package:lottie/lottie.dart';
 
 Widget bookLoader() {
   return Container(
-    height: 600,
+    height: 650,
     child: Center(
       child: Lottie.asset(
         'assets/animations/loading.json',
-        width: 180,
-        height: 180,
+        width: 220,
+        height: 220,
         fit: BoxFit.fill,
       ),
     ),

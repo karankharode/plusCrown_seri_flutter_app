@@ -419,10 +419,18 @@ class _BodyState extends State<Body> {
                                 // bottom: kDefaultPadding,
                                 right: kDefaultPadding,
                                 left: kDefaultPadding),
-                            child: Image.asset(
-                              brands[index],
-                              // width: size.width * 0.3,
-                              fit: BoxFit.fitHeight,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    commonRouter(SearchScreen(
+                                        loginResponse, cartData, brands[index]['keyWord'])));
+                              },
+                              child: Image.asset(
+                                brands[index]['image'],
+                                // width: size.width * 0.3,
+                                fit: BoxFit.fitHeight,
+                              ),
                             ),
                           );
                         },

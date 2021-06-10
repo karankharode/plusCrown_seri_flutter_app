@@ -132,7 +132,7 @@ We collect personal information such as :
                 child: Text(
                   '''• In order to maintain security, We suggest you not share your registered Passwords, This may result in change of the information provided by you, and may be misused by others.
                   ''',
-                  style: textStyle,
+                  style: heading,
                 ),
               ),
               SizedBox(height: 5),

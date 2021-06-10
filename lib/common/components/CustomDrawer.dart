@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
+import 'package:seri_flutter_app/common/components/PinCodeController.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/drawerWidgets/buildDrawerTile.dart';
 import 'package:seri_flutter_app/common/widgets/drawerWidgets/buildHomeDrawerTile.dart';
@@ -16,6 +17,7 @@ import 'package:seri_flutter_app/listing-pages/screens/8_std_page.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:seri_flutter_app/login&signup/screens/login.dart';
 import 'package:seri_flutter_app/my-orders/screens/myOrdersPage.dart';
+import 'package:seri_flutter_app/requestBook/screens/RequestBookPage.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../My-Account/My_Account.dart';
@@ -119,32 +121,83 @@ class CustomDrawer extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        !true
-                                            ? 'Delivery not available\nat this pincode'
-                                            : "Delievery available\nat 442342",
-                                        textAlign: TextAlign.center,
-                                        style: !true
-                                            ? TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                fontSize: 12.sp,
-                                                color: Colors.red.withOpacity(0.8),
-                                                fontWeight: FontWeight.bold)
-                                            : TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                fontSize: 12.sp,
-                                                color: Colors.green.withOpacity(0.8),
-                                                fontWeight: FontWeight.bold),
+                                loginResponse.email != 'guest@gmail.com'
+                                    ? FutureBuilder<List<PinCode>>(
+                                        future: PinCodeController().getPinCode(),
+                                        builder: (context, snapshot) {
+                                          bool delieveryAvailable;
+                                          if (snapshot.hasData) {
+                                            if (snapshot.data.any((element) =>
+                                                element.pinCode == loginResponse.pincode)) {
+                                              delieveryAvailable = true;
+                                            } else {
+                                              delieveryAvailable = false;
+                                            }
+                                            return Expanded(
+                                              flex: 3,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    !delieveryAvailable
+                                                        ? 'Delivery not available\nat this pincode'
+                                                        : "Delievery available\nat ${loginResponse.pincode}",
+                                                    textAlign: TextAlign.center,
+                                                    style: !delieveryAvailable
+                                                        ? TextStyle(
+                                                            fontFamily: 'GothamMedium',
+                                                            fontSize: 12.sp,
+                                                            color: Colors.red.withOpacity(0.8),
+                                                            fontWeight: FontWeight.bold)
+                                                        : TextStyle(
+                                                            fontFamily: 'GothamMedium',
+                                                            fontSize: 12.sp,
+                                                            color: Colors.green.withOpacity(0.8),
+                                                            fontWeight: FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else {
+                                            return Expanded(
+                                              flex: 3,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "Checking Delievery\n for ${loginResponse.pincode}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontFamily: 'GothamMedium',
+                                                        fontSize: 12.sp,
+                                                        color: Colors.green.withOpacity(0.8),
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        })
+                                    : Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Please login to\nShop with us}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'GothamMedium',
+                                                  fontSize: 12.sp,
+                                                  color: Colors.green.withOpacity(0.8),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                )
                               ],
                             ),
                           )
@@ -256,6 +309,8 @@ class CustomDrawer extends StatelessWidget {
                     )),
                 drawerTile(context, 'Stationary', drawerNavigator,
                     Stationary(loginResponse: loginResponse, cartData: cartData)),
+                drawerTile(context, 'Request a Book', drawerNavigator,
+                    RequestBook(loginResponse, cartData)),
                 Divider(color: Colors.black, height: 0),
                 drawerTile(
                     context, 'My Orders', drawerNavigator, MyOrdersPage(loginResponse, cartData)),
@@ -290,6 +345,7 @@ class CustomDrawer extends StatelessWidget {
                               context, commonRouter(LoginPage()), (Route<dynamic> route) => false)
                           : Alert(
                               context: context,
+                              style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
                               title: "Do you want to Log Out?",
                               buttons: [
                                 DialogButton(

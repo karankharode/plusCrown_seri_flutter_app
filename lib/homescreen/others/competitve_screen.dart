@@ -90,7 +90,7 @@ class _CompetitiveState extends State<Competitive> {
             fetched
                 ? Expanded(
                     child: ListView(
-                      padding: EdgeInsets.only(top: kDefaultPadding / 2),
+                      padding: EdgeInsets.only(top: kDefaultPadding / 4),
                       physics: BouncingScrollPhysics(),
                       children: [
                         SizedBox(

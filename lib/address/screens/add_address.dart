@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddAddressData.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
@@ -23,24 +22,16 @@ class Address extends StatefulWidget {
 class _AddressState extends State<Address> {
   final LoginResponse loginResponse;
   final CartData cartData;
-  Future futureForCart;
 
   var cartController = CartController();
 
   final formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
-    ));
-    super.initState();
-  }
-
   addAddress(AddAddressData addAddressData) async {
     bool response = await AddressController().addAddress(addAddressData);
     print(response);
     if (response) {
+      // showCustomFlushBar(context, "Added Successfully", 2);
       Flushbar(
         margin: EdgeInsets.all(8),
         borderRadius: 8,
@@ -117,7 +108,7 @@ class _AddressState extends State<Address> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 15.0, right: 15, top: 18, bottom: 18),
+            padding: const EdgeInsets.only(left: 15.0, right: 15, top: 18, bottom: 1),
             child: Form(
               key: formKey,
               child: Column(
@@ -328,16 +319,16 @@ class _AddressState extends State<Address> {
                     onPressed: () {
                       if (formKey.currentState.validate()) {
                         addAddress(AddAddressData(
-                          addPincode: pinCodeTextEditingController.text,
-                          addType: addressType.toString(),
-                          city: cityTextEditingController.text,
-                          customer_id: loginResponse.id,
-                          name: nameTextEditingController.text,
-                          line1: flatNoTextEditingController.text,
-                          line2:
-                              areaTextEditingController.text + landmarkTextEditingController.text,
-                          line3: districtTextEditingController.text,
-                        ));
+                            addPincode: pinCodeTextEditingController.text,
+                            addType: addressType.toString(),
+                            city: cityTextEditingController.text,
+                            customer_id: loginResponse.id,
+                            name: nameTextEditingController.text,
+                            line1: flatNoTextEditingController.text,
+                            line2:
+                                areaTextEditingController.text + landmarkTextEditingController.text,
+                            line3: districtTextEditingController.text,
+                            isdeafault: checkValue));
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(

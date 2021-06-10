@@ -2,6 +2,8 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:seri_flutter_app/address/screens/address-book-page.dart';
+import 'package:seri_flutter_app/address/screens/address-book.dart';
 import 'package:seri_flutter_app/cart/cart_product.dart';
 import 'package:seri_flutter_app/cart/models/DeleteFromCartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
@@ -78,6 +80,7 @@ class _CartState extends State<Cart> {
       title: all
           ? "Do you want to Delete all items from Cart ?"
           : "Do you want to Delete an item from Cart ?",
+      style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
       buttons: [
         DialogButton(
           child: Text(
@@ -678,9 +681,7 @@ class _CartState extends State<Cart> {
                                                     fontSize:
                                                         MediaQuery.of(context).size.width / 24,
                                                   )),
-                                              Text(
-                                                  "\u20B9 " +
-                                                      cartDataFromSnapshot.cart_total_amount,
+                                              Text("\u20B9 " + cartDataFromSnapshot.cart_mrp,
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontFamily: 'GothamMedium',
@@ -695,7 +696,7 @@ class _CartState extends State<Cart> {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("Card Savings ",
+                                              Text("Cart Savings ",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontFamily: 'GothamMedium',
@@ -853,16 +854,22 @@ class _CartState extends State<Cart> {
                                         height: 5,
                                       ),
                                       ElevatedButton(
-                                        child: Text("Procees to Checkout",
+                                        child: Text("Proceed to Checkout",
                                             style: TextStyle(
                                                 fontFamily: 'GothamMedium',
                                                 color: Colors.white,
                                                 fontSize: MediaQuery.of(context).size.width / 24)),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              commonRouter(AddressBookPage(
+                                                loginResponse,
+                                                cartData,
+                                                true,
+                                              )));
+                                        },
                                         style: ElevatedButton.styleFrom(
-                                          primary: totalAmt == 0.00
-                                              ? Colors.grey
-                                              : Color.fromARGB(255, 71, 54, 111),
+                                          primary: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                     ],

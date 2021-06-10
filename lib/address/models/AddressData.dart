@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+
 // ignore_for_file: non_constant_identifier_names
 class AddressData {
   final int id;
@@ -12,9 +13,11 @@ class AddressData {
   final int customer_id;
   final String status;
   final String msg;
+  final bool isdeafault;
 
   AddressData(
-      {this.id,
+      {this.isdeafault,
+      this.id,
       this.name,
       this.city,
       this.line1,
@@ -44,6 +47,7 @@ class AddressData {
 
   factory AddressData.getAddressResponseFromHttpResponse(Response<dynamic> response) {
     return AddressData(
+        isdeafault: response.data["isdeafault"],
         id: response.data['id'],
         name: response.data['name'],
         city: response.data['city'],
@@ -59,6 +63,7 @@ class AddressData {
 
   factory AddressData.getSingleAddress(dynamic data) {
     return AddressData(
+        isdeafault: data["isdeafault"],
         id: data['id'],
         name: data['name'],
         city: data['city'],

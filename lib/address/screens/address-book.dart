@@ -11,8 +11,9 @@ import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 class AddressBook extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
+  final Function updateAddress;
 
-  AddressBook(this.loginResponse, this.cartData);
+  AddressBook(this.loginResponse, this.cartData, this.updateAddress);
 
   @override
   _AddressBookState createState() => _AddressBookState(loginResponse, cartData);
@@ -35,7 +36,17 @@ class _AddressBookState extends State<AddressBook> {
 
   String getType(String addType) {
     // DO changes from here
-    if (addType == "Home") {}
+    switch (addType) {
+      case "H":
+        return "Home";
+      case "O":
+        return "Other";
+      case "W":
+        return "Work";
+        break;
+      default:
+        return "";
+    }
   }
 
   deleteAddress(addid) async {
@@ -82,18 +93,20 @@ class _AddressBookState extends State<AddressBook> {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
                     return SingleAddress(
-                      name: addList[index].name,
-                      phoneNo: "9635821475",
-                      pinCode: addList[index].addpincode,
-                      city: addList[index].city,
-                      district: addList[index].city,
-                      flatNo: addList[index].line1,
-                      area: addList[index].line2,
-                      landmark: addList[index].line3,
-                      type: "default",
-                      add_id: addList[index].id.toString(),
-                      deleteAddress: deleteAddress,
-                    );
+                        name: addList[index].name,
+                        phoneNo: "9635821475",
+                        pinCode: addList[index].addpincode,
+                        city: addList[index].city,
+                        district: addList[index].city,
+                        flatNo: addList[index].line1,
+                        area: addList[index].line2,
+                        landmark: addList[index].line3,
+                        type: getType(addList[index].addtype),
+                        add_id: addList[index].id.toString(),
+                        deleteAddress: deleteAddress,
+                        isDefault: addList[index].isdeafault,
+                        addressData: addList[index],
+                        updateAddressId: widget.updateAddress);
                   });
             } else {
               return Container();
@@ -116,7 +129,10 @@ class SingleAddress extends StatefulWidget {
   final String add_id;
   final type;
   final district;
+  final isDefault;
   final Function deleteAddress;
+  final Function updateAddressId;
+  final AddressData addressData;
 
   SingleAddress(
       {this.name,
@@ -129,7 +145,10 @@ class SingleAddress extends StatefulWidget {
       this.type,
       this.flatNo,
       this.add_id,
-      this.deleteAddress});
+      this.deleteAddress,
+      this.isDefault,
+      this.updateAddressId,
+      this.addressData});
 
   @override
   _SingleAddressState createState() => _SingleAddressState();
@@ -171,6 +190,7 @@ class _SingleAddressState extends State<SingleAddress> {
                           setState(() {
                             checkValue = newValue;
                           });
+                          widget.updateAddressId(widget.add_id, widget.addressData);
                         },
                       ),
                     ),
@@ -189,15 +209,15 @@ class _SingleAddressState extends State<SingleAddress> {
                   // alignment: Alignment.topRight,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext bc) => [
-                      PopupMenuItem(
-                          child: Text(
-                            "Edit",
-                            style: TextStyle(
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 71, 54, 111)),
-                          ),
-                          value: "1"),
+                      // PopupMenuItem(
+                      //     child: Text(
+                      //       "Edit",
+                      //       style: TextStyle(
+                      //           fontFamily: 'GothamMedium',
+                      //           fontWeight: FontWeight.w600,
+                      //           color: Color.fromARGB(255, 71, 54, 111)),
+                      //     ),
+                      //     value: "1"),
                       PopupMenuItem(
                           child: Text(
                             "Delete",
@@ -231,7 +251,7 @@ class _SingleAddressState extends State<SingleAddress> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.type == "default")
+                  if (widget.isDefault)
                     Column(
                       children: [
                         Align(

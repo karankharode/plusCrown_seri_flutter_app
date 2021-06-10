@@ -10,9 +10,11 @@ class AddAddressData {
   final String line3;
   final String addType;
   final String addPincode;
+  final bool isdeafault;
 
   AddAddressData(
-      {this.customer_id,
+      {this.isdeafault,
+      this.customer_id,
       this.name,
       this.city,
       this.line1,
@@ -30,7 +32,8 @@ class AddAddressData {
       'line2': addAddressData.line2 ?? "",
       'line3': addAddressData.line3 ?? "",
       'addtype': addAddressData.addType ?? "",
-      'addpincode': addAddressData.addPincode ?? ""
+      'addpincode': addAddressData.addPincode ?? "",
+      'isdeafault ': addAddressData.isdeafault ?? false
     });
   }
 }

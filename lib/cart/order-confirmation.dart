@@ -1,57 +1,44 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/address/models/AddressData.dart';
+import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:sizer/sizer.dart';
-
 import '../address/screens/address-book-page.dart';
-import 'carts.dart';
 import 'controller/CartController.dart';
 import 'models/AddToCartData.dart';
 import 'models/CartData.dart';
+
 // ignore_for_file: non_constant_identifier_names
 class OrderConfirmation extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
 
-  final name;
-  final phoneNo;
-  final pinCode;
-  final city;
-  final flatNo;
-  final area;
-  final landmark;
-  final type;
+  final AddressData addressData;
 
-  OrderConfirmation(
-      {this.name,
-      this.phoneNo,
-      this.pinCode,
-      this.city,
-      this.area,
-      this.landmark,
-      this.type,
-      this.flatNo,
-      this.loginResponse,
-      this.cartData});
+  OrderConfirmation({this.addressData, this.loginResponse, this.cartData});
 
   @override
   _OrderConfirmationState createState() =>
-      _OrderConfirmationState(loginResponse, cartData);
+      _OrderConfirmationState(loginResponse, cartData, addressData);
 }
 
 class _OrderConfirmationState extends State<OrderConfirmation> {
   final LoginResponse loginResponse;
   final CartData cartData;
+  final AddressData addressData;
 
-  var address = [];
-  String PaymentMode = "Cash On Delivery";
+  String PaymentMode = "null";
 
-  _OrderConfirmationState(this.loginResponse, this.cartData);
+  _OrderConfirmationState(this.loginResponse, this.cartData, this.addressData);
 
   Future futureForCart;
 
   var cartController = CartController();
+
+  Future placeOrder() async {
+    // bool response = await
+  }
 
   @override
   void initState() {
@@ -72,100 +59,13 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
         //   ))
         //   :
         Scaffold(
-            appBar: AppBar(
-              backgroundColor: Color.fromARGB(255, 71, 54, 111),
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Image.asset(
-                    'assets/icons/leftarrowwhite.png',
-                    width: MediaQuery.of(context).size.width * 0.07,
-                  ),
-                ),
-              ),
-              title: Text(
-                "Order Confirmation",
-                style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-              ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Image.asset(
-                          'assets/icons/search3.png',
-                          width: MediaQuery.of(context).size.width * 0.07,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      FutureBuilder(
-                          future: futureForCart,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              CartData cartData = snapshot.data;
-                              return GestureDetector(
-                                onTap: () {
-                                  cartData.cartProducts.length == 0
-                                      ? Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  EmptyCartPage(
-                                                    loginResponse,
-                                                    cartData,
-                                                  )))
-                                      : Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  Cart(
-                                                    loginResponse,
-                                                    cartData,
-                                                  )));
-                                },
-                                child: Badge(
-                                    position:
-                                        BadgePosition.topEnd(top: -8, end: -10),
-                                    badgeColor: Colors.white,
-                                    badgeContent: Text(
-                                      cartData.cartProducts.length.toString(),
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              35),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/icons/cart1.png',
-                                      width: MediaQuery.of(context).size.width *
-                                          0.07,
-                                    )),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          }),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            appBar:
+                buildTextAppBar(context, "Order Confirmation", loginResponse, false, false, null),
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 11.0, right: 11, top: 18, bottom: 18),
+                padding: const EdgeInsets.only(left: 11.0, right: 11, top: 18, bottom: 18),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -175,10 +75,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         width: MediaQuery.of(context).size.width - 15,
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(
-                                color: Color.fromARGB(255, 71, 54, 111)),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                            border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
+                            borderRadius: BorderRadius.all(Radius.circular(10))),
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: Column(
@@ -186,17 +84,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Home Delivery",
                                     style: TextStyle(
                                         fontFamily: 'GothamMedium',
                                         color: Color.fromARGB(255, 71, 54, 111),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                23),
+                                        fontSize: MediaQuery.of(context).size.width / 23),
                                   ),
                                   GestureDetector(
                                     onTap: () {
@@ -204,151 +99,67 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AddressBookPage(loginResponse,
-                                                      cartData)));
+                                                  AddressBookPage(loginResponse, cartData, true)));
                                     },
                                     child: Text("Change Address",
                                         //   textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.red,
                                             fontFamily: 'GothamMedium',
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                25)),
+                                            fontSize: MediaQuery.of(context).size.width / 25)),
                                   )
                                 ],
                               ),
                               SizedBox(height: 12),
-                              Text("Ohm Chadwik",
+                              Text(addressData.name,
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 71, 54, 111),
                                       fontFamily: 'GothamMedium',
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              18)),
+                                      fontSize: MediaQuery.of(context).size.width / 18)),
                               SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Plot no. ",
-                                    //  textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        fontFamily: 'GothamMedium',
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                23),
-                                  ),
-                                  Text("480/203, ",
-                                      //   textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                  Text("sai section,",
-                                      style: TextStyle(
-                                          fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                ],
+                              Text(
+                                addressData.line1,
+                                //  textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 71, 54, 111),
+                                    fontFamily: 'GothamMedium',
+                                    fontSize: MediaQuery.of(context).size.width / 23),
                               ),
-                              if (widget.landmark != null)
+                              if (false) // landmark
                                 Text("near data mandir,",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'GothamMedium',
                                         color: Color.fromARGB(255, 71, 54, 111),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                23)),
+                                        fontSize: MediaQuery.of(context).size.width / 23)),
                               Row(
                                 children: [
-                                  Text("City - ",
+                                  Text("City - " + addressData.city,
                                       style: TextStyle(
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                  Text("Thane, ",
+                                          color: Color.fromARGB(255, 71, 54, 111),
+                                          fontSize: MediaQuery.of(context).size.width / 23)),
+                                  Text("Dist - " + addressData.line2,
                                       style: TextStyle(
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                  Text("Dist - ",
-                                      style: TextStyle(
-                                          fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                  Text("Thane, ",
-                                      style: TextStyle(
-                                          fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
+                                          color: Color.fromARGB(255, 71, 54, 111),
+                                          fontSize: MediaQuery.of(context).size.width / 23)),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Text("PinCode - ",
-                                      style: TextStyle(
-                                          fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                  Text("416112",
-                                      style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
-                                          fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              23)),
-                                ],
-                              ),
+                              Text("PinCode - " + addressData.addpincode,
+                                  style: TextStyle(
+                                      fontFamily: 'GothamMedium',
+                                      color: Color.fromARGB(255, 71, 54, 111),
+                                      fontSize: MediaQuery.of(context).size.width / 23)),
                               SizedBox(height: 12),
-                              Row(children: [
-                                Text("Phone Number - ",
-                                    style: TextStyle(
-                                        fontFamily: 'GothamMedium',
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                23)),
-                                Text("6215199399",
-                                    style: TextStyle(
-                                        fontFamily: 'GothamMedium',
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                23)),
-                              ])
+                              // Row(children: [
+                              //   Text("Phone Number - " + addressData.,
+                              //       style: TextStyle(
+                              //           fontFamily: 'GothamMedium',
+                              //           color: Color.fromARGB(255, 71, 54, 111),
+                              //           fontSize: MediaQuery.of(context).size.width / 23)),
+
+                              // ])
                             ],
                           ),
                         ),
@@ -363,16 +174,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                   fontFamily: 'GothamMedium',
                                   fontWeight: FontWeight.w600,
                                   color: Colors.red,
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22)),
-                          Text("  01 May 2021",
+                                  fontSize: MediaQuery.of(context).size.width / 22)),
+                          Text("  15 June 2021",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'GothamMedium',
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 71, 54, 111),
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22)),
+                                  fontSize: MediaQuery.of(context).size.width / 22)),
                         ],
                       ),
                       SizedBox(height: 5),
@@ -391,28 +200,16 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                   fontFamily: 'GothamMedium',
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 71, 54, 111),
-                                  fontSize:
-                                      MediaQuery.of(context).size.width / 22)),
+                                  fontSize: MediaQuery.of(context).size.width / 22)),
                           Row(
                             children: [
-                              Text(" Rs ",
+                              Text(" \u20B9 " + cartData.cart_total_amount,
                                   //   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontFamily: 'GothamMedium',
                                       fontWeight: FontWeight.w600,
                                       color: Color.fromARGB(255, 71, 54, 111),
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              22)),
-                              Text("3949    ",
-                                  //   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'GothamMedium',
-                                      fontWeight: FontWeight.w600,
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              22)),
+                                      fontSize: MediaQuery.of(context).size.width / 22)),
                             ],
                           ),
                         ],
@@ -430,17 +227,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                               fontFamily: 'GothamMedium',
                               fontWeight: FontWeight.w600,
                               color: Color.fromARGB(255, 71, 54, 111),
-                              fontSize:
-                                  MediaQuery.of(context).size.width / 22)),
+                              fontSize: MediaQuery.of(context).size.width / 22)),
                       SizedBox(height: 5),
-                      Text(
-                          "click on the payment method as per your convenience",
+                      Text("click on the payment method as per your convenience",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
                               color: Color.fromARGB(255, 71, 54, 111),
-                              fontSize:
-                                  MediaQuery.of(context).size.width / 30)),
+                              fontSize: MediaQuery.of(context).size.width / 30)),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -448,33 +242,29 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                PaymentMode = 'Online Payment';
+                                PaymentMode = '2';
                               });
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.4,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.055,
+                              height: MediaQuery.of(context).size.height * 0.055,
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 7),
                                 decoration: BoxDecoration(
-                                  color: PaymentMode == 'Online Payment'
+                                  color: PaymentMode == '2'
                                       ? Color.fromARGB(255, 71, 54, 111)
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: Color.fromARGB(255, 71, 54, 111)),
+                                  border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(" Online Payment ",
                                     style: TextStyle(
                                         fontFamily: 'GothamMedium',
-                                        color: PaymentMode == 'Online Payment'
+                                        color: PaymentMode == '2'
                                             ? Colors.white
                                             : Color.fromARGB(255, 71, 54, 111),
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                25,
+                                        fontSize: MediaQuery.of(context).size.width / 25,
                                         fontWeight: FontWeight.bold)),
                               ),
                             ),
@@ -482,39 +272,67 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                PaymentMode = 'Cash on Delivery';
+                                PaymentMode = '1';
                               });
                               // Navigator.push(context,
                               //     MaterialPageRoute(builder: (context) => AddressPhoneVerify()));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.4,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.055,
+                              height: MediaQuery.of(context).size.height * 0.055,
                               padding: EdgeInsets.symmetric(vertical: 7),
                               decoration: BoxDecoration(
-                                color: PaymentMode == 'Cash on Delivery'
+                                color: PaymentMode == '1'
                                     ? Color.fromARGB(255, 71, 54, 111)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                    color: Color.fromARGB(255, 71, 54, 111)),
+                                border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                               ),
                               alignment: Alignment.center,
                               child: Text(" Cash on Delivery ",
                                   style: TextStyle(
                                       fontFamily: 'GothamMedium',
-                                      color: PaymentMode == 'Cash on Delivery'
+                                      color: PaymentMode == '1'
                                           ? Colors.white
                                           : Color.fromARGB(255, 71, 54, 111),
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              25,
+                                      fontSize: MediaQuery.of(context).size.width / 25,
                                       fontWeight: FontWeight.bold)),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: Center(
+                          child: ElevatedButton(
+                            child: Text("Place Order",
+                                style: TextStyle(
+                                    fontFamily: 'GothamMedium',
+                                    color: Colors.white,
+                                    fontSize: MediaQuery.of(context).size.width / 24)),
+                            onPressed: () {
+                              if (PaymentMode != "null") {
+                                placeOrder();
+                                // Navigator.push(
+                                //     context,
+                                //     commonRouter((
+                                //       loginResponse: loginResponse,
+                                //       cartData: cartData,
+                                //       addressData: addressData,
+                                //     )));
+                              } else {
+                                showCustomFlushBar(context, "Select Payment Method", 2);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(255, 71, 54, 111),
+                            ),
+                          ),
+                        ),
+                      )
                     ]),
               ),
             ));

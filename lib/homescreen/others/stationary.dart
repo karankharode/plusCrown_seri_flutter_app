@@ -81,23 +81,16 @@ class _StationaryState extends State<Stationary> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               search == true
-                  ? SearchBar(
-                      context,
-                      size,
-                      () {
-                        setState(() {
-                          search = false;
-                        });
-                      }, loginResponse, cartData
-                    )
+                  ? SearchBar(context, size, () {
+                      setState(() {
+                        search = false;
+                      });
+                    }, loginResponse, cartData)
                   : Container(),
               SizedBox(
                 height: 2,
               ),
               buildListingPoster(context, 'assets/stationary/stationary.png', "7"),
-              SizedBox(
-                height: 5,
-              ),
               fetched
                   ? Expanded(
                       child: ListView(

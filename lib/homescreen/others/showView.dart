@@ -151,7 +151,8 @@ List<Widget> getCombos(context, index, proListnew, loginResponse, cartData) {
   List<Widget> products = [];
   for (ProductData product in proListnew) {
     // products.add(Container(height: 40, color: Colors.blue));
-    products.add(combosCard(context, index, product, loginResponse, cartData));
+    products.add(comboCard(
+        index: index, productData: product, loginResponse: loginResponse, cartData: cartData));
   }
   return products;
 }
