@@ -210,8 +210,6 @@ class _RequestBookState extends State<RequestBook> {
                   gapBox,
                   TextFormField(
                     controller: descriptionTextEditingController,
-                    // style: formFieldTextStyle,
-
                     cursorColor: Color.fromARGB(255, 71, 54, 111),
                     maxLength: 150,
                     minLines: 1,

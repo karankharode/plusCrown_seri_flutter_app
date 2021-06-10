@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/address/models/AddressData.dart';
+import 'package:seri_flutter_app/common/screens/otp/main_otp.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
@@ -27,7 +28,6 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   final LoginResponse loginResponse;
   final CartData cartData;
   final AddressData addressData;
-
   String PaymentMode = "null";
 
   _OrderConfirmationState(this.loginResponse, this.cartData, this.addressData);
@@ -37,7 +37,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   var cartController = CartController();
 
   Future placeOrder() async {
-    // bool response = await
+    Navigator.push(context, commonRouter(Otp_page(loginResponse, cartData)));
+    bool response = await cartController.placeOrder(
+        OrderData(loginResponse.id.toString(), "First100", addressData.id.toString(), PaymentMode));
+    if (response) {
+      showCustomFlushBar(context, "Order Placed", 2);
+    } else {
+      showCustomFlushBar(context, "Error Occured", 2);
+    }
   }
 
   @override
@@ -146,6 +153,11 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                           fontSize: MediaQuery.of(context).size.width / 23)),
                                 ],
                               ),
+                              Text("Dist - " + addressData.line3,
+                                  style: TextStyle(
+                                      fontFamily: 'GothamMedium',
+                                      color: Color.fromARGB(255, 71, 54, 111),
+                                      fontSize: MediaQuery.of(context).size.width / 23)),
                               Text("PinCode - " + addressData.addpincode,
                                   style: TextStyle(
                                       fontFamily: 'GothamMedium',
@@ -229,7 +241,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                               color: Color.fromARGB(255, 71, 54, 111),
                               fontSize: MediaQuery.of(context).size.width / 22)),
                       SizedBox(height: 5),
-                      Text("click on the payment method as per your convenience",
+                      Text("Click on the payment method as per your convenience",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
@@ -302,13 +314,13 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Container(
                         width: double.infinity,
                         child: Center(
                           child: ElevatedButton(
-                            child: Text("Place Order",
+                            child: Text("  Place Order  ",
                                 style: TextStyle(
                                     fontFamily: 'GothamMedium',
                                     color: Colors.white,
