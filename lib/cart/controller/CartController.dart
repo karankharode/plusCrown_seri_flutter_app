@@ -25,6 +25,18 @@ class OrderData {
   }
 }
 
+class CompleteOrderData {
+  final String id;
+
+  CompleteOrderData(this.id);
+
+  FormData getFormData(CompleteOrderData completeOrderData) {
+    return FormData.fromMap({
+      'id': completeOrderData.id.toString(),
+    });
+  }
+}
+
 class CartController {
   static final _sharedPref = SharedPref.instance;
   final dio = Dio();
@@ -59,6 +71,31 @@ class CartController {
 
     bool serverMsg = await _httpRequestForPlaceOrder(endPointUrl, parameters);
     return serverMsg;
+  }
+
+  Future<bool> completeOrder(CompleteOrderData completeOrderData) async {
+    const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/complete_order/";
+    final parameters = completeOrderData.getFormData(completeOrderData);
+
+    bool serverMsg = await _httpRequestForCompleteOrder(endPointUrl, parameters);
+    return serverMsg;
+  }
+
+  Future<bool> _httpRequestForCompleteOrder(String url, FormData formData) async {
+    bool addedToCart;
+    try {
+      var response = await dio.put(url, data: formData);
+
+      if (response != null) {
+        if (response.data['msg'] == "Order Placed") {
+          addedToCart = true;
+        }
+      }
+
+      return addedToCart;
+    } catch (e) {
+      throw new Exception('Error');
+    }
   }
 
   Future<bool> _httpRequestForPlaceOrder(String url, FormData formData) async {

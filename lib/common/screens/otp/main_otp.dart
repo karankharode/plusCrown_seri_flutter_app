@@ -1,14 +1,19 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
+import 'package:seri_flutter_app/common/screens/S_19.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
+import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,6 +31,8 @@ class Otp_page extends StatefulWidget {
 class _Otp_pageState extends State<Otp_page> {
   final LoginResponse loginResponse;
   final CartData cartData;
+  bool otpSent = false;
+  String phoneNumString;
 
   _Otp_pageState(this.loginResponse, this.cartData);
 
@@ -38,15 +45,44 @@ class _Otp_pageState extends State<Otp_page> {
     ),
   );
 
-  Future futureForCart;
-
   var cartController = CartController();
+
+  sendOtp() async {
+    setState(() {
+      otpSent = true;
+    });
+  }
+
+  checkOtp() async {
+    // bool otpRespose = await
+    if (true) {
+      bool response =
+          await cartController.completeOrder(CompleteOrderData(loginResponse.id.toString()));
+      if (response)
+        Navigator.pushReplacement(context, commonRouter(S_19()));
+      else
+        showCustomFlushBar(context, "Some Error Occured", 2);
+    } else {
+      Alert(
+        context: context,
+        title: "You have entered an invalid OTP",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Try Again",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 120,
+            color: Color.fromARGB(255, 71, 54, 111),
+          )
+        ],
+      ).show();
+    }
+  }
 
   @override
   void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
-    ));
     super.initState();
   }
 
@@ -86,7 +122,7 @@ class _Otp_pageState extends State<Otp_page> {
                 margin: EdgeInsets.fromLTRB(5.w, 0, 0, 3.w),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Enter OTP',
+                  otpSent ? 'Enter OTP' : 'Enter Mobile Number',
                   style: TextStyle(
                     fontSize: 15.sp,
                     color: Color.fromARGB(255, 71, 54, 111),
@@ -94,51 +130,76 @@ class _Otp_pageState extends State<Otp_page> {
                   ),
                 ),
               ),
-              Column(children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width / 18,
-                      right: MediaQuery.of(context).size.width / 12),
-                  child: Container(
-                    child: PinPut(
-                      eachFieldWidth: 15.0,
-                      eachFieldHeight: 20.0,
-                      withCursor: true,
-                      fieldsCount: 4,
-                      focusNode: _pinPutFocusNode,
-                      controller: _pinPutController,
-                      // onSubmit: (String pin) => _showSnackBar(pin),
-                      submittedFieldDecoration: pinPutDecoration,
-                      selectedFieldDecoration: pinPutDecoration,
-                      followingFieldDecoration: pinPutDecoration,
-                      pinAnimationType: PinAnimationType.scale,
-                      textStyle:
-                          const TextStyle(color: Color.fromARGB(255, 71, 54, 111), fontSize: 20.0),
+              otpSent
+                  ? Column(
+                      children: [
+                        Column(children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width / 18,
+                                right: MediaQuery.of(context).size.width / 12),
+                            child: Container(
+                              child: PinPut(
+                                eachFieldWidth: 15.0,
+                                eachFieldHeight: 20.0,
+                                withCursor: true,
+                                fieldsCount: 4,
+                                focusNode: _pinPutFocusNode,
+                                controller: _pinPutController,
+                                // onSubmit: (String pin) => _showSnackBar(pin),
+                                submittedFieldDecoration: pinPutDecoration,
+                                selectedFieldDecoration: pinPutDecoration,
+                                followingFieldDecoration: pinPutDecoration,
+                                pinAnimationType: PinAnimationType.scale,
+                                textStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 71, 54, 111), fontSize: 20.0),
+                              ),
+                            ),
+                          ),
+                        ]),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(5.w, 5.w, 0, 4.w),
+                          alignment: Alignment.topLeft,
+                          child: RichText(
+                            text: TextSpan(
+                                text: "Haven't Received the OTP yet? ",
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: Color.fromARGB(255, 71, 54, 111),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Resend OTP',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 10.sp,
+                                      ))
+                                ]),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      // height: 65,
+                      child: TextFormField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          validator: (val) {
+                            return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
+                                ? null
+                                : "Please provide valid number";
+                          },
+                          onChanged: (value) {
+                            phoneNumString = value;
+                          },
+                          cursorColor: Color.fromARGB(255, 71, 54, 111),
+                          decoration: getInputDecoration("Enter Phone Number")),
                     ),
-                  ),
-                ),
-              ]),
-              Container(
-                margin: EdgeInsets.fromLTRB(5.w, 5.w, 0, 4.w),
-                alignment: Alignment.topLeft,
-                child: RichText(
-                  text: TextSpan(
-                      text: "Haven't Received the OTP yet? ",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: Color.fromARGB(255, 71, 54, 111),
-                        fontWeight: FontWeight.normal,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Resend OTP',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 10.sp,
-                            ))
-                      ]),
-                ),
-              ),
               SizedBox(
                 height: 3.h,
               ),
@@ -147,26 +208,12 @@ class _Otp_pageState extends State<Otp_page> {
                   minWidth: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.05,
                   onPressed: () {
-                    Alert(
-                      context: context,
-                      title: "You have entered an invalid OTP",
-                      buttons: [
-                        DialogButton(
-                          child: Text(
-                            "Try Again",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          width: 120,
-                          color: Color.fromARGB(255, 71, 54, 111),
-                        )
-                      ],
-                    ).show();
+                    !otpSent ? sendOtp() : checkOtp();
                   },
                   color: Color.fromARGB(255, 71, 54, 111),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   child: Text(
-                    "Submit",
+                    otpSent ? "Submit" : "Verify",
                     style:
                         TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
                   ),
