@@ -271,81 +271,60 @@ class _SingleProdWLState extends State<SingleProdWL> {
         },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
-          child: Container(
-            // height: 160,
-            width: double.infinity,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 2.0,
-                      color: Color(0xbb999999),
-                      spreadRadius: 1.6,
-                      offset: Offset(1, 1))
-                ],
-                border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Stack(
-              children: [
-                Column(
+          child: Stack(
+            children: [
+              Container(
+                // height: 160,
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2.0,
+                          color: Color(0xaa999999),
+                          spreadRadius: 1.4,
+                          offset: Offset(1, 1))
+                    ],
+                    border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                                alignment: Alignment.center,
-                                height: 140,
-                                width: MediaQuery.of(context).size.width / 3.6,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[50],
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.black),
-                                ),
-                                child: coverPageimageBuilder(widget.image)),
-                          ],
-                        ),
+                        Container(
+                            alignment: Alignment.center,
+                            height: 140,
+                            width: MediaQuery.of(context).size.width / 3.6,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.black),
+                            ),
+                            child: coverPageimageBuilder(widget.image)),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.topLeft,
-                                    width: MediaQuery.of(context).size.width / 2.2,
-                                    //  height: 30,
-                                    child: Text(
-                                      widget.prodName,
-                                      style: TextStyle(
-                                          fontFamily: 'GothamMedium',
-                                          fontSize: MediaQuery.of(context).size.width / 25,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color.fromARGB(255, 71, 54, 111)),
-                                    ),
-                                  ),
-
-                                  // GestureDetector(
-                                  //   onTap: (){
-                                  //
-                                  //   },
-                                  //   child: Align(
-                                  //     alignment: Alignment.topRight,
-                                  //     child: Icon(Icons.more_vert, color: Color.fromARGB(
-                                  //         255, 71, 54, 111) ,),
-                                  //   ),
-                                  // ),
-                                ],
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: MediaQuery.of(context).size.width / 2.2,
+                                //  height: 30,
+                                child: Text(
+                                  widget.prodName,
+                                  style: TextStyle(
+                                      fontFamily: 'GothamMedium',
+                                      fontSize: MediaQuery.of(context).size.width / 25,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(255, 71, 54, 111)),
+                                ),
                               ),
-                              SizedBox(height: 8),
+                              SizedBox(height: 15),
                               widget.available == true
                                   ? Container(
                                       child: Column(
@@ -462,85 +441,83 @@ class _SingleProdWLState extends State<SingleProdWL> {
                                       ],
                                     ),
                               SizedBox(
-                                height: 5,
+                                height: 15,
                               ),
-                              widget.available == true
-                                  ? Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Container(
-                                          height: MediaQuery.of(context).size.height / 25,
-                                          // alignment: Alignment.bottomRight,
-                                          child: ElevatedButton(
-                                            child: Text("Add to cart",
-                                                style: TextStyle(
-                                                    fontFamily: 'GothamMedium',
-                                                    color: Colors.white,
-                                                    fontSize:
-                                                        MediaQuery.of(context).size.width / 25)),
-                                            onPressed: () {
-                                              AddToCartData add = new AddToCartData(
-                                                  customerId: widget.loginResponse.id,
-                                                  productId: widget.productId);
-                                              addProductToCart(add);
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Color.fromARGB(255, 71, 54, 111),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        )
-                                      ],
-                                    )
-                                  : Container()
-                            ],
+                               ],
                           ),
                         )
                       ],
                     ),
                   ],
                 ),
-                Positioned(
-                  top: 1,
-                  right: 1,
-                  child: PopupMenuButton(
+              ),
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: 
+                  IconButton(
                     padding: EdgeInsets.zero,
-                    itemBuilder: (BuildContext bc) => [
-                      // PopupMenuItem(
-                      //     child: Text(
-                      //       "Edit",
-                      //       style: TextStyle(
-                      //           fontFamily: 'GothamMedium',
-                      //           fontWeight: FontWeight.w600,
-                      //           color: Color.fromARGB(255, 71, 54, 111)),
-                      //     ),
-                      //     value: "1"),
-                      PopupMenuItem(
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 71, 54, 111)),
-                          ),
-                          value: "2"),
-                    ],
-                    onSelected: (value) {
-                      if (value == "2") {
-                        widget.showDeleteConfirmationDialog(widget.productId, false);
-                      }
-                    },
-                    // onSelected: (route) {
-                    //   Navigator.pushNamed(context, route);
-                    // },
-                  ),
+                    icon:Icon(Icons.highlight_remove_rounded,color: Colors.grey,),onPressed:()=>widget.showDeleteConfirmationDialog(widget.productId, false)),
+                  // PopupMenuButton(
+                  //   padding: EdgeInsets.zero,
+                  //   itemBuilder: (BuildContext bc) => [
+                  //     // PopupMenuItem(
+                  //     //     child: Text(
+                  //     //       "Edit",
+                  //     //       style: TextStyle(
+                  //     //           fontFamily: 'GothamMedium',
+                  //     //           fontWeight: FontWeight.w600,
+                  //     //           color: Color.fromARGB(255, 71, 54, 111)),
+                  //     //     ),
+                  //     //     value: "1"),
+                  //     PopupMenuItem(
+                  //         child: Text(
+                  //           "Delete",
+                  //           style: TextStyle(
+                  //               fontFamily: 'GothamMedium',
+                  //               fontWeight: FontWeight.w600,
+                  //               color: Color.fromARGB(255, 71, 54, 111)),
+                  //         ),
+                  //         value: "2"),
+                  //   ],
+                  //   onSelected: (value) {
+                  //     if (value == "2") {
+                  //       widget.showDeleteConfirmationDialog(widget.productId, false);
+                  //     }
+                  //   },
+                  //   // onSelected: (route) {
+                  //   //   Navigator.pushNamed(context, route);
+                  //   // },
+                  // ),
+               
                 ),
-              ],
-            ),
+                widget.available == true
+                                  ? Positioned(right: 9,bottom: 9,
+                                                                      child: Container(
+                                                                        height: MediaQuery.of(context).size.height / 25,
+                                                                        // alignment: Alignment.bottomRight,
+                                                                        child: ElevatedButton(
+                                                                          child: Text("Add to cart",
+                                                                              style: TextStyle(
+                                                                                  fontFamily: 'GothamMedium',
+                                                                                  color: Colors.white,
+                                                                                  fontSize:
+                                                                                      MediaQuery.of(context).size.width / 25)),
+                                                                          onPressed: () {
+                                                                            AddToCartData add = new AddToCartData(
+                                                                                customerId: widget.loginResponse.id,
+                                                                                productId: widget.productId);
+                                                                            addProductToCart(add);
+                                                                          },
+                                                                          style: ElevatedButton.styleFrom(
+                                                                            primary: Color.fromARGB(255, 71, 54, 111),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                  )
+                                  : Container()
+                           
+            ],
           ),
         ),
       ),

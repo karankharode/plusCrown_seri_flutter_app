@@ -79,12 +79,14 @@ class CustomDrawer extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(new Radius.circular(14.w)),
+                                borderRadius:
+                                    BorderRadius.all(new Radius.circular(14.w)),
                                 border: Border.all(color: Colors.black38)),
                             child: CircleAvatar(
                               backgroundColor: Colors.white60,
                               radius: 12.w,
-                              child: Image.asset('assets/icons/profile - Copy.png'),
+                              child: Image.asset(
+                                  'assets/icons/profile - Copy.png'),
                             ),
                           ),
                           Padding(
@@ -98,7 +100,8 @@ class CustomDrawer extends StatelessWidget {
                                 Expanded(
                                   flex: 3,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
@@ -123,12 +126,14 @@ class CustomDrawer extends StatelessWidget {
                                 ),
                                 loginResponse.email != 'guest@gmail.com'
                                     ? FutureBuilder<List<PinCode>>(
-                                        future: PinCodeController().getPinCode(),
+                                        future:
+                                            PinCodeController().getPinCode(),
                                         builder: (context, snapshot) {
                                           bool delieveryAvailable;
                                           if (snapshot.hasData) {
                                             if (snapshot.data.any((element) =>
-                                                element.pinCode == loginResponse.pincode)) {
+                                                element.pinCode ==
+                                                loginResponse.pincode)) {
                                               delieveryAvailable = true;
                                             } else {
                                               delieveryAvailable = false;
@@ -136,8 +141,10 @@ class CustomDrawer extends StatelessWidget {
                                             return Expanded(
                                               flex: 3,
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     !delieveryAvailable
@@ -146,15 +153,24 @@ class CustomDrawer extends StatelessWidget {
                                                     textAlign: TextAlign.center,
                                                     style: !delieveryAvailable
                                                         ? TextStyle(
-                                                            fontFamily: 'GothamMedium',
+                                                            fontFamily:
+                                                                'GothamMedium',
                                                             fontSize: 12.sp,
-                                                            color: Colors.red.withOpacity(0.8),
-                                                            fontWeight: FontWeight.bold)
+                                                            color: Colors.red
+                                                                .withOpacity(
+                                                                    0.8),
+                                                            fontWeight:
+                                                                FontWeight.bold)
                                                         : TextStyle(
-                                                            fontFamily: 'GothamMedium',
+                                                            fontFamily:
+                                                                'GothamMedium',
                                                             fontSize: 12.sp,
-                                                            color: Colors.green.withOpacity(0.8),
-                                                            fontWeight: FontWeight.bold),
+                                                            color: Colors.green
+                                                                .withOpacity(
+                                                                    0.8),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                   ),
                                                 ],
                                               ),
@@ -163,17 +179,22 @@ class CustomDrawer extends StatelessWidget {
                                             return Expanded(
                                               flex: 3,
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     "Checking Delievery\n for ${loginResponse.pincode}",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        fontFamily: 'GothamMedium',
+                                                        fontFamily:
+                                                            'GothamMedium',
                                                         fontSize: 12.sp,
-                                                        color: Colors.green.withOpacity(0.8),
-                                                        fontWeight: FontWeight.bold),
+                                                        color: Colors.green
+                                                            .withOpacity(0.8),
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ],
                                               ),
@@ -183,16 +204,19 @@ class CustomDrawer extends StatelessWidget {
                                     : Expanded(
                                         flex: 3,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Please login to\nShop with us}",
+                                              "Please login to\nShop with us",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'GothamMedium',
                                                   fontSize: 12.sp,
-                                                  color: Colors.green.withOpacity(0.8),
+                                                  color: Colors.green
+                                                      .withOpacity(0.8),
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ],
@@ -215,7 +239,8 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 drawerHomeTile(context, "Home", homeNavigator),
                 Divider(color: Colors.black, height: 0),
-                drawerTile(context, 'Notebooks', drawerNavigator, Books(loginResponse, cartData)),
+                drawerTile(context, 'Notebooks', drawerNavigator,
+                    Books(loginResponse, cartData)),
                 ExpansionTile(
                   // trailing: Image.asset('assets/icons/downarrow1 - Copy.png'),
                   childrenPadding: EdgeInsets.only(left: 20),
@@ -295,10 +320,10 @@ class CustomDrawer extends StatelessWidget {
                         )),
                   ],
                 ),
-                drawerTile(
-                    context, 'JEE/CET/NEET', drawerNavigator, Competitive(loginResponse, cartData)),
-                drawerTile(
-                    context, 'Story Tellers', drawerNavigator, Story(loginResponse, cartData)),
+                drawerTile(context, 'NEET/JEE/CET', drawerNavigator,
+                    Competitive(loginResponse, cartData)),
+                drawerTile(context, 'Story Tellers', drawerNavigator,
+                    Story(loginResponse, cartData)),
                 drawerTile(
                     context,
                     'Biography Books',
@@ -307,17 +332,21 @@ class CustomDrawer extends StatelessWidget {
                       loginResponse: loginResponse,
                       cartData: cartData,
                     )),
-                drawerTile(context, 'Stationary', drawerNavigator,
-                    Stationary(loginResponse: loginResponse, cartData: cartData)),
+                drawerTile(
+                    context,
+                    'Stationary',
+                    drawerNavigator,
+                    Stationary(
+                        loginResponse: loginResponse, cartData: cartData)),
                 drawerTile(context, 'Request a Book', drawerNavigator,
                     RequestBook(loginResponse, cartData)),
                 Divider(color: Colors.black, height: 0),
-                drawerTile(
-                    context, 'My Orders', drawerNavigator, MyOrdersPage(loginResponse, cartData)),
-                drawerTile(
-                    context, 'Wishlist', drawerNavigator, WishListPage(loginResponse, cartData)),
-                drawerTile(
-                    context, 'My Account', drawerNavigator, MyAccount(loginResponse, cartData)),
+                drawerTile(context, 'My Orders', drawerNavigator,
+                    MyOrdersPage(loginResponse, cartData)),
+                drawerTile(context, 'Wishlist', drawerNavigator,
+                    WishListPage(loginResponse, cartData)),
+                drawerTile(context, 'My Account', drawerNavigator,
+                    MyAccount(loginResponse, cartData)),
                 Divider(color: Colors.black, height: 0),
                 drawerTile(
                     context,
@@ -327,12 +356,14 @@ class CustomDrawer extends StatelessWidget {
                       loginResponse: loginResponse,
                       cartData: cartData,
                     )),
-                drawerTile(
-                    context, 'Contact Us', drawerNavigator, ContactUs(loginResponse, cartData)),
+                drawerTile(context, 'Contact Us', drawerNavigator,
+                    ContactUs(loginResponse, cartData)),
                 ListTile(
                     dense: true,
                     title: Text(
-                      loginResponse.email == 'guest@gmail.com' ? "Log In" : 'Log Out',
+                      loginResponse.email == 'guest@gmail.com'
+                          ? "Log In"
+                          : 'Log Out',
                       style: TextStyle(
                           fontFamily: 'GothamMedium',
                           fontSize: 2.1.h,
@@ -342,30 +373,38 @@ class CustomDrawer extends StatelessWidget {
                     onTap: () {
                       loginResponse.email == 'guest@gmail.com'
                           ? Navigator.pushAndRemoveUntil(
-                              context, commonRouter(LoginPage()), (Route<dynamic> route) => false)
+                              context,
+                              commonRouter(LoginPage()),
+                              (Route<dynamic> route) => false)
                           : Alert(
                               context: context,
-                              style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
+                              style: AlertStyle(
+                                  overlayColor: Colors.black.withOpacity(0.4)),
                               title: "Do you want to Log Out?",
                               buttons: [
                                 DialogButton(
                                   child: Text(
                                     "Yes",
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
                                   ),
                                   onPressed: () async {
                                     await _sharedPref.removeUser();
                                     await _sharedPref.removeIsLoggedIn();
-                                    if (await _sharedPref.readIsLoggedIn() == true) {
+                                    if (await _sharedPref.readIsLoggedIn() ==
+                                        true) {
                                       await _sharedPref.removeUser();
                                       await _sharedPref.removeIsLoggedIn();
                                       Navigator.of(context).pop();
-                                      Navigator.of(context).pop(MaterialPageRoute(
-                                          builder: (BuildContext context) => LoginPage()));
+                                      Navigator.of(context).pop(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  LoginPage()));
                                     } else {
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(builder: (c) => LoginPage()),
+                                          MaterialPageRoute(
+                                              builder: (c) => LoginPage()),
                                           (route) => false);
                                     }
                                   },
@@ -375,7 +414,8 @@ class CustomDrawer extends StatelessWidget {
                                 DialogButton(
                                   child: Text(
                                     "No",
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).pop();

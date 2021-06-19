@@ -233,11 +233,12 @@ class _SearchScreenState extends State<SearchScreen> {
                       "Showing Results for - " + searchKeyWord ?? " ",
                       style: TextStyle(
                         color: kPrimaryColor,
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'GothamMedium',
                       ),
                     ),
+                    SizedBox(height:2),
                     FutureBuilder(
                         future: futureForSearch,
                         builder: (context, snapshot) {

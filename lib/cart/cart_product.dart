@@ -10,7 +10,6 @@ import 'package:seri_flutter_app/empty-wishlist/models/AddtoWishlistData.dart';
 import 'package:seri_flutter_app/homescreen/controller/products_controller.dart';
 import 'package:seri_flutter_app/homescreen/others/page_one.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
-import 'package:seri_flutter_app/my-order-detail-page/screens/myOrderDetailPage.dart';
 import 'package:sizer/sizer.dart';
 import 'models/CartData.dart';
 
@@ -140,9 +139,9 @@ class _SingleOfferState extends State<SingleOffer> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                        blurRadius: 2.0,
+                        blurRadius: 1.0,
                         color: Color(0xbb999999),
-                        spreadRadius: 1.6,
+                        spreadRadius: 0.4,
                         offset: Offset(1, 1))
                   ],
                   border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),

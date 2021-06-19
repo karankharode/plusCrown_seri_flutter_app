@@ -102,7 +102,8 @@ class CartController {
     bool addedToCart;
     try {
       var response = await dio.post(url, data: formData);
-
+      print("respone");
+      print(response.data);
       if (response != null) {
         if (response.data['msg'] == "Order Placed") {
           addedToCart = true;

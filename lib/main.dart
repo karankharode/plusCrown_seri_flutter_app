@@ -11,6 +11,7 @@ import 'package:seri_flutter_app/update_customer/password/controller/password_co
 import 'package:sizer/sizer.dart';
 import 'cart/controller/CartController.dart';
 import 'cart/models/AddToCartData.dart';
+import 'checkOut/screens/CheckOutPage.dart';
 import 'constants.dart';
 import 'homescreen/controller/products_controller.dart';
 import 'login&signup/controller/login_controller.dart';
@@ -89,6 +90,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return CheckOutPage();
     return startupPage;
   }
 }

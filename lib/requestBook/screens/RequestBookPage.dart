@@ -83,11 +83,7 @@ class _RequestBookState extends State<RequestBook> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle formFieldTextStyle = TextStyle(
-      color: kPrimaryColor,
-      fontFamily: 'GothamMedium',
-      fontSize: MediaQuery.of(context).size.width / 22,
-    );
+    
     return Scaffold(
       appBar: buildTextAppBar(context, "Request Book", loginResponse, false, false, null),
       resizeToAvoidBottomInset: true,
@@ -233,7 +229,7 @@ class _RequestBookState extends State<RequestBook> {
                             ? Center(
                                 child: IconButton(
                                     onPressed: getImage,
-                                    icon: Icon(Icons.add_photo_alternate_outlined)),
+                                    icon: Icon(Icons.add_photo_alternate_outlined,size: 40,)),
                               )
                             : ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(7)),

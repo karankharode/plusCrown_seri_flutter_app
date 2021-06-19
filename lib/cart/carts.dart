@@ -1,11 +1,9 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:seri_flutter_app/address/screens/address-book-page.dart';
-import 'package:seri_flutter_app/address/screens/address-book.dart';
 import 'package:seri_flutter_app/cart/cart_product.dart';
 import 'package:seri_flutter_app/cart/models/DeleteFromCartData.dart';
+import 'package:seri_flutter_app/checkOut/screens/CheckOutPage.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
@@ -34,9 +32,8 @@ class _CartState extends State<Cart> {
 
   _CartState({this.loginResponse, this.cartData});
 
-  bool apply = false;
+  
   bool checkValue = false;
-  bool delivery = true;
   double totalAmt = 0.00;
   double cardTotal;
   double cardSavings;
@@ -84,6 +81,17 @@ class _CartState extends State<Cart> {
       buttons: [
         DialogButton(
           child: Text(
+            "No",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
+        ),
+        DialogButton(
+          child: Text(
             "Yes",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
@@ -98,17 +106,7 @@ class _CartState extends State<Cart> {
           width: 120,
           color: Color.fromARGB(255, 71, 54, 111),
         ),
-        DialogButton(
-          child: Text(
-            "No",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          width: 120,
-          color: Color.fromARGB(255, 71, 54, 111),
-        )
+        
       ],
     ).show();
   }
@@ -155,7 +153,7 @@ class _CartState extends State<Cart> {
 
   bool search = false;
   final formKey = GlobalKey<FormState>();
-  TextEditingController couponTextEditingController = new TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -196,35 +194,57 @@ class _CartState extends State<Cart> {
                                 break;
                               case ConnectionState.done:
                                 return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(10),
                                   child: Column(
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "  " +
-                                                cartDataFromSnapshot.cartProducts.length
-                                                    .toString() +
-                                                " item(s) in the Cart",
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                fontSize: MediaQuery.of(context).size.width / 25,
-                                                color: Color.fromARGB(255, 71, 54, 111)),
-                                          ),
-                                          // SizedBox(
-                                          //   width: MediaQuery.of(context).size.width/80,
-                                          // ),
-                                          Text(
-                                            "Total amount  \u20B9 " +
-                                                cartDataFromSnapshot.cartPrice +
-                                                " ",
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                fontSize: MediaQuery.of(context).size.width / 25,
-                                                color: Color.fromARGB(255, 71, 54, 111)),
-                                          )
-                                        ],
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(8, 4, 8, 10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "  " +
+                                                  cartDataFromSnapshot.cartProducts.length
+                                                      .toString() +
+                                                  " item(s) in the Cart",
+                                              style: TextStyle(
+                                                  fontFamily: 'GothamMedium',
+                                                  fontSize: MediaQuery.of(context).size.width / 25,
+                                                  color: Color.fromARGB(255, 71, 54, 111)),
+                                            ),
+
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 7.0,
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  showDeleteConfirmationDialog(null, true);
+                                                },
+                                                child: Text(
+                                                  "Clear Cart",
+                                                  style: TextStyle(
+                                                      fontFamily: 'GothamMedium',
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                            ),
+                                            // SizedBox(
+                                            //   width: MediaQuery.of(context).size.width/80,
+                                            // ),
+                                            // Text(
+                                            //   "Total amount  \u20B9 " +
+                                            //       cartDataFromSnapshot.cartPrice +
+                                            //       " ",
+                                            //   style: TextStyle(
+                                            //       fontFamily: 'GothamMedium',
+                                            //       fontSize: MediaQuery.of(context).size.width / 25,
+                                            //       color: Color.fromARGB(255, 71, 54, 111)),
+                                            // )
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 5,
@@ -234,51 +254,50 @@ class _CartState extends State<Cart> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  commonRouter(HomePage(
-                                                    loginResponse: loginResponse,
-                                                    cartData: cartDataFromSnapshot,
-                                                  )));
+                                          SizedBox(width: 2),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.only(
+                                          //     right: 7.0,
+                                          //   ),
+                                          //   child: GestureDetector(
+                                          //     onTap: () {
+                                          //       showDeleteConfirmationDialog(null, true);
+                                          //     },
+                                          //     child: Text(
+                                          //       "Remove all",
+                                          //       style: TextStyle(
+                                          //           fontFamily: 'GothamMedium',
+                                          //           fontSize: 12,
+                                          //           color: Colors.red),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                         
+                                            
+                                             Padding(
+                                               padding: const EdgeInsets.all(8.0),
+                                               child: ElevatedButton(
+                                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 71, 54, 111))),
+                                                onPressed: () {
+                                                Navigator.push(
+                                                context,
+                                                commonRouter(HomePage(
+                                                  loginResponse: loginResponse,
+                                                  cartData: cartDataFromSnapshot,
+                                                )));
                                             },
-                                            child: Row(
-                                              children: [
-                                                Icon(Icons.add),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                    left: 7.0,
-                                                  ),
-                                                  child: Text(
-                                                    "Add more products",
-                                                    style: TextStyle(
-                                                        fontFamily: 'GothamMedium',
-                                                        fontSize: 12,
-                                                        color: Color.fromARGB(255, 71, 54, 111)),
-                                                  ),
-                                                ),
-                                              ],
+                                                           child: Text(
+                                                             "Continue Shopping",
+                                                             style: TextStyle(
+                                                                 fontFamily: 'GothamMedium',
+                                                                 fontSize: 16,
+                                                                 fontWeight: FontWeight.w500,
+                                                                 color: Colors.white),
+                                                           ),
                                             ),
-                                          ),
+                                             ),
+                                          
                                           // SizedBox(width: MediaQuery.of(context).size.width ,),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 7.0,
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                showDeleteConfirmationDialog(null, true);
-                                              },
-                                              child: Text(
-                                                "Remove all",
-                                                style: TextStyle(
-                                                    fontFamily: 'GothamMedium',
-                                                    fontSize: 12,
-                                                    color: Colors.red),
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       ),
                                       SizedBox(
@@ -566,311 +585,8 @@ class _CartState extends State<Cart> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        // mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 35,
-                                            width: MediaQuery.of(context).size.width / 1.78,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                  color: Color.fromARGB(255, 71, 54, 111)),
-                                            ),
-                                            child: TextFormField(
-                                              textAlign: TextAlign.center,
-                                              controller: couponTextEditingController,
-                                              style: TextStyle(
-                                                  fontFamily: 'GothamMedium',
-                                                  color: Colors.red,
-                                                  fontSize: 16),
-                                              decoration: InputDecoration(
-                                                border: InputBorder.none,
-                                                hintText: 'Type Coupon Code',
-                                                hintStyle: TextStyle(
-                                                    fontFamily: 'GothamMedium', color: Colors.grey),
-                                                labelStyle: TextStyle(fontSize: 20),
-                                              ),
-                                            ),
-                                          ),
-                                          if (apply == false)
-                                            Container(
-                                              height: 35,
-                                              width: MediaQuery.of(context).size.width / 3.2,
-                                              decoration: BoxDecoration(
-                                                color: Color.fromARGB(255, 71, 54, 111),
-                                                border: Border.all(
-                                                    color: Color.fromARGB(255, 71, 54, 111)),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      couponTextEditingController.text = "xyz";
-                                                      apply = true;
-                                                    });
-                                                  },
-                                                  child: Text("Apply",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Colors.white,
-                                                          fontSize: 16)),
-                                                ),
-                                              ),
-                                            ),
-                                          if (apply == true)
-                                            Container(
-                                              height: 35,
-                                              width: MediaQuery.of(context).size.width / 3.2,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color: Color.fromARGB(255, 71, 54, 111)),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      couponTextEditingController.text = " ";
-                                                    });
-                                                  },
-                                                  child: Text("Remove",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Color.fromARGB(255, 71, 54, 111),
-                                                          fontSize: 16)),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 2),
-                                      Divider(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        height: 10,
-                                        thickness: 1,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("Order Details",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                color: Color.fromARGB(255, 71, 54, 111),
-                                                fontSize: MediaQuery.of(context).size.width / 22,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("Cart Total",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: 'GothamMedium',
-                                                    color: Color.fromARGB(255, 71, 54, 111),
-                                                    fontSize:
-                                                        MediaQuery.of(context).size.width / 24,
-                                                  )),
-                                              Text("\u20B9 " + cartDataFromSnapshot.cart_mrp,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'GothamMedium',
-                                                      color: Color.fromARGB(255, 71, 54, 111),
-                                                      fontSize:
-                                                          MediaQuery.of(context).size.width / 24)),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("Cart Savings ",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'GothamMedium',
-                                                      color: Color.fromARGB(255, 71, 54, 111),
-                                                      fontSize:
-                                                          MediaQuery.of(context).size.width / 24)),
-                                              Text("- \u20B9 " + cartDataFromSnapshot.cart_saving,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'GothamMedium',
-                                                      color: Color.fromARGB(255, 71, 54, 111),
-                                                      fontSize:
-                                                          MediaQuery.of(context).size.width / 24)),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          if (couponTextEditingController.text == "xyz")
-                                            Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text("Coupon Savings ",
-                                                        textAlign: TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            color: Color.fromARGB(255, 71, 54, 111),
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    24)),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                            "- \u20B9 " +
-                                                                cartDataFromSnapshot
-                                                                    .coupons_discount,
-                                                            textAlign: TextAlign.center,
-                                                            style: TextStyle(
-                                                                fontFamily: 'GothamMedium',
-                                                                color: Color.fromARGB(
-                                                                    255, 71, 54, 111),
-                                                                fontSize: MediaQuery.of(context)
-                                                                        .size
-                                                                        .width /
-                                                                    24)),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                              ],
-                                            ),
-                                          if (checkValue == true)
-                                            Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text("Gift",
-                                                        textAlign: TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            color: Color.fromARGB(255, 71, 54, 111),
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    24)),
-                                                    Text(
-                                                        "\u20B9 " +
-                                                            " 300", // cartDataFromSnapshot.,
-                                                        textAlign: TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            color: Color.fromARGB(255, 71, 54, 111),
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    24)),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                              ],
-                                            ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("Delivery",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'GothamMedium',
-                                                      color: Color.fromARGB(255, 71, 54, 111),
-                                                      fontSize:
-                                                          MediaQuery.of(context).size.width / 24)),
-                                              (delivery == false ||
-                                                      (int.tryParse(
-                                                              cartDataFromSnapshot.cartPrice) ??
-                                                          0 < 300))
-                                                  ? Text(
-                                                      "Free",
-                                                      textAlign: TextAlign.center,
-                                                      style: GoogleFonts.rasa(
-                                                          textStyle: TextStyle(
-                                                              color:
-                                                                  Color.fromARGB(255, 71, 54, 111),
-                                                              fontSize: MediaQuery.of(context)
-                                                                      .size
-                                                                      .width /
-                                                                  24)),
-                                                    )
-                                                  : Text(
-                                                      "\u20B9 " +
-                                                          cartDataFromSnapshot.cart_delivery,
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Color.fromARGB(255, 71, 54, 111),
-                                                          fontSize:
-                                                              MediaQuery.of(context).size.width /
-                                                                  24),
-                                                    )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Color.fromARGB(255, 71, 54, 111),
-                                        height: 10,
-                                        thickness: 1,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Total Amount ",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'GothamMedium',
-                                                  color: Color.fromARGB(255, 71, 54, 111),
-                                                  fontSize:
-                                                      MediaQuery.of(context).size.width / 24)),
-                                          Text(
-                                            " \u20B9 " + cartDataFromSnapshot.cart_total_amount,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                color: Color.fromARGB(255, 71, 54, 111),
-                                                fontSize: MediaQuery.of(context).size.width / 24),
-                                          ),
-                                        ],
-                                      ),
                                       SizedBox(
                                         height: 5,
-                                      ),
-                                      ElevatedButton(
-                                        child: Text("Proceed to Checkout",
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                color: Colors.white,
-                                                fontSize: MediaQuery.of(context).size.width / 24)),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              commonRouter(AddressBookPage(
-                                                loginResponse,
-                                                cartData,
-                                                true,
-                                              )));
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Color.fromARGB(255, 71, 54, 111),
-                                        ),
                                       ),
                                     ],
                                   ),
@@ -883,6 +599,28 @@ class _CartState extends State<Cart> {
                           }
                         }),
                   ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: Container(
+              height: 56,
+              child: ElevatedButton(
+                child: Text("Proceed to Checkout",
+                    style: TextStyle(
+                        fontFamily: 'GothamMedium',
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width / 24)),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      commonRouter(CheckOutPage(
+                        loginResponse: loginResponse,
+                        cartData: cartData,
+                        
+                      )));
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 71, 54, 111),
                 ),
               ),
             ),

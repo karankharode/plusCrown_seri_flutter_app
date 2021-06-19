@@ -48,7 +48,7 @@ class _AddressState extends State<Address> {
       Flushbar(
         margin: EdgeInsets.all(8),
         borderRadius: 8,
-        message: "Error adding to Cart",
+        message: "Error adding Address",
         icon: Icon(
           Icons.info_outline,
           size: 20,

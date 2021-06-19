@@ -5,6 +5,7 @@ import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddressData.dart';
 import 'package:seri_flutter_app/address/models/UpdateAddressData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 
 // ignore_for_file: non_constant_identifier_names
@@ -12,8 +13,9 @@ class AddressBook extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
   final Function updateAddress;
+  final String selected_add_id;
 
-  AddressBook(this.loginResponse, this.cartData, this.updateAddress);
+  AddressBook(this.loginResponse, this.cartData, this.updateAddress, this.selected_add_id);
 
   @override
   _AddressBookState createState() => _AddressBookState(loginResponse, cartData);
@@ -30,7 +32,6 @@ class _AddressBookState extends State<AddressBook> {
   _AddressBookState(this.loginResponse, this.cartData);
 
   var addressController;
-  Future futureForAddress;
 
   // Add controller and get Address details
 
@@ -83,6 +84,13 @@ class _AddressBookState extends State<AddressBook> {
     return FutureBuilder(
         future: AddressController().getAddress(loginResponse.id.toString()),
         builder: (context, snapshot) {
+           switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return bookLoader();
+              break;
+            case ConnectionState.done:
           if (snapshot.hasData) {
             List<AddressData> addList = snapshot.data;
             if (addList.length > 0) {
@@ -106,7 +114,9 @@ class _AddressBookState extends State<AddressBook> {
                         deleteAddress: deleteAddress,
                         isDefault: addList[index].isdeafault,
                         addressData: addList[index],
-                        updateAddressId: widget.updateAddress);
+                        updateAddressId: widget.updateAddress,
+                        selected_add_id: widget.selected_add_id,
+                        );
                   });
             } else {
               return Container();
@@ -114,6 +124,10 @@ class _AddressBookState extends State<AddressBook> {
           } else {
             return Container();
           }
+          break;
+          default:
+          return bookLoader();
+           }
         });
   }
 }
@@ -127,6 +141,7 @@ class SingleAddress extends StatefulWidget {
   final String area;
   final String landmark;
   final String add_id;
+  final String selected_add_id;
   final type;
   final district;
   final isDefault;
@@ -135,7 +150,9 @@ class SingleAddress extends StatefulWidget {
   final AddressData addressData;
 
   SingleAddress(
-      {this.name,
+      {
+        @required this.selected_add_id,
+        this.name,
       this.phoneNo,
       this.pinCode,
       this.city,
@@ -185,7 +202,7 @@ class _SingleAddressState extends State<SingleAddress> {
                       scale: 1,
                       child: Checkbox(
                         activeColor: Color.fromARGB(255, 71, 54, 111),
-                        value: checkValue,
+                        value: widget.selected_add_id==widget.add_id,
                         onChanged: (newValue) {
                           setState(() {
                             checkValue = newValue;

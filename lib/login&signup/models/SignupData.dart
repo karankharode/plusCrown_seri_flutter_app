@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class SignupData {
   final String firstName;
@@ -7,9 +8,16 @@ class SignupData {
   final int phoneNumber;
   final String password;
   final String userName;
+  final String pinCode;
 
   const SignupData(
-      {this.firstName, this.lastName, this.email, this.phoneNumber, this.password, this.userName});
+      {@required this.pinCode,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.phoneNumber,
+      this.password,
+      this.userName});
 
   FormData getFormData(SignupData signupData) {
     return FormData.fromMap({
@@ -18,7 +26,8 @@ class SignupData {
       'number': signupData.phoneNumber,
       'password': signupData.password,
       'username': signupData.userName,
-      'lname': signupData.lastName
+      'lname': signupData.lastName,
+      'pincode': signupData.pinCode,
     });
   }
 

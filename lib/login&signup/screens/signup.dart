@@ -46,6 +46,8 @@ class _SignupPageState extends State<SignupPage> {
             phoneNumber: phoneNum,
             email: email,
             password: password,
+            pinCode: pinCode.toString(),
+            lastName: "",
             userName: name);
 
         bool isAuthorized = await signUpController.signup(signupData);
@@ -153,7 +155,8 @@ class _SignupPageState extends State<SignupPage> {
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
                                   validator: (val) {
-                                    return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
+                                    return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)')
+                                            .hasMatch(val)
                                         ? null
                                         : "Please provide valid number";
                                   },
@@ -161,7 +164,8 @@ class _SignupPageState extends State<SignupPage> {
                                     phoneNumString = value;
                                   },
                                   cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                  decoration: getInputDecoration("Phone Number")),
+                                  decoration:
+                                      getInputDecoration("Phone Number")),
                             ),
                             gapBox,
                             Container(
@@ -172,7 +176,8 @@ class _SignupPageState extends State<SignupPage> {
                               child: Form(
                                 child: TextFormField(
                                   validator: (val) {
-                                    return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val) ||
+                                    return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)')
+                                                .hasMatch(val) ||
                                             RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
                                                     r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
                                                     r"{0,253}[a-zA-Z0-9])?)*$")
@@ -182,7 +187,8 @@ class _SignupPageState extends State<SignupPage> {
                                   },
                                   onChanged: (value) => email = value,
                                   cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                  decoration: getInputDecoration("Email Address"),
+                                  decoration:
+                                      getInputDecoration("Email Address"),
                                 ),
                               ),
                             ),
@@ -194,7 +200,8 @@ class _SignupPageState extends State<SignupPage> {
                               // height: 65,
                               child: TextFormField(
                                 validator: (val) {
-                                  return RegExp("^(?=.{8,32}\$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*")
+                                  return RegExp(
+                                              "^(?=.{8,32}\$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*")
                                           .hasMatch(val)
                                       ? null
                                       : "Input Valid Password";
@@ -234,7 +241,9 @@ class _SignupPageState extends State<SignupPage> {
                                           });
                                         },
                                         icon: Icon(
-                                          !_obscureText ? Icons.visibility : Icons.visibility_off,
+                                          !_obscureText
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
                                           color: !_obscureText
                                               ? Color.fromARGB(255, 71, 54, 111)
                                               : Colors.grey[500],
@@ -260,7 +269,9 @@ class _SignupPageState extends State<SignupPage> {
                               child: TextFormField(
                                 cursorColor: Color.fromARGB(255, 71, 54, 111),
                                 validator: (val) {
-                                  return checkPass == password ? null : "Password not matched";
+                                  return checkPass == password
+                                      ? null
+                                      : "Password not matched";
                                 },
                                 obscureText: !_obscureText,
                                 onChanged: (value) => checkPass = value,
@@ -296,7 +307,9 @@ class _SignupPageState extends State<SignupPage> {
                                           });
                                         },
                                         icon: Icon(
-                                          !_obscureText ? Icons.visibility : Icons.visibility_off,
+                                          !_obscureText
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
                                           color: !_obscureText
                                               ? Color.fromARGB(255, 71, 54, 111)
                                               : Colors.grey[500],
@@ -321,7 +334,8 @@ class _SignupPageState extends State<SignupPage> {
                               // height: 65,
                               child: TextFormField(
                                 validator: (val) {
-                                  return RegExp(r'(^[1-9][0-9]{5}$)').hasMatch(val)
+                                  return RegExp(r'(^[1-9][0-9]{5}$)')
+                                          .hasMatch(val)
                                       ? null
                                       : "Please provide valid PinCode";
                                 },
@@ -354,7 +368,8 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         Flexible(
                           child: Container(
-                            child: Text('I agree with the privacy policy & terms and conditions',
+                            child: Text(
+                                'I agree with the privacy policy & terms and conditions',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 71, 54, 111),
                                   fontSize: 12.0.sp,

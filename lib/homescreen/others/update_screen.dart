@@ -699,19 +699,19 @@ class _UpdateFormState extends State<UpdateForm> {
                   color: kPrimaryColor,
                   fontFamily: 'GothamMedium',
                 ),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
-                  child: GestureDetector(
-                    onTap: () {
-                      _showModalBottomSheetForEmail(context, size);
-                    },
-                    child: SvgPicture.asset(
-                      'assets/images/edit.svg',
-                      width: 3,
-                      height: 3,
-                    ),
-                  ),
-                ),
+                // suffixIcon: Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       _showModalBottomSheetForEmail(context, size);
+                //     },
+                //     child: SvgPicture.asset(
+                //       'assets/images/edit.svg',
+                //       width: 3,
+                //       height: 3,
+                //     ),
+                //   ),
+                // ),
               ),
             ),
             SizedBox(
@@ -762,19 +762,19 @@ class _UpdateFormState extends State<UpdateForm> {
                   color: kPrimaryColor,
                   fontFamily: 'GothamMedium',
                 ),
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    _showModalBottomSheetForPass(context, size);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
-                    child: SvgPicture.asset(
-                      'assets/images/edit.svg',
-                      width: 5,
-                      height: 5,
-                    ),
-                  ),
-                ),
+                // suffixIcon: GestureDetector(
+                //   onTap: () {
+                //     _showModalBottomSheetForPass(context, size);
+                //   },
+                //   child: Padding(
+                //     padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 1.5),
+                //     child: SvgPicture.asset(
+                //       'assets/images/edit.svg',
+                //       width: 5,
+                //       height: 5,
+                //     ),
+                //   ),
+                // ),
               ),
             ),
             SizedBox(
