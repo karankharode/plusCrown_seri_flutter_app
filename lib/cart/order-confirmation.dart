@@ -36,16 +36,16 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
   var cartController = CartController();
 
-  Future placeOrder() async {
-    Navigator.push(context, commonRouter(Otp_page(loginResponse, cartData)));
-    bool response = await cartController.placeOrder(
-        OrderData(loginResponse.id.toString(), "First100", addressData.id.toString(), PaymentMode));
-    if (response) {
-      showCustomFlushBar(context, "Order Placed", 2);
-    } else {
-      showCustomFlushBar(context, "Error Occured", 2);
-    }
-  }
+  // Future placeOrder() async {
+  //   Navigator.push(context, commonRouter(Otp_page(loginResponse, cartData)));
+  //   // bool response = await cartController.placeOrder(
+  //   //     OrderData(loginResponse.id.toString(), "First100", addressData.id.toString(), PaymentMode));
+  //   if (response) {
+  //     showCustomFlushBar(context, "Order Placed", 2);
+  //   } else {
+  //     showCustomFlushBar(context, "Error Occured", 2);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -327,7 +327,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                     fontSize: MediaQuery.of(context).size.width / 24)),
                             onPressed: () {
                               if (PaymentMode != "null") {
-                                placeOrder();
+                                // placeOrder();
                                 // Navigator.push(
                                 //     context,
                                 //     commonRouter((

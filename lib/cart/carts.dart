@@ -4,6 +4,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/cart/cart_product.dart';
 import 'package:seri_flutter_app/cart/models/DeleteFromCartData.dart';
 import 'package:seri_flutter_app/checkOut/screens/CheckOutPage.dart';
+import 'package:seri_flutter_app/checkOut/screens/giftPage.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/searchBar.dart';
@@ -32,12 +33,12 @@ class _CartState extends State<Cart> {
 
   _CartState({this.loginResponse, this.cartData});
 
-  
   bool checkValue = false;
   double totalAmt = 0.00;
   double cardTotal;
   double cardSavings;
   double gift;
+  int giftCount = 0;
   double couponSavings;
   bool containsGift = false;
 
@@ -66,9 +67,15 @@ class _CartState extends State<Cart> {
   }
 
   giftCheck(bool value) {
-    setState(() {
-      containsGift = value;
-    });
+    if (value) {
+      setState(() {
+        giftCount = ++giftCount;
+        containsGift = true;
+      });
+    } else {
+      giftCount = --giftCount;
+      containsGift = giftCount != 0;
+    }
   }
 
   showDeleteConfirmationDialog(productid, bool all) {
@@ -106,7 +113,6 @@ class _CartState extends State<Cart> {
           width: 120,
           color: Color.fromARGB(255, 71, 54, 111),
         ),
-        
       ],
     ).show();
   }
@@ -153,7 +159,6 @@ class _CartState extends State<Cart> {
 
   bool search = false;
   final formKey = GlobalKey<FormState>();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -272,318 +277,37 @@ class _CartState extends State<Cart> {
                                           //     ),
                                           //   ),
                                           // ),
-                                         
-                                            
-                                             Padding(
-                                               padding: const EdgeInsets.all(8.0),
-                                               child: ElevatedButton(
-                                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 71, 54, 111))),
-                                                onPressed: () {
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor: MaterialStateProperty.all(
+                                                      Color.fromARGB(255, 71, 54, 111))),
+                                              onPressed: () {
                                                 Navigator.push(
-                                                context,
-                                                commonRouter(HomePage(
-                                                  loginResponse: loginResponse,
-                                                  cartData: cartDataFromSnapshot,
-                                                )));
-                                            },
-                                                           child: Text(
-                                                             "Continue Shopping",
-                                                             style: TextStyle(
-                                                                 fontFamily: 'GothamMedium',
-                                                                 fontSize: 16,
-                                                                 fontWeight: FontWeight.w500,
-                                                                 color: Colors.white),
-                                                           ),
+                                                    context,
+                                                    commonRouter(HomePage(
+                                                      loginResponse: loginResponse,
+                                                      cartData: cartDataFromSnapshot,
+                                                    )));
+                                              },
+                                              child: Text(
+                                                "Continue Shopping",
+                                                style: TextStyle(
+                                                    fontFamily: 'GothamMedium',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                              ),
                                             ),
-                                             ),
-                                          
+                                          ),
+
                                           // SizedBox(width: MediaQuery.of(context).size.width ,),
                                         ],
                                       ),
                                       SizedBox(
                                         height: 5,
-                                      ),
-                                      if (containsGift == true)
-                                        Container(
-                                          // height: 250,
-                                          width: MediaQuery.of(context).size.width - 15,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                  color: Color.fromARGB(255, 71, 54, 111)),
-                                              borderRadius: BorderRadius.all(Radius.circular(10))),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("This Order Contains Gift",
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Colors.green,
-                                                          fontSize:
-                                                              MediaQuery.of(context).size.width /
-                                                                  22)),
-                                                  SizedBox(height: 3),
-                                                  Text("Add Gift Message",
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Color.fromARGB(255, 71, 54, 111),
-                                                          fontSize:
-                                                              MediaQuery.of(context).size.width /
-                                                                  24)),
-                                                  Container(
-                                                    height: 120,
-                                                    width: MediaQuery.of(context).size.width * 2,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: Border.all(
-                                                          color: Color.fromARGB(255, 71, 54, 111)),
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        TextFormField(
-                                                            textAlign: TextAlign.start,
-                                                            maxLines: 3,
-                                                            //   controller: couponTextEditingController,
-                                                            style: TextStyle(
-                                                                fontFamily: 'GothamMedium',
-                                                                color: Color.fromARGB(
-                                                                    255, 71, 54, 111),
-                                                                fontWeight: FontWeight.w500,
-                                                                fontSize: MediaQuery.of(context)
-                                                                        .size
-                                                                        .width /
-                                                                    22),
-                                                            decoration: InputDecoration(
-                                                              border: InputBorder.none,
-                                                              hintText: 'Type Your Gift Message',
-                                                              hintStyle: TextStyle(
-                                                                fontWeight: FontWeight.w300,
-                                                                fontFamily: 'GothamMedium',
-                                                                color: Color.fromARGB(
-                                                                    255, 71, 54, 111),
-                                                              ),
-                                                              labelStyle: TextStyle(
-                                                                  fontSize: MediaQuery.of(context)
-                                                                          .size
-                                                                          .width /
-                                                                      24),
-                                                            )),
-                                                        Divider(
-                                                          color: Color.fromARGB(255, 71, 54, 111),
-                                                          height: 1,
-                                                          thickness: 1,
-                                                        ),
-                                                        Container(
-                                                          // height:  MediaQuery.of(context).size.height/ 25,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment.start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment.center,
-                                                            children: [
-                                                              Text("From:  ",
-                                                                  textAlign: TextAlign.center,
-                                                                  style: TextStyle(
-                                                                      fontFamily: 'GothamMedium',
-                                                                      color: Color.fromARGB(
-                                                                          255, 71, 54, 111),
-                                                                      fontSize:
-                                                                          MediaQuery.of(context)
-                                                                                  .size
-                                                                                  .width /
-                                                                              24)),
-                                                              // SizedBox(
-                                                              //   width: 2,
-                                                              // ),
-                                                              // Padding(
-                                                              //   padding:
-                                                              //   EdgeInsets.only(top: MediaQuery.of(context).size.height / 55),
-                                                              //   child:
-                                                              Column(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: MediaQuery.of(context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.02,
-                                                                  ),
-                                                                  Container(
-                                                                    height: MediaQuery.of(context)
-                                                                            .size
-                                                                            .height /
-                                                                        30,
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width -
-                                                                        97,
-                                                                    child: TextFormField(
-                                                                      maxLines: 1,
-                                                                      textAlign: TextAlign.left,
-                                                                      //   controller: couponTextEditingController,
-                                                                      style: TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          fontFamily:
-                                                                              'GothamMedium',
-                                                                          color: Color.fromARGB(
-                                                                              255, 71, 54, 111),
-                                                                          fontSize:
-                                                                              MediaQuery.of(context)
-                                                                                      .size
-                                                                                      .width /
-                                                                                  22),
-                                                                      decoration: InputDecoration(
-                                                                        border: InputBorder.none,
-                                                                        hintText: '',
-                                                                        hintStyle: TextStyle(
-                                                                          fontFamily:
-                                                                              'GothamMedium',
-                                                                          fontWeight:
-                                                                              FontWeight.w300,
-                                                                          color: Color.fromARGB(
-                                                                              255, 71, 54, 111),
-                                                                        ),
-                                                                        labelStyle: TextStyle(
-                                                                            fontSize: MediaQuery.of(
-                                                                                        context)
-                                                                                    .size
-                                                                                    .width /
-                                                                                22),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              //    ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Text("Add-ons",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'GothamMedium',
-                                                          color: Color.fromARGB(255, 71, 54, 111),
-                                                          fontSize:
-                                                              MediaQuery.of(context).size.width /
-                                                                  30)),
-                                                  SizedBox(height: 8),
-                                                  Row(
-                                                    // crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 8,
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 2.0),
-                                                        child: SizedBox(
-                                                          height:
-                                                              MediaQuery.of(context).size.width /
-                                                                  30,
-                                                          width: MediaQuery.of(context).size.width /
-                                                              30,
-                                                          child: Transform.scale(
-                                                            scale: 0.8,
-                                                            child: Checkbox(
-                                                              activeColor:
-                                                                  Color.fromARGB(255, 71, 54, 111),
-                                                              value: checkValue,
-                                                              onChanged: (newValue) {
-                                                                setState(() {
-                                                                  checkValue = newValue;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 12,
-                                                      ),
-                                                      RichText(
-                                                        text: TextSpan(
-                                                            text: "Add Gift Bag/Box",
-                                                            style: TextStyle(
-                                                              fontFamily: 'GothamMedium',
-                                                              fontSize: MediaQuery.of(context)
-                                                                      .size
-                                                                      .width /
-                                                                  29,
-                                                              color:
-                                                                  Color.fromARGB(255, 71, 54, 111),
-                                                            ),
-                                                            children: [
-                                                              TextSpan(
-                                                                text:
-                                                                    "(Additional charges - RS 50)",
-                                                                style: TextStyle(
-                                                                    fontFamily: 'GothamMedium',
-                                                                    fontSize: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width /
-                                                                        29,
-                                                                    color: Colors.red),
-                                                              )
-                                                            ]),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 5),
-                                                  Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(left: 24.0),
-                                                        child: Icon(Icons.wallet_giftcard,
-                                                            color: Colors.redAccent,
-                                                            size:
-                                                                MediaQuery.of(context).size.height /
-                                                                    18),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 8.0),
-                                                        child: ElevatedButton(
-                                                          child: Text("See Details",
-                                                              style: TextStyle(
-                                                                  fontFamily: 'GothamMedium',
-                                                                  color: Colors.red,
-                                                                  fontSize: MediaQuery.of(context)
-                                                                          .size
-                                                                          .width /
-                                                                      25)),
-                                                          onPressed: () {},
-                                                          style: ElevatedButton.styleFrom(
-                                                            primary: Colors.white,
-                                                            elevation: 1,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(10),
-                                                                side: BorderSide(
-                                                                    color: Colors.black54,
-                                                                    width: 0.5)),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ]),
-                                          ),
-                                        ),
-                                      SizedBox(
-                                        height: 10,
                                       ),
                                       SizedBox(
                                         height: 5,
@@ -611,13 +335,26 @@ class _CartState extends State<Cart> {
                         color: Colors.white,
                         fontSize: MediaQuery.of(context).size.width / 24)),
                 onPressed: () {
+                  // if (containsGift) {
+                  //   Navigator.push(
+                  //       context,
+                  //       commonRouter(GiftPage(
+                  //         count: giftCount,
+                  //         loginResponse: loginResponse,
+                  //         cartData: cartData,
+                  //         gift_msg: "",
+                  //         gift_from: loginResponse.id.toString(),
+                  //       )));
+                  // } else {
                   Navigator.push(
                       context,
                       commonRouter(CheckOutPage(
                         loginResponse: loginResponse,
                         cartData: cartData,
-                        
+                        gift_msg: "gift message will be inserted here",
+                        gift_from: loginResponse.id.toString(),
                       )));
+                  // }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 71, 54, 111),

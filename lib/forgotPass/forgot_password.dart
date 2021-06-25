@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/showLoadingDialog.dart';
 import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/forgotPass/forgot_password_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -27,7 +28,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   );
 
   Future sendOtp() async {
+    showLoadingDialog(context);
     bool response = await ForgetPasswordController().sendOtp(ModelForgotPassword(email));
+    Navigator.pop(context);
     if (response) {
       setState(() {
         otpSent = true;
@@ -80,40 +83,66 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                     ),
                     gapBox,
-                    headingForgotPass("Forgot Password ?"),
+                    otpSent
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                headingForgotPass("Forgot Password ?"),
+                                TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        otpSent = false;
+                                      });
+                                    },
+                                    child: Text(
+                                      "Edit Request",
+                                      style: TextStyle(
+                                        fontFamily: 'GothamMedium',
+                                        fontSize: 1.8.h,
+                                        fontWeight: FontWeight.w500,
+                                        color: kPrimaryColor,
+                                      ),
+                                    ))
+                              ])
+                        : Container(),
+                    Container(
+                      alignment: Alignment.center,
+                      // height: MediaQuery.of(context).size.height * 0.1,
+                      child: Form(
+                        key: _emailKey,
+                        child: TextFormField(
+                          validator: (val) {
+                            return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val) ||
+                                    RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                            r"{0,253}[a-zA-Z0-9])?)*$")
+                                        .hasMatch(val)
+                                ? null
+                                : "Please provide valid number or Email ID";
+                          },
+                          onChanged: (value) => email = value,
+                          cursorColor: Color.fromARGB(255, 71, 54, 111),
+                          decoration: getInputDecoration("Registered Email Id/Mobile"),
+                        ),
+                      ),
+                    ),
                     !otpSent
-                        ? Container(
-                            alignment: Alignment.center,
-                            // height: MediaQuery.of(context).size.height * 0.1,
-                            child: Form(
-                              key: _emailKey,
-                              child: TextFormField(
-                                validator: (val) {
-                                  return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val) ||
-                                          RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-                                                  r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-                                                  r"{0,253}[a-zA-Z0-9])?)*$")
-                                              .hasMatch(val)
-                                      ? null
-                                      : "Please provide valid number or Email ID";
-                                },
-                                onChanged: (value) => email = value,
-                                cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                decoration: getInputDecoration("Enter your registered Email Id"),
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Container(
+                              alignment: Alignment.center,
+                              // height: MediaQuery.of(context).size.height * 0.1,
+                              child: Form(
+                                key: _otpKey,
+                                child: TextFormField(
+                                    maxLength: 4,
+                                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                                    onChanged: (value) => otp = value,
+                                    cursorColor: Color.fromARGB(255, 71, 54, 111),
+                                    decoration: getInputDecoration("Enter OTP")),
                               ),
-                            ),
-                          )
-                        : Container(
-                            alignment: Alignment.center,
-                            // height: MediaQuery.of(context).size.height * 0.1,
-                            child: Form(
-                              key: _otpKey,
-                              child: TextFormField(
-                                  maxLength: 4,
-                                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                                  onChanged: (value) => otp = value,
-                                  cursorColor: Color.fromARGB(255, 71, 54, 111),
-                                  decoration: getInputDecoration("Enter OTP")),
                             ),
                           ),
                     !otpSent

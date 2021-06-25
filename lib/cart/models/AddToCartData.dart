@@ -13,3 +13,17 @@ class AddToCartData {
     });
   }
 }
+
+class GetMyOrderData {
+  final int id;
+
+  GetMyOrderData({
+    this.id,
+  });
+
+  FormData getFormData(GetMyOrderData getMyOrderData) {
+    return FormData.fromMap({
+      'id': getMyOrderData.id.toString(),
+    });
+  }
+}

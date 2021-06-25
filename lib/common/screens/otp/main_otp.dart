@@ -1,15 +1,11 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:seri_flutter_app/cart/carts.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
-import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/S_19.dart';
-import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
 import 'package:seri_flutter_app/common/services/Form/textFieldDecoration.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
@@ -21,8 +17,8 @@ import 'package:sizer/sizer.dart';
 class Otp_page extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
-
-  Otp_page(this.loginResponse, this.cartData);
+  final String order_id;
+  Otp_page(this.loginResponse, this.cartData, this.order_id);
 
   @override
   _Otp_pageState createState() => _Otp_pageState(loginResponse, cartData);
@@ -33,6 +29,7 @@ class _Otp_pageState extends State<Otp_page> {
   final CartData cartData;
   bool otpSent = false;
   String phoneNumString;
+  final _formkey = GlobalKey<FormState>();
 
   _Otp_pageState(this.loginResponse, this.cartData);
 
@@ -48,18 +45,30 @@ class _Otp_pageState extends State<Otp_page> {
   var cartController = CartController();
 
   sendOtp() async {
-    setState(() {
-      otpSent = true;
-    });
+    if (_formkey.currentState.validate()) {
+      bool response = await CartController().generateNumberOtp(GenerateNumberOTP(phoneNumString));
+      if (response) {
+        showCustomFlushBar(context, "OTP Sent", 2);
+        setState(() {
+          otpSent = true;
+        });
+      } else {
+        showCustomFlushBar(context, "Error Occured", 2);
+      }
+    } else {
+      showCustomFlushBar(context, "Enter valid Number", 2);
+    }
   }
 
   checkOtp() async {
-    // bool otpRespose = await
-    if (true) {
+    print(_pinPutController.text);
+    bool otpRespose =
+        await cartController.checkNumberOtp(CheckNumberOTP(phoneNumString, _pinPutController.text));
+    if (otpRespose) {
       bool response =
-          await cartController.completeOrder(CompleteOrderData(loginResponse.id.toString()));
+          await cartController.completeOrder(CompleteOrderData(widget.order_id.toString()));
       if (response)
-        Navigator.pushReplacement(context, commonRouter(S_19()));
+        Navigator.pushReplacement(context, commonRouter(S_19(loginResponse, cartData)));
       else
         showCustomFlushBar(context, "Some Error Occured", 2);
     } else {
@@ -122,7 +131,7 @@ class _Otp_pageState extends State<Otp_page> {
                 margin: EdgeInsets.fromLTRB(5.w, 0, 0, 3.w),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  otpSent ? 'Enter OTP' : 'Enter Mobile Number',
+                  'Enter Mobile Number',
                   style: TextStyle(
                     fontSize: 15.sp,
                     color: Color.fromARGB(255, 71, 54, 111),
@@ -130,76 +139,93 @@ class _Otp_pageState extends State<Otp_page> {
                   ),
                 ),
               ),
-              otpSent
-                  ? Column(
-                      children: [
-                        Column(children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width / 18,
-                                right: MediaQuery.of(context).size.width / 12),
-                            child: Container(
-                              child: PinPut(
-                                eachFieldWidth: 15.0,
-                                eachFieldHeight: 20.0,
-                                withCursor: true,
-                                fieldsCount: 4,
-                                focusNode: _pinPutFocusNode,
-                                controller: _pinPutController,
-                                // onSubmit: (String pin) => _showSnackBar(pin),
-                                submittedFieldDecoration: pinPutDecoration,
-                                selectedFieldDecoration: pinPutDecoration,
-                                followingFieldDecoration: pinPutDecoration,
-                                pinAnimationType: PinAnimationType.scale,
-                                textStyle: const TextStyle(
-                                    color: Color.fromARGB(255, 71, 54, 111), fontSize: 20.0),
-                              ),
-                            ),
-                          ),
-                        ]),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5.w, 5.w, 0, 4.w),
-                          alignment: Alignment.topLeft,
-                          child: RichText(
-                            text: TextSpan(
-                                text: "Haven't Received the OTP yet? ",
-                                style: TextStyle(
-                                  fontSize: 10.sp,
-                                  color: Color.fromARGB(255, 71, 54, 111),
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Resend OTP',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 10.sp,
-                                      ))
-                                ]),
-                          ),
-                        ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width * 0.9,
+                // height: 65,
+                child: Form(
+                  key: _formkey,
+                  child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
-                    )
-                  : Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      // height: 65,
-                      child: TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          validator: (val) {
-                            return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
-                                ? null
-                                : "Please provide valid number";
-                          },
-                          onChanged: (value) {
-                            phoneNumString = value;
-                          },
-                          cursorColor: Color.fromARGB(255, 71, 54, 111),
-                          decoration: getInputDecoration("Enter Phone Number")),
+                      validator: (val) {
+                        return RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(val)
+                            ? null
+                            : "Please provide valid number";
+                      },
+                      onChanged: (value) {
+                        phoneNumString = value;
+                      },
+                      cursorColor: Color.fromARGB(255, 71, 54, 111),
+                      decoration: getInputDecoration("Enter Phone Number")),
+                ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(5.w, 0, 0, 3.w),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Enter OTP',
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    color: otpSent ? Color.fromARGB(255, 71, 54, 111) : Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  Column(children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width / 18,
+                          right: MediaQuery.of(context).size.width / 12),
+                      child: Container(
+                        child: PinPut(
+                          eachFieldWidth: 15.0,
+                          eachFieldHeight: 20.0,
+                          withCursor: true,
+                          fieldsCount: 4,
+                          focusNode: _pinPutFocusNode,
+                          controller: _pinPutController,
+                          // onSubmit: (String pin) => _showSnackBar(pin),
+                          submittedFieldDecoration: pinPutDecoration,
+                          selectedFieldDecoration: pinPutDecoration,
+                          followingFieldDecoration: pinPutDecoration,
+                          pinAnimationType: PinAnimationType.scale,
+                          textStyle: const TextStyle(
+                              color: Color.fromARGB(255, 71, 54, 111), fontSize: 20.0),
+                        ),
+                      ),
                     ),
+                  ]),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(5.w, 5.w, 0, 4.w),
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                      text: TextSpan(
+                          text: "Haven't Received the OTP yet? ",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: Color.fromARGB(255, 71, 54, 111),
+                            fontWeight: FontWeight.normal,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Resend OTP',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 10.sp,
+                                ))
+                          ]),
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 3.h,
               ),
@@ -213,7 +239,7 @@ class _Otp_pageState extends State<Otp_page> {
                   color: Color.fromARGB(255, 71, 54, 111),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   child: Text(
-                    otpSent ? "Submit" : "Verify",
+                    otpSent ? "Submit OTP" : "Send OTP",
                     style:
                         TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
                   ),

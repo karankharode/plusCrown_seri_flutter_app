@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seri_flutter_app/cart/counter_box.dart';
+import 'package:seri_flutter_app/checkOut/screens/giftPage.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/currentlyAvailable.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/networkImageBuilder.dart';
@@ -282,6 +283,9 @@ class _SingleOfferState extends State<SingleOffer> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                           Text(
                                             "Price inclusive of all taxes",
                                             style: TextStyle(
@@ -336,6 +340,26 @@ class _SingleOfferState extends State<SingleOffer> {
                                       fontSize: 13,
                                       color: Color.fromARGB(255, 71, 54, 111)),
                                 ),
+                                Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        if (checkedValue) {
+                                          Navigator.push(
+                                              context,
+                                              commonRouter(GiftPage(
+                                                count: 1,
+                                                loginResponse: loginResponse,
+                                                cartData: cartData,
+                                                gift_msg: "",
+                                                gift_from: loginResponse.id.toString(),
+                                              )));
+                                        }
+                                      },
+                                      icon: Icon(Icons.wallet_giftcard_rounded,
+                                          color: checkedValue ? Colors.redAccent : Colors.grey,
+                                          size: 24),
+                                    )),
                               ],
                             ),
                             CountButtonView(
@@ -441,7 +465,7 @@ class _SingleOfferState extends State<SingleOffer> {
                           ],
                         ),
                   SizedBox(
-                    height: 8,
+                    height: 1,
                   ),
                   Divider(
                     color: Color.fromARGB(255, 71, 54, 111),

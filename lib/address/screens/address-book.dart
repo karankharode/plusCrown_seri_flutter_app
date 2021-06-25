@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddressData.dart';
 import 'package:seri_flutter_app/address/models/UpdateAddressData.dart';
@@ -51,32 +52,63 @@ class _AddressBookState extends State<AddressBook> {
   }
 
   deleteAddress(addid) async {
-    bool deleted = await AddressController().removeAddress(RemoveAddressData(add_id: addid));
-    if (deleted) {
-      Flushbar(
-        margin: EdgeInsets.all(8),
-        borderRadius: 8,
-        message: "Deleted Successfully",
-        icon: Icon(
-          Icons.info_outline,
-          size: 20,
-          color: Colors.lightBlue[800],
+    Alert(
+      context: context,
+      title: "Do you want to Delete an Address ?",
+      style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
+      buttons: [
+        DialogButton(
+          child: Text(
+            "No",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
         ),
-        duration: Duration(seconds: 1),
-      )..show(context).then((value) => setState(() {}));
-    } else {
-      Flushbar(
-        margin: EdgeInsets.all(8),
-        borderRadius: 8,
-        message: "Error deleting from Cart",
-        icon: Icon(
-          Icons.info_outline,
-          size: 20,
-          color: Colors.lightBlue[800],
+        DialogButton(
+          child: Text(
+            "Yes",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () async {
+            bool deleted =
+                await AddressController().removeAddress(RemoveAddressData(add_id: addid));
+            if (deleted) {
+              Flushbar(
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                message: "Deleted Successfully",
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Colors.lightBlue[800],
+                ),
+                duration: Duration(seconds: 1),
+              )..show(context).then((value) => setState(() {}));
+            } else {
+              Flushbar(
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                message: "Error deleting Address",
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Colors.lightBlue[800],
+                ),
+                duration: Duration(seconds: 2),
+              )..show(context);
+            }
+
+            Navigator.pop(context);
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
         ),
-        duration: Duration(seconds: 2),
-      )..show(context);
-    }
+      ],
+    ).show();
   }
 
   @override
@@ -84,50 +116,50 @@ class _AddressBookState extends State<AddressBook> {
     return FutureBuilder(
         future: AddressController().getAddress(loginResponse.id.toString()),
         builder: (context, snapshot) {
-           switch (snapshot.connectionState) {
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
               return bookLoader();
               break;
             case ConnectionState.done:
-          if (snapshot.hasData) {
-            List<AddressData> addList = snapshot.data;
-            if (addList.length > 0) {
-              return ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: addList.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SingleAddress(
-                        name: addList[index].name,
-                        phoneNo: "9635821475",
-                        pinCode: addList[index].addpincode,
-                        city: addList[index].city,
-                        district: addList[index].city,
-                        flatNo: addList[index].line1,
-                        area: addList[index].line2,
-                        landmark: addList[index].line3,
-                        type: getType(addList[index].addtype),
-                        add_id: addList[index].id.toString(),
-                        deleteAddress: deleteAddress,
-                        isDefault: addList[index].isdeafault,
-                        addressData: addList[index],
-                        updateAddressId: widget.updateAddress,
-                        selected_add_id: widget.selected_add_id,
+              if (snapshot.hasData) {
+                List<AddressData> addList = snapshot.data;
+                if (addList.length > 0) {
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: addList.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SingleAddress(
+                          name: addList[index].name,
+                          phoneNo: "9635821475",
+                          pinCode: addList[index].addpincode,
+                          city: addList[index].city,
+                          district: addList[index].city,
+                          flatNo: addList[index].line1,
+                          area: addList[index].line2,
+                          landmark: addList[index].line3,
+                          type: getType(addList[index].addtype),
+                          add_id: addList[index].id.toString(),
+                          deleteAddress: deleteAddress,
+                          isDefault: addList[index].isdeafault,
+                          addressData: addList[index],
+                          updateAddressId: widget.updateAddress,
+                          selected_add_id: widget.selected_add_id,
                         );
-                  });
-            } else {
-              return Container();
-            }
-          } else {
-            return Container();
+                      });
+                } else {
+                  return Container();
+                }
+              } else {
+                return Container();
+              }
+              break;
+            default:
+              return bookLoader();
           }
-          break;
-          default:
-          return bookLoader();
-           }
         });
   }
 }
@@ -150,9 +182,8 @@ class SingleAddress extends StatefulWidget {
   final AddressData addressData;
 
   SingleAddress(
-      {
-        @required this.selected_add_id,
-        this.name,
+      {@required this.selected_add_id,
+      this.name,
       this.phoneNo,
       this.pinCode,
       this.city,
@@ -202,7 +233,7 @@ class _SingleAddressState extends State<SingleAddress> {
                       scale: 1,
                       child: Checkbox(
                         activeColor: Color.fromARGB(255, 71, 54, 111),
-                        value: widget.selected_add_id==widget.add_id,
+                        value: widget.selected_add_id == widget.add_id,
                         onChanged: (newValue) {
                           setState(() {
                             checkValue = newValue;
@@ -223,43 +254,55 @@ class _SingleAddressState extends State<SingleAddress> {
               GestureDetector(
                 onTap: () {},
                 child: Align(
-                  // alignment: Alignment.topRight,
-                  child: PopupMenuButton(
-                    itemBuilder: (BuildContext bc) => [
-                      // PopupMenuItem(
-                      //     child: Text(
-                      //       "Edit",
-                      //       style: TextStyle(
-                      //           fontFamily: 'GothamMedium',
-                      //           fontWeight: FontWeight.w600,
-                      //           color: Color.fromARGB(255, 71, 54, 111)),
-                      //     ),
-                      //     value: "1"),
-                      PopupMenuItem(
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(
-                                fontFamily: 'GothamMedium',
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 71, 54, 111)),
-                          ),
-                          value: "2"),
-                    ],
-                    onSelected: (value) {
-                      switch (value) {
-                        case "2":
-                          widget.deleteAddress(widget.add_id);
-
-                          break;
-                        default:
-                          break;
-                      }
-                    },
-                    // onSelected: (route) {
-                    //   Navigator.pushNamed(context, route);
-                    // },
+                    // alignment: Alignment.topRight,
+                    child: Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.highlight_remove_rounded,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () => widget.deleteAddress(widget.add_id),
                   ),
-                ),
+                )
+                    // child: PopupMenuButton(
+                    //   itemBuilder: (BuildContext bc) => [
+                    //     // PopupMenuItem(
+                    //     //     child: Text(
+                    //     //       "Edit",
+                    //     //       style: TextStyle(
+                    //     //           fontFamily: 'GothamMedium',
+                    //     //           fontWeight: FontWeight.w600,
+                    //     //           color: Color.fromARGB(255, 71, 54, 111)),
+                    //     //     ),
+                    //     //     value: "1"),
+                    //     PopupMenuItem(
+                    //         child: Text(
+                    //           "Delete",
+                    //           style: TextStyle(
+                    //               fontFamily: 'GothamMedium',
+                    //               fontWeight: FontWeight.w600,
+                    //               color: Color.fromARGB(255, 71, 54, 111)),
+                    //         ),
+                    //         value: "2"),
+                    //   ],
+                    //   onSelected: (value) {
+                    //     switch (value) {
+                    //       case "2":
+                    //         widget.deleteAddress(widget.add_id);
+
+                    //         break;
+                    //       default:
+                    //         break;
+                    //     }
+                    //   },
+                    //   // onSelected: (route) {
+                    //   //   Navigator.pushNamed(context, route);
+                    //   // },
+                    // ),
+                    ),
               ),
             ]),
             Padding(

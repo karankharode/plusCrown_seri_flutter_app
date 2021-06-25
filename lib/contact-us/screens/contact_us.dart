@@ -121,7 +121,7 @@ class _ContactUsState extends State<ContactUs> {
                             padding: EdgeInsets.only(right: 0, bottom: 0),
                             child: Image.asset(
                               'assets/images/PlusCrown.png',
-                              width: (queryData.size.width / 1.7),
+                              width: (queryData.size.width / 1.5),
                             )),
                       ],
                     )

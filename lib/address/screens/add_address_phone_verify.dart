@@ -17,8 +17,7 @@ class AddressPhoneVerify extends StatefulWidget {
   const AddressPhoneVerify(this.loginResponse, this.cartData);
 
   @override
-  _AddressPhoneVerifyState createState() =>
-      _AddressPhoneVerifyState(loginResponse, cartData);
+  _AddressPhoneVerifyState createState() => _AddressPhoneVerifyState(loginResponse, cartData);
 }
 
 class _AddressPhoneVerifyState extends State<AddressPhoneVerify> {
@@ -112,37 +111,29 @@ class _AddressPhoneVerifyState extends State<AddressPhoneVerify> {
                             return GestureDetector(
                               onTap: () {
                                 cartData.cartProducts.length == 0
-                                    ? Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                EmptyCartPage(
-                                                  loginResponse,
-                                                  cartData,
-                                                )))
-                                    : Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                Cart(
-                                                  loginResponse,
-                                                  cartData,
-                                                )));
+                                    ? Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (BuildContext context) => EmptyCartPage(
+                                              loginResponse,
+                                              cartData,
+                                            )))
+                                    : Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (BuildContext context) => Cart(
+                                              loginResponse,
+                                              cartData,
+                                            )));
                               },
                               child: Badge(
-                                  position:
-                                      BadgePosition.topEnd(top: -8, end: -10),
+                                  position: BadgePosition.topEnd(top: -8, end: -10),
                                   badgeColor: Colors.white,
                                   badgeContent: Text(
                                     cartData.cartProducts.length.toString(),
                                     style: TextStyle(
                                         color: Colors.red,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width /
-                                                35),
+                                        fontSize: MediaQuery.of(context).size.width / 35),
                                   ),
                                   child: Image.asset(
                                     'assets/icons/cart1.png',
-                                    width: MediaQuery.of(context).size.width *
-                                        0.07,
+                                    width: MediaQuery.of(context).size.width * 0.07,
                                   )),
                             );
                           } else {
@@ -206,10 +197,8 @@ class _AddressPhoneVerifyState extends State<AddressPhoneVerify> {
                             focusColor: Color.fromARGB(255, 71, 54, 111),
                             hoverColor: Color.fromARGB(255, 71, 54, 111),
                             border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(6.0)),
-                              borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 71, 54, 111)),
+                              borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                              borderSide: BorderSide(color: Color.fromARGB(255, 71, 54, 111)),
                               //borderSide: const BorderSide(),
                             ),
                             hintStyle: TextStyle(
@@ -247,17 +236,16 @@ class _AddressPhoneVerifyState extends State<AddressPhoneVerify> {
                           style: ElevatedButton.styleFrom(
                             primary: Color.fromARGB(255, 71, 54, 111),
                             shape: const BeveledRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            minimumSize: Size((queryData.size.width / 3),
-                                (queryData.size.height / 20)),
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            minimumSize:
+                                Size((queryData.size.width / 3), (queryData.size.height / 20)),
                           ),
                           onPressed: () {
                             validateMobile(mobile);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Otp_page(loginResponse, cartData)));
+                                    builder: (context) => Otp_page(loginResponse, cartData, "50")));
                           },
                           child: Text(
                             'Confirm',

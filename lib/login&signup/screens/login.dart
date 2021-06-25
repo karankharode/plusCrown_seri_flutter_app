@@ -236,9 +236,8 @@ class _LoginPageState extends State<LoginPage> {
                                           vertical: kDefaultPadding / 2,
                                         ),
                                         labelStyle: TextStyle(
-                                          fontSize: 10.0.sp,
-                                          fontFamily: 'GothamMedium',
                                           color: Color.fromARGB(255, 71, 54, 111),
+                                          fontFamily: 'GothamMedium',
                                         )),
                                   ),
                                 ),
@@ -399,7 +398,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment.bottomLeft,
+                          alignment: Alignment.bottomCenter,
                           margin: EdgeInsets.fromLTRB(3, 25, 0, 0),
                           child: RichText(
                             text: TextSpan(

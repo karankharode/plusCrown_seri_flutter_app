@@ -1,7 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddressData.dart';
 import 'package:seri_flutter_app/address/models/UpdateAddressData.dart';
@@ -11,6 +11,7 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/cart/models/DeleteFromCartData.dart';
+import 'package:seri_flutter_app/common/screens/S_19.dart';
 import 'package:seri_flutter_app/common/screens/otp/main_otp.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
@@ -26,20 +27,25 @@ import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 class CheckOutPage extends StatefulWidget {
   final LoginResponse loginResponse;
   final CartData cartData;
+  final String gift_msg;
+  final String gift_from;
 
-  const CheckOutPage({this.loginResponse, this.cartData});
+  const CheckOutPage({this.loginResponse, this.cartData, @required this.gift_msg, this.gift_from});
   @override
   _CheckOutPageState createState() =>
-      _CheckOutPageState(loginResponse: loginResponse, cartData: cartData);
+      _CheckOutPageState(gift_msg, gift_from, loginResponse: loginResponse, cartData: cartData);
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
   final LoginResponse loginResponse;
   final CartData cartData;
+  final String gift_msg;
+  final String gift_from;
 
-  _CheckOutPageState({this.loginResponse, this.cartData});
+  _CheckOutPageState(this.gift_msg, this.gift_from, {this.loginResponse, this.cartData});
   bool finalSubmission = false;
   int step = 1;
+  double progress = 0.44;
   Size size;
   Future futureForCart;
 
@@ -73,37 +79,57 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   handlePlaceOrder() async {
     showLoadingDialog(context);
-    try{
-    bool response = await cartController.placeOrder(
-        OrderData(loginResponse.id.toString(), "First100", addressData.id.toString(), paymentMode));
-    Navigator.pop(context);
-    if (response) {
-      showCustomFlushBar(context, "Order Placed", 2);
-    } else {
-      showCustomFlushBar(context, "Error Occured", 2);
+    try {
+      String response = await cartController.placeOrder(OrderData(loginResponse.id.toString(),
+          "First100", addressData.id.toString(), paymentMode, gift_msg, gift_from));
+      Navigator.pop(context);
+      print(response);
+      print("response here $response");
+      if (response != null) {
+        print("Order Placed");
+        showCustomFlushBar(context, "Order Placed", 2);
+      } else {
+        showCustomFlushBar(context, "Error Occured", 2);
+      }
+      if (paymentMode == '1')
+        Navigator.pushReplacement(
+            context, commonRouter(Otp_page(loginResponse, cartData, response)));
+      else
+        Navigator.pushReplacement(context, commonRouter(S_19(loginResponse, cartData)));
+    } catch (e) {
+      Navigator.pop(context);
     }
-    Navigator.push(context, commonRouter(Otp_page(loginResponse, cartData)));
-    }catch(e){
-    print("remove this line at 86 in checkout");
-    Navigator.pop(context);
-    Navigator.push(context, commonRouter(Otp_page(loginResponse, cartData)));
+  }
 
+  handleBack(int stepRequested, double progressRequested) {
+    if (stepRequested < step && progressRequested < progress) {
+      setState(() {
+        step = stepRequested;
+        progress = progressRequested;
+      });
     }
   }
 
   handleOrderConfirmation() {
     setState(() {
       step = 2;
+      progress = 0.7;
     });
   }
 
   handleAddressSelection() {
-    setState(() {
-      step = 3;
-      finalSubmission = true;
-    });
+    if (addId != null) {
+      setState(() {
+        step = 3;
+        progress = 1.0;
+        finalSubmission = true;
+      });
+    } else {
+      showCustomFlushBar(context, "Select Address", 2);
+    }
   }
-    String getType(String addType) {
+
+  String getType(String addType) {
     // DO changes from here
     switch (addType) {
       case "H":
@@ -118,40 +144,72 @@ class _CheckOutPageState extends State<CheckOutPage> {
     }
   }
 
-
   updateAddress(String addressId, AddressData newaddressData) {
     setState(() {
       addId = addressId;
       addressData = newaddressData;
     });
   }
+
   deleteAddress(addid) async {
-    bool deleted = await AddressController().removeAddress(RemoveAddressData(add_id: addid));
-    if (deleted) {
-      Flushbar(
-        margin: EdgeInsets.all(8),
-        borderRadius: 8,
-        message: "Deleted Successfully",
-        icon: Icon(
-          Icons.info_outline,
-          size: 20,
-          color: Colors.lightBlue[800],
+    Alert(
+      context: context,
+      title: "Do you want to Delete an Address ?",
+      style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
+      buttons: [
+        DialogButton(
+          child: Text(
+            "No",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
         ),
-        duration: Duration(seconds: 1),
-      )..show(context).then((value) => setState(() {}));
-    } else {
-      Flushbar(
-        margin: EdgeInsets.all(8),
-        borderRadius: 8,
-        message: "Error deleting from Cart",
-        icon: Icon(
-          Icons.info_outline,
-          size: 20,
-          color: Colors.lightBlue[800],
+        DialogButton(
+          child: Text(
+            "Yes",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () async {
+            bool deleted =
+                await AddressController().removeAddress(RemoveAddressData(add_id: addid));
+            setState(() {});
+            if (deleted) {
+              Flushbar(
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                message: "Deleted Successfully",
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Colors.lightBlue[800],
+                ),
+                duration: Duration(seconds: 1),
+              )..show(context).then((value) => setState(() {}));
+            } else {
+              Flushbar(
+                margin: EdgeInsets.all(8),
+                borderRadius: 8,
+                message: "Error deleting Address",
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Colors.lightBlue[800],
+                ),
+                duration: Duration(seconds: 2),
+              )..show(context);
+            }
+
+            Navigator.pop(context);
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
         ),
-        duration: Duration(seconds: 2),
-      )..show(context);
-    }
+      ],
+    ).show();
   }
 
   getGlobalCartData() async {
@@ -317,7 +375,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.only(bottom: 5),
+                                                padding: EdgeInsets.only(bottom: 0),
                                                 child: Row(
                                                   children: [
                                                     Row(
@@ -512,6 +570,21 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                                                           ),
                                                                         ],
                                                                       ),
+                                                                      SizedBox(
+                                                                        height: 2,
+                                                                      ),
+                                                                      Text(
+                                                                        "Price inclusive of all taxes",
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'GothamMedium',
+                                                                            fontSize: MediaQuery.of(
+                                                                                        context)
+                                                                                    .size
+                                                                                    .width /
+                                                                                34,
+                                                                            color: Colors.red),
+                                                                      ),
 
                                                                       // SizedBox(width: MediaQuery.of(context).size.width *0.2),
                                                                     ],
@@ -570,51 +643,38 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 35,
-                        width: MediaQuery.of(context).size.width / 1.78,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
-                        ),
-                        child: TextFormField(
-                          textAlign: TextAlign.center,
-                          controller: couponTextEditingController,
-                          style: TextStyle(
-                              fontFamily: 'GothamMedium', color: Colors.red, fontSize: 16),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Type Coupon Code',
-                            hintStyle: TextStyle(fontFamily: 'GothamMedium', color: Colors.grey),
-                            labelStyle: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      if (apply == false)
-                        Container(
                           height: 35,
-                          width: MediaQuery.of(context).size.width / 3.2,
+                          width: MediaQuery.of(context).size.width - 50,
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 71, 54, 111),
+                            color: Colors.white,
                             border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  couponTextEditingController.text = "xyz";
-                                  apply = true;
-                                });
-                              },
-                              child: Text("Apply",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'GothamMedium',
-                                      color: Colors.white,
-                                      fontSize: 16)),
-                            ),
-                          ),
-                        ),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.ac_unit,
+                                          color: Colors.grey,
+                                        ),
+                                        Text("   Apply Coupons"),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: Icon(Icons.arrow_forward_ios),
+                                  ),
+                                ]),
+                          )),
                       if (apply == true)
                         Container(
                           height: 35,
@@ -642,12 +702,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         ),
                     ],
                   ),
-                  SizedBox(height: 2),
+                  SizedBox(height: 8),
                   Divider(
                     color: Color.fromARGB(255, 71, 54, 111),
                     height: 10,
                     thickness: 1,
                   ),
+                  SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Order Details",
@@ -657,6 +718,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             color: Color.fromARGB(255, 71, 54, 111),
                             fontSize: MediaQuery.of(context).size.width / 22,
                             fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Divider(
+                    color: Color.fromARGB(255, 71, 54, 111),
+                    height: 10,
+                    thickness: 1,
                   ),
                   SizedBox(
                     height: 8,
@@ -825,101 +894,112 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   Widget buildAddressSelectionPage() {
-
-    return  Container(
-      height: MediaQuery.of(context).size.height-200,
+    return Container(
+      height: MediaQuery.of(context).size.height - 200,
+      padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
       child: Stack(
         children: [
-          Column(
-            children: [
-              FutureBuilder(
-                  future: futureForAddress,
-                  builder: (context, snapshot) {
-                     switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.active:
-                      case ConnectionState.waiting:
-                        return bookLoader();
-                        break;
-                      case ConnectionState.done:
-                    if (snapshot.hasData) {
-                      List<AddressData> addList = snapshot.data;
-                      addList.forEach((element) {print(element.id);});
-                      if (addList.length > 0) {
-                        return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: addList.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              return SingleAddress(
-                                  name: addList[index].name,
-                                  phoneNo: "9635821475",
-                                  pinCode: addList[index].addpincode,
-                                  city: addList[index].city,
-                                  district: addList[index].city,
-                                  flatNo: addList[index].line1,
-                                  area: addList[index].line2,
-                                  landmark: addList[index].line3,
-                                  type: getType(addList[index].addtype),
-                                  add_id: addList[index].id.toString(),
-                                  deleteAddress: deleteAddress,
-                                  isDefault: addList[index].isdeafault,
-                                  addressData: addList[index],
-                                  updateAddressId: updateAddress
-                                  , selected_add_id: addId,);
-                            });
-                      } else {
-                        return Container();
-                      }
-                    } else {
-                      return Container();
-                    }
-                    break;
-                    default:
-                    return bookLoader();
-                     }
-                  }),
-           
-              GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Address(loginResponse, cartData)));
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                          child: Icon(
-                        Icons.add,
-                        color: Color.fromARGB(255, 71, 54, 111),
-                        size: MediaQuery.of(context).size.width / 23,
-                      )),
-                      SizedBox(width: 4),
-                      Text("Add new Address",
-                          style: TextStyle(
-                            fontFamily: 'GothamMedium',
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    FutureBuilder(
+                        future: futureForAddress,
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.none:
+                            case ConnectionState.active:
+                            case ConnectionState.waiting:
+                              return bookLoader();
+                              break;
+                            case ConnectionState.done:
+                              if (snapshot.hasData) {
+                                List<AddressData> addList = snapshot.data;
+
+                                if (addList.length > 0) {
+                                  return ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: addList.length,
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return SingleAddress(
+                                          name: addList[index].name,
+                                          phoneNo: "9635821475",
+                                          pinCode: addList[index].addpincode,
+                                          city: addList[index].city,
+                                          district: addList[index].city,
+                                          flatNo: addList[index].line1,
+                                          area: addList[index].line2,
+                                          landmark: addList[index].line3,
+                                          type: getType(addList[index].addtype),
+                                          add_id: addList[index].id.toString(),
+                                          deleteAddress: deleteAddress,
+                                          isDefault: addList[index].isdeafault,
+                                          addressData: addList[index],
+                                          updateAddressId: updateAddress,
+                                          selected_add_id: addId,
+                                        );
+                                      });
+                                } else {
+                                  return Container();
+                                }
+                              } else {
+                                return Container();
+                              }
+                              break;
+                            default:
+                              return bookLoader();
+                          }
+                        }),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Address(loginResponse, cartData)));
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                              child: Icon(
+                            Icons.add,
                             color: Color.fromARGB(255, 71, 54, 111),
-                            fontSize: MediaQuery.of(context).size.width / 23,
+                            size: MediaQuery.of(context).size.width / 23,
                           )),
-                    ],
-                  ),
+                          SizedBox(width: 4),
+                          Text("Add new Address",
+                              style: TextStyle(
+                                fontFamily: 'GothamMedium',
+                                color: Color.fromARGB(255, 71, 54, 111),
+                                fontSize: MediaQuery.of(context).size.width / 23,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-            ],
+              ],
+            ),
           ),
-        
-            Positioned(
-              bottom: 0,
-              right: 10,
-              child: Image.asset("assets/images/location.png",height: 45, width: 45),)
+          Positioned(
+            bottom: 0,
+            right: 10,
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Address(loginResponse, cartData)));
+                },
+                child: Image.asset("assets/images/location.png", height: 45, width: 45)),
+          )
         ],
       ),
     );
-  
   }
 
   Widget buildPaymentPage() {
     return Column(children: [
-
       Image.asset("assets/images/payments.jpg"),
       Text("Select the Payment method for placing Order",
           textAlign: TextAlign.center,
@@ -1007,24 +1087,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-                child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 2, 15),
+                child: TextButton(
+              onPressed: () {
+                handleBack(1, 0.44);
+              },
               child: Text(
                 "Order Confirmation",
                 style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),
               ),
             )),
             Container(
-                child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+                child: TextButton(
+              onPressed: () {
+                handleBack(2, 0.7);
+              },
               child: Text(
                 "Address",
                 style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),
               ),
             )),
             Container(
-                child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+                child: TextButton(
+              onPressed: () {
+                handleBack(3, 1);
+              },
               child: Text(
                 "Payment",
                 style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),
@@ -1035,7 +1121,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         LinearProgressIndicator(
           color: kPrimaryColor,
           minHeight: 3.0,
-          value: step * 0.34,
+          value: progress,
           backgroundColor: Colors.white,
         ),
       ],

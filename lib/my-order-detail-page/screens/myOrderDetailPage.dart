@@ -5,6 +5,8 @@ import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/screens/empty-cart/emptyCartPage.dart';
+import 'package:seri_flutter_app/common/widgets/appBars/textTitleAppBar.dart';
+import 'package:seri_flutter_app/common/widgets/commonWidgets/bookLoader.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,8 +19,7 @@ class MyOrdersDetailPage extends StatefulWidget {
   const MyOrdersDetailPage({this.loginResponse, this.cartData});
 
   @override
-  _MyOrdersDetailPageState createState() =>
-      _MyOrdersDetailPageState(loginResponse, cartData);
+  _MyOrdersDetailPageState createState() => _MyOrdersDetailPageState(loginResponse, cartData);
 }
 
 class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
@@ -27,14 +28,14 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
 
   _MyOrdersDetailPageState(this.loginResponse, this.cartData);
 
-  Future futureForCart;
+  Future futureForOrders;
 
   var cartController = CartController();
 
   @override
   void initState() {
-    futureForCart = cartController.getCartDetails(AddToCartData(
-      customerId: loginResponse.id,
+    futureForOrders = cartController.getMyOrderDetails(GetMyOrderData(
+      id: loginResponse.id,
     ));
     super.initState();
   }
@@ -42,89 +43,10 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 71, 54, 111),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Image.asset(
-              'assets/icons/leftarrowwhite.png',
-              width: MediaQuery.of(context).size.width * 0.07,
-            ),
-          ),
-        ),
-        title: Text(
-          "Orders",
-          style: TextStyle(fontFamily: 'GothamMedium', fontSize: 16.sp),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    'assets/icons/search3.png',
-                    width: MediaQuery.of(context).size.width * 0.07,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                FutureBuilder(
-                    future: futureForCart,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        CartData cartData = snapshot.data;
-                        return GestureDetector(
-                          onTap: () {
-                            cartData.cartProducts.length == 0
-                                ? Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EmptyCartPage(
-                                          loginResponse,
-                                          cartData,
-                                        )))
-                                : Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => Cart(
-                                          loginResponse,
-                                          cartData,
-                                        )));
-                          },
-                          child: Badge(
-                              position: BadgePosition.topEnd(top: -8, end: -10),
-                              badgeColor: Colors.white,
-                              badgeContent: Text(
-                                cartData.cartProducts.length.toString(),
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width / 35),
-                              ),
-                              child: Image.asset(
-                                'assets/icons/cart1.png',
-                                width: MediaQuery.of(context).size.width * 0.07,
-                              )),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
-                SizedBox(
-                  width: 15,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      appBar: buildTextAppBar(context, "Order", loginResponse, false, false, null),
       body: ListView(
         children: [
+          
           Padding(
             padding: EdgeInsets.all(5.w),
             child: Text(
@@ -233,12 +155,9 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                       onTap: () {},
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color:
-                                              Color.fromARGB(175, 71, 54, 111),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border:
-                                              Border.all(color: Colors.black12),
+                                          color: Color.fromARGB(175, 71, 54, 111),
+                                          borderRadius: BorderRadius.circular(5),
+                                          border: Border.all(color: Colors.black12),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
@@ -274,8 +193,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    constraints:
-                                        BoxConstraints(maxHeight: 25.w),
+                                    constraints: BoxConstraints(maxHeight: 25.w),
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(
@@ -287,8 +205,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 Expanded(
                                   flex: 8,
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Rs. 599.00',
@@ -296,8 +213,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                           fontFamily: 'GothamMedium',
                                           fontSize: 14.sp,
                                           fontWeight: FontWeight.w500,
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -305,8 +221,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontFamily: 'GothamMedium',
                                           fontSize: 12.sp,
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -314,8 +229,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontFamily: 'GothamMedium',
                                           fontSize: 9.sp,
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -323,8 +237,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontFamily: 'GothamMedium',
                                           fontSize: 9.sp,
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                     ],
@@ -341,19 +254,15 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromARGB(255, 71, 54, 111)),
+                                    border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child: Text(
                                       'Track Order',
                                       style: TextStyle(
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                           fontSize: 8.sp,
                                           fontWeight: FontWeight.w500),
                                     ),
@@ -437,8 +346,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 Expanded(
                                   flex: 4,
                                   child: Container(
-                                    constraints:
-                                        BoxConstraints(maxHeight: 25.w),
+                                    constraints: BoxConstraints(maxHeight: 25.w),
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(
@@ -450,8 +358,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 Expanded(
                                   flex: 8,
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Rs. 1641.00',
@@ -459,8 +366,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                           fontSize: 14.sp,
                                           fontFamily: 'GothamMedium',
                                           fontWeight: FontWeight.w500,
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -468,8 +374,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontSize: 12.sp,
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -477,8 +382,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontSize: 9.sp,
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                       Text(
@@ -486,8 +390,7 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                         style: TextStyle(
                                           fontSize: 9.sp,
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                         ),
                                       ),
                                     ],
@@ -504,19 +407,15 @@ class _MyOrdersDetailPageState extends State<MyOrdersDetailPage> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromARGB(255, 71, 54, 111)),
+                                    border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child: Text(
                                       'Track Order',
                                       style: TextStyle(
                                           fontFamily: 'GothamMedium',
-                                          color:
-                                              Color.fromARGB(255, 71, 54, 111),
+                                          color: Color.fromARGB(255, 71, 54, 111),
                                           fontSize: 8.sp,
                                           fontWeight: FontWeight.w500),
                                     ),

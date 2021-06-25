@@ -83,7 +83,6 @@ class _RequestBookState extends State<RequestBook> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: buildTextAppBar(context, "Request Book", loginResponse, false, false, null),
       resizeToAvoidBottomInset: true,
@@ -229,7 +228,10 @@ class _RequestBookState extends State<RequestBook> {
                             ? Center(
                                 child: IconButton(
                                     onPressed: getImage,
-                                    icon: Icon(Icons.add_photo_alternate_outlined,size: 40,)),
+                                    icon: Icon(
+                                      Icons.add_photo_alternate_outlined,
+                                      size: 40,
+                                    )),
                               )
                             : ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(7)),
@@ -260,7 +262,7 @@ class _RequestBookState extends State<RequestBook> {
                             height: 55,
                             child: TextFormField(
                               controller: authorNameEditingController,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.name,
                               cursorColor: Color.fromARGB(255, 71, 54, 111),
                               decoration: getInputDecoration("Author Name"),
                             ),
@@ -322,7 +324,7 @@ class _RequestBookState extends State<RequestBook> {
                         ),
                       ),
                       SizedBox(
-                        height: 1.h,
+                        height: 0.8.h,
                       ),
                       Flexible(
                         child: Container(
@@ -338,7 +340,7 @@ class _RequestBookState extends State<RequestBook> {
                     ],
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     padding: EdgeInsets.only(top: 0, left: 0),
                     height: MediaQuery.of(context).size.height / 18,
                     width: MediaQuery.of(context).size.width / 2,

@@ -691,7 +691,7 @@ class _UpdateFormState extends State<UpdateForm> {
                   gapPadding: 10,
                 ),
                 hintText: 'Email',
-                labelText: loginResponse.email,
+                labelText: "Email",
                 labelStyle: TextStyle(
                   color: kPrimaryColor,
                 ),
@@ -935,7 +935,7 @@ class _UpdateFormState extends State<UpdateForm> {
                       gapPadding: 10,
                     ),
                     hintText: 'Phone Number',
-                    labelText: loginResponse.phoneNo == "" ? 'Phone Number' : loginResponse.phoneNo,
+                    labelText: 'Phone Number',
                     labelStyle: TextStyle(
                       color: kPrimaryColor,
                     ),

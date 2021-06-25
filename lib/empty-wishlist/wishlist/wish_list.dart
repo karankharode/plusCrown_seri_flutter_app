@@ -44,6 +44,17 @@ class _WishListState extends State<WishList> {
       buttons: [
         DialogButton(
           child: Text(
+            "No",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
+        ),
+        DialogButton(
+          child: Text(
             "Yes",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
@@ -58,17 +69,6 @@ class _WishListState extends State<WishList> {
           width: 120,
           color: Color.fromARGB(255, 71, 54, 111),
         ),
-        DialogButton(
-          child: Text(
-            "No",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          width: 120,
-          color: Color.fromARGB(255, 71, 54, 111),
-        )
       ],
     ).show();
   }
@@ -443,7 +443,7 @@ class _SingleProdWLState extends State<SingleProdWL> {
                               SizedBox(
                                 height: 15,
                               ),
-                               ],
+                            ],
                           ),
                         )
                       ],
@@ -452,71 +452,72 @@ class _SingleProdWLState extends State<SingleProdWL> {
                 ),
               ),
               Positioned(
-                  top: 0,
-                  right: 0,
-                  child: 
-                  IconButton(
+                top: 0,
+                right: 0,
+                child: IconButton(
                     padding: EdgeInsets.zero,
-                    icon:Icon(Icons.highlight_remove_rounded,color: Colors.grey,),onPressed:()=>widget.showDeleteConfirmationDialog(widget.productId, false)),
-                  // PopupMenuButton(
-                  //   padding: EdgeInsets.zero,
-                  //   itemBuilder: (BuildContext bc) => [
-                  //     // PopupMenuItem(
-                  //     //     child: Text(
-                  //     //       "Edit",
-                  //     //       style: TextStyle(
-                  //     //           fontFamily: 'GothamMedium',
-                  //     //           fontWeight: FontWeight.w600,
-                  //     //           color: Color.fromARGB(255, 71, 54, 111)),
-                  //     //     ),
-                  //     //     value: "1"),
-                  //     PopupMenuItem(
-                  //         child: Text(
-                  //           "Delete",
-                  //           style: TextStyle(
-                  //               fontFamily: 'GothamMedium',
-                  //               fontWeight: FontWeight.w600,
-                  //               color: Color.fromARGB(255, 71, 54, 111)),
-                  //         ),
-                  //         value: "2"),
-                  //   ],
-                  //   onSelected: (value) {
-                  //     if (value == "2") {
-                  //       widget.showDeleteConfirmationDialog(widget.productId, false);
-                  //     }
-                  //   },
-                  //   // onSelected: (route) {
-                  //   //   Navigator.pushNamed(context, route);
-                  //   // },
-                  // ),
-               
-                ),
-                widget.available == true
-                                  ? Positioned(right: 9,bottom: 9,
-                                                                      child: Container(
-                                                                        height: MediaQuery.of(context).size.height / 25,
-                                                                        // alignment: Alignment.bottomRight,
-                                                                        child: ElevatedButton(
-                                                                          child: Text("Add to cart",
-                                                                              style: TextStyle(
-                                                                                  fontFamily: 'GothamMedium',
-                                                                                  color: Colors.white,
-                                                                                  fontSize:
-                                                                                      MediaQuery.of(context).size.width / 25)),
-                                                                          onPressed: () {
-                                                                            AddToCartData add = new AddToCartData(
-                                                                                customerId: widget.loginResponse.id,
-                                                                                productId: widget.productId);
-                                                                            addProductToCart(add);
-                                                                          },
-                                                                          style: ElevatedButton.styleFrom(
-                                                                            primary: Color.fromARGB(255, 71, 54, 111),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                  )
-                                  : Container()
-                           
+                    icon: Icon(
+                      Icons.highlight_remove_rounded,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () => widget.showDeleteConfirmationDialog(widget.productId, false)),
+                // PopupMenuButton(
+                //   padding: EdgeInsets.zero,
+                //   itemBuilder: (BuildContext bc) => [
+                //     // PopupMenuItem(
+                //     //     child: Text(
+                //     //       "Edit",
+                //     //       style: TextStyle(
+                //     //           fontFamily: 'GothamMedium',
+                //     //           fontWeight: FontWeight.w600,
+                //     //           color: Color.fromARGB(255, 71, 54, 111)),
+                //     //     ),
+                //     //     value: "1"),
+                //     PopupMenuItem(
+                //         child: Text(
+                //           "Delete",
+                //           style: TextStyle(
+                //               fontFamily: 'GothamMedium',
+                //               fontWeight: FontWeight.w600,
+                //               color: Color.fromARGB(255, 71, 54, 111)),
+                //         ),
+                //         value: "2"),
+                //   ],
+                //   onSelected: (value) {
+                //     if (value == "2") {
+                //       widget.showDeleteConfirmationDialog(widget.productId, false);
+                //     }
+                //   },
+                //   // onSelected: (route) {
+                //   //   Navigator.pushNamed(context, route);
+                //   // },
+                // ),
+              ),
+              widget.available == true
+                  ? Positioned(
+                      right: 9,
+                      bottom: 9,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 25,
+                        // alignment: Alignment.bottomRight,
+                        child: ElevatedButton(
+                          child: Text("Add to cart",
+                              style: TextStyle(
+                                  fontFamily: 'GothamMedium',
+                                  color: Colors.white,
+                                  fontSize: MediaQuery.of(context).size.width / 25)),
+                          onPressed: () {
+                            AddToCartData add = new AddToCartData(
+                                customerId: widget.loginResponse.id, productId: widget.productId);
+                            addProductToCart(add);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Color.fromARGB(255, 71, 54, 111),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container()
             ],
           ),
         ),

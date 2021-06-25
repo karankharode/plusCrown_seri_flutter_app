@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:seri_flutter_app/address/models/AddressData.dart';
 
 String urlToAppend = "https://swaraj.pythonanywhere.com/media/";
 
@@ -99,5 +102,57 @@ class CartProduct {
       product_isExchangeable: data['product_isExchangeable'],
       product_isReturnable: data['product_isReturnable'],
     );
+  }
+}
+
+class MyOrderData {
+  final String order_id;
+  final String order_placed_by;
+  final String ordered_products;
+
+  final String total_products; // "uploads/products/803020001-001_ZBRDs5u.jpg",
+  final String order_price;
+  // "5",
+  final String date_of_ordering; // true,
+  final String date_of_delivery; // "150.00",
+  final AddressData address; // true,
+  // final String address; // true,
+  final bool order_completed; // true
+
+  MyOrderData(
+      {this.order_id,
+      this.order_placed_by,
+      this.ordered_products,
+      this.total_products,
+      this.order_price,
+      this.date_of_ordering,
+      this.date_of_delivery,
+      this.address,
+      this.order_completed});
+
+  factory MyOrderData.getProduct(dynamic data) {
+    dynamic address = data['address'].split(":");
+    print("Address data" + address.length.toString());
+    // dynamic address = jsonDecode(data["address"]);
+
+    return MyOrderData(
+        order_id: data['order_id'].toString(),
+        order_placed_by: data['order_placed_by']?.toString(),
+        ordered_products: data['ordered_products']?.toString() ?? '',
+        total_products: data['total_products']?.toString() ?? '',
+        order_price: data['order_price']?.toString() ?? '',
+        date_of_ordering: data['date_of_ordering']?.toString() ?? '',
+        date_of_delivery: data['date_of_delivery']?.toString() ?? '',
+        // address: data['address']?.toString() ?? '',
+        address: AddressData(
+          name: address[0],
+          city: address[1],
+          line1: data[2],
+          line2: address[3],
+          line3: address[4],
+          addtype: address[5],
+          addpincode: address[6].toString(),
+        ),
+        order_completed: data['order_completed']);
   }
 }
