@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^8.0.0+2
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.0+3
+  hive: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +69,7 @@ flutter:
     - assets/icons/
     - assets/stationary/
     - assets/Logo/
+    - assets/banners/
     - assets/
     - assets/animations/sharingRocket.json
     - assets/animations/
-

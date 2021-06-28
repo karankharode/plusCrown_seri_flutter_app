@@ -140,6 +140,7 @@ class _CompetitiveState extends State<Competitive> with SingleTickerProviderStat
                     controller: _tabController,
                   ),
                 ),
+                SizedBox(height: 5),
                 fetched
                     ? Expanded(
                         child: TabBarView(controller: _tabController, children: [

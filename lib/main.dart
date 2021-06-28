@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
@@ -11,7 +15,6 @@ import 'package:seri_flutter_app/update_customer/password/controller/password_co
 import 'package:sizer/sizer.dart';
 import 'cart/controller/CartController.dart';
 import 'cart/models/AddToCartData.dart';
-import 'checkOut/screens/CheckOutPage.dart';
 import 'constants.dart';
 import 'homescreen/controller/products_controller.dart';
 import 'login&signup/controller/login_controller.dart';
@@ -42,7 +45,10 @@ void main() async {
     defaultPage = LoginPage();
   }
   Widget defaultHome = defaultPage; // isAuthorized ? homePage : loginPage;
-
+  var dir = await getApplicationDocumentsDirectory();
+  Hive..init(dir.path);
+  Hive.openBox('favBox');
+  Hive.openBox('addedToCart');
   runApp(
     MultiProvider(
       providers: [

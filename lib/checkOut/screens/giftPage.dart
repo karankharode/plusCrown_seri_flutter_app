@@ -9,11 +9,15 @@ class GiftPage extends StatefulWidget {
   final CartData cartData;
   final String gift_msg;
   final String gift_from;
+  final String giftFromName;
+  final Function saveFunction;
 
   GiftPage(
       {this.count,
       @required this.loginResponse,
       this.cartData,
+      this.saveFunction,
+      this.giftFromName,
       @required this.gift_msg,
       this.gift_from});
 
@@ -23,8 +27,16 @@ class GiftPage extends StatefulWidget {
 
 class _GiftPageState extends State<GiftPage> {
   bool checkValue = false;
-  TextEditingController _fromKey = TextEditingController();
-  TextEditingController _msgKey = TextEditingController();
+  TextEditingController _fromKey;
+  TextEditingController _msgKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _fromKey = TextEditingController(text: widget.giftFromName);
+    _msgKey = TextEditingController(text: widget.gift_msg);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +92,7 @@ class _GiftPageState extends State<GiftPage> {
               height: 400,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 3),
+            SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -95,6 +107,7 @@ class _GiftPageState extends State<GiftPage> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
             Container(
               // height: 250,
               width: MediaQuery.of(context).size.width - 15,
@@ -217,7 +230,7 @@ class _GiftPageState extends State<GiftPage> {
                               height: MediaQuery.of(context).size.width / 30,
                               width: MediaQuery.of(context).size.width / 30,
                               child: Transform.scale(
-                                scale: 0.8,
+                                scale: 1,
                                 child: Checkbox(
                                   activeColor: Color.fromARGB(255, 71, 54, 111),
                                   value: checkValue,
@@ -304,6 +317,7 @@ class _GiftPageState extends State<GiftPage> {
                   fontSize: MediaQuery.of(context).size.width / 24)),
           onPressed: () {
             widget.count = widget.count - 1;
+            widget.saveFunction(_msgKey.text, _fromKey.text);
             Navigator.pop(context); // if (widget.count != 0) {
             //   Navigator.push(
             //       context,

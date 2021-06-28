@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/showFlushBar.dart';
@@ -24,6 +25,37 @@ class comboCard extends StatefulWidget {
 
 class _comboCardState extends State<comboCard> {
   bool wishlist = false;
+
+  var box;
+  List favList = [];
+
+  initHive() async {
+    box = await Hive.openBox('favBox');
+    List localFavList = box.get('favList');
+    if (localFavList != null) favList = localFavList;
+  }
+
+  addToFavList(productId) {
+    favList.add(productId.toString());
+    box.put('favList', favList.toList());
+    setState(() {
+      favList = box.get('favList');
+    });
+  }
+
+  removeFromFavList(productId) {
+    favList.remove(productId.toString());
+    box.put('favList', favList.toList());
+    favList = box.get('favList');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initHive();
+  }
+
   addToWishList(productId) async {
     setState(() {
       wishlist = true;
@@ -34,6 +66,7 @@ class _comboCardState extends State<comboCard> {
       wishlist = response;
     });
     if (response) {
+      addToFavList(productId);
       showCustomFlushBar(context, "Added Successfully", 2);
     } else {
       showCustomFlushBar(context, "Error Adding to WishList", 2);
@@ -50,6 +83,7 @@ class _comboCardState extends State<comboCard> {
       wishlist = !response;
     });
     if (response) {
+      removeFromFavList(productId);
       showCustomFlushBar(context, "Removed Product", 2);
     } else {
       showCustomFlushBar(context, "Error removing from WishList", 2);
@@ -59,6 +93,7 @@ class _comboCardState extends State<comboCard> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 1.5;
+    print(widget.productData.label);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -85,14 +120,14 @@ class _comboCardState extends State<comboCard> {
               children: [
                 Row(
                   children: [
-                    widget.productData.label != null
+                    widget.productData.label != "S"
                         ? Container(
                             decoration: BoxDecoration(
                                 color: widget.productData.label == 'P' ? Colors.green : Colors.red),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5),
                               child: Text(
-                                widget.productData.label,
+                                widget.productData.label == 'P' ? "Trending" : "New",
                                 style: TextStyle(
                                   fontFamily: 'GothamMedium',
                                   color: Colors.white,

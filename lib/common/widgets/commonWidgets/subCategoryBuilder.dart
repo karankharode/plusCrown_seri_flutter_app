@@ -20,7 +20,8 @@ FutureBuilder<dynamic> subcategoryBuilder(
                 return Column(
                   children: [
                     buildTitleandShowAllRow(
-                        context, subCattitle, loginResponse, cartData, catId, subCatId,future: future),
+                        context, subCattitle, loginResponse, cartData, catId, subCatId,
+                        future: future),
                     (subCattitle.split('-').first == "Combos")
                         ? buildHorizontalCombosList(size, proList, loginResponse, cartData)
                         : buildHorizontalProductList(size, proList, loginResponse, cartData),
@@ -51,10 +52,12 @@ Column buildCategoryProductList(
   subCatId,
   loginResponse,
   cartData,
+ { Future future}
 ) {
   return Column(
     children: [
-      buildTitleandShowAllRow(context, title, loginResponse, cartData, catId, subCatId),
+      buildTitleandShowAllRow(context, title, loginResponse, cartData, catId, subCatId,
+          future: future),
       buildHorizontalProductList(size, proList, loginResponse, cartData),
       SizedBox(height: 15),
     ],

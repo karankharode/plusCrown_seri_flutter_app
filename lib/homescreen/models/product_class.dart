@@ -77,6 +77,11 @@ class ProductData {
     });
   }
 
+  FormData getCategoryFormData(ProductData product) {
+    return FormData.fromMap({
+      'category_id': product.category_id,
+    });
+  }
   FormData getKeyword(String keyword) {
     return FormData.fromMap({
       'keyword': keyword,

@@ -35,7 +35,7 @@ class ProductController {
 
   Future<List<ProductData>> getProductByCategory(ProductData productData) async {
     const endPointUrl = "https://swaraj.pythonanywhere.com/django/api/get_products_by_category/";
-    final parameters = productData.getFormData(productData);
+    final parameters = productData.getCategoryFormData(productData);
 
     List<ProductData> productsList =
         await _httpPostRequestForGetProductsByCategory(endPointUrl, parameters);

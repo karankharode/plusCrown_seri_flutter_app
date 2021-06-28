@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/address/controller/AddressController.dart';
 import 'package:seri_flutter_app/address/models/AddressData.dart';
@@ -47,12 +48,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
   int step = 1;
   double progress = 0.44;
   Size size;
+  String couponText;
   Future futureForCart;
 
   Future futureForAddress;
   var cartController = CartController();
   bool cartDataFetched = false;
   TextEditingController couponTextEditingController = new TextEditingController();
+  final _couponKey = GlobalKey<FormState>();
   bool apply = false;
   bool checkValue = false;
   String paymentMode = "null";
@@ -222,20 +225,43 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   deleteCartItem(productid) async {
-    bool deleted = await CartController().removeFromCart(DeleteFromCartData(
-        customerId:
-
-            // 27,
-            loginResponse.id,
-        productId: productid));
-    if (deleted) {
-      getGlobalCartData();
-      showCustomFlushBar(context, "Deleted Successfully", 2);
-
-      // setState(() {});
-    } else {
-      showCustomFlushBar(context, "Error deleting from Cart", 2);
-    }
+    Alert(
+      context: context,
+      title: "Do you want to Delete an Item from Cart ?",
+      style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
+      buttons: [
+        DialogButton(
+          child: Text(
+            "No",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
+        ),
+        DialogButton(
+          child: Text(
+            "Yes",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () async {
+            bool deleted = await CartController().removeFromCart(
+                DeleteFromCartData(customerId: loginResponse.id, productId: productid));
+            if (deleted) {
+              Navigator.pop(context);
+              getGlobalCartData();
+              showCustomFlushBar(context, "Deleted Successfully", 2);
+            } else {
+              showCustomFlushBar(context, "Error deleting from Cart", 2);
+            }
+          },
+          width: 120,
+          color: Color.fromARGB(255, 71, 54, 111),
+        ),
+      ],
+    ).show();
   }
 
   @override
@@ -360,9 +386,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                           color: Colors.white,
                                           boxShadow: [
                                             BoxShadow(
-                                                blurRadius: 2.0,
+                                                blurRadius: 1.0,
                                                 color: Color(0xbb999999),
-                                                spreadRadius: 1.6,
+                                                spreadRadius: 0.5,
                                                 offset: Offset(1, 1))
                                           ],
                                           border:
@@ -644,62 +670,128 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     children: [
                       Container(
                           height: 35,
-                          width: MediaQuery.of(context).size.width - 50,
+                          width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
                           ),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Alert(
+                                context: context,
+                                title: "Apply Coupon",
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Lottie.asset('assets/animations/coupon.json'),
+                                      ),
+                                      Form(
+                                        key: _couponKey,
+                                        child: TextFormField(
+                                          controller: couponTextEditingController,
+                                          validator: (value) {
+                                            if (value.isEmpty) {
+                                              return "Enter Coupon";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                style: AlertStyle(overlayColor: Colors.black.withOpacity(0.4)),
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    width: 120,
+                                    color: Color.fromARGB(255, 71, 54, 111),
+                                  ),
+                                  DialogButton(
+                                    child: Text(
+                                      "Apply",
+                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () async {
+                                      if (_couponKey.currentState.validate()) {
+                                        setState(() {
+                                          couponText = couponTextEditingController.text;
+                                          apply = true;
+                                        });
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    width: 120,
+                                    color: Color.fromARGB(255, 71, 54, 111),
+                                  ),
+                                ],
+                              ).show();
+                            },
                             child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.ac_unit,
-                                          color: Colors.grey,
+                                    child: apply == true
+                                        ? Text(
+                                            "   '${couponText}'  Applied",
+                                            style: textStyle,
+                                          )
+                                        : Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.ac_unit,
+                                                color: Colors.grey,
+                                              ),
+                                              Text("   Apply Coupons"),
+                                            ],
+                                          ),
+                                  ),
+                                  apply == true
+                                      ? Container(
+                                          height: 35,
+                                          width: MediaQuery.of(context).size.width / 3.2,
+                                          decoration: BoxDecoration(
+                                            color: Color.fromARGB(255, 71, 54, 111),
+                                            border:
+                                                Border.all(color: Color.fromARGB(255, 71, 54, 111)),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 8.0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  apply = false;
+                                                  couponTextEditingController.clear();
+                                                });
+                                              },
+                                              child: Text("Remove",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'GothamMedium',
+                                                      color: Colors.white,
+                                                      fontSize: 16)),
+                                            ),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.only(right: 15.0),
+                                          child: Icon(Icons.arrow_forward_ios),
                                         ),
-                                        Text("   Apply Coupons"),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: Icon(Icons.arrow_forward_ios),
-                                  ),
                                 ]),
                           )),
-                      if (apply == true)
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width / 3.2,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  couponTextEditingController.text = " ";
-                                });
-                              },
-                              child: Text("Remove",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: 'GothamMedium',
-                                      color: Color.fromARGB(255, 71, 54, 111),
-                                      fontSize: 16)),
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                   SizedBox(height: 8),
@@ -863,6 +955,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     height: 10,
                     thickness: 1,
                   ),
+                  SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -871,6 +964,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           style: TextStyle(
                               fontFamily: 'GothamMedium',
                               color: Color.fromARGB(255, 71, 54, 111),
+                              fontWeight: FontWeight.w500,
                               fontSize: MediaQuery.of(context).size.width / 24)),
                       Text(
                         " \u20B9 " + cartDataFromSnapshot.cart_total_amount,
@@ -878,9 +972,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         style: TextStyle(
                             fontFamily: 'GothamMedium',
                             color: Color.fromARGB(255, 71, 54, 111),
+                            fontWeight: FontWeight.w500,
                             fontSize: MediaQuery.of(context).size.width / 24),
                       ),
                     ],
+                  ),
+                  SizedBox(height: 8),
+                  Divider(
+                    color: Color.fromARGB(255, 71, 54, 111),
+                    height: 10,
+                    thickness: 1,
                   ),
                   SizedBox(height: 10),
                 ]),
@@ -899,86 +1000,81 @@ class _CheckOutPageState extends State<CheckOutPage> {
       padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
       child: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
+          Container(
+            height: MediaQuery.of(context).size.height - 200,
+            child: ListView(
               children: [
-                Column(
-                  children: [
-                    FutureBuilder(
-                        future: futureForAddress,
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.none:
-                            case ConnectionState.active:
-                            case ConnectionState.waiting:
-                              return bookLoader();
-                              break;
-                            case ConnectionState.done:
-                              if (snapshot.hasData) {
-                                List<AddressData> addList = snapshot.data;
+                FutureBuilder(
+                    future: futureForAddress,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.active:
+                        case ConnectionState.waiting:
+                          return bookLoader();
+                          break;
+                        case ConnectionState.done:
+                          if (snapshot.hasData) {
+                            List<AddressData> addList = snapshot.data;
 
-                                if (addList.length > 0) {
-                                  return ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: addList.length,
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return SingleAddress(
-                                          name: addList[index].name,
-                                          phoneNo: "9635821475",
-                                          pinCode: addList[index].addpincode,
-                                          city: addList[index].city,
-                                          district: addList[index].city,
-                                          flatNo: addList[index].line1,
-                                          area: addList[index].line2,
-                                          landmark: addList[index].line3,
-                                          type: getType(addList[index].addtype),
-                                          add_id: addList[index].id.toString(),
-                                          deleteAddress: deleteAddress,
-                                          isDefault: addList[index].isdeafault,
-                                          addressData: addList[index],
-                                          updateAddressId: updateAddress,
-                                          selected_add_id: addId,
-                                        );
-                                      });
-                                } else {
-                                  return Container();
-                                }
-                              } else {
-                                return Container();
-                              }
-                              break;
-                            default:
-                              return bookLoader();
+                            if (addList.length > 0) {
+                              return ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: addList.length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return SingleAddress(
+                                      name: addList[index].name,
+                                      phoneNo: "9635821475",
+                                      pinCode: addList[index].addpincode,
+                                      city: addList[index].city,
+                                      district: addList[index].city,
+                                      flatNo: addList[index].line1,
+                                      area: addList[index].line2,
+                                      landmark: addList[index].line3,
+                                      type: getType(addList[index].addtype),
+                                      add_id: addList[index].id.toString(),
+                                      deleteAddress: deleteAddress,
+                                      isDefault: addList[index].isdeafault,
+                                      addressData: addList[index],
+                                      updateAddressId: updateAddress,
+                                      selected_add_id: addId,
+                                    );
+                                  });
+                            } else {
+                              return Container();
+                            }
+                          } else {
+                            return Container();
                           }
-                        }),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Address(loginResponse, cartData)));
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                              child: Icon(
-                            Icons.add,
+                          break;
+                        default:
+                          return bookLoader();
+                      }
+                    }),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Address(loginResponse, cartData)));
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                          child: Icon(
+                        Icons.add,
+                        color: Color.fromARGB(255, 71, 54, 111),
+                        size: MediaQuery.of(context).size.width / 23,
+                      )),
+                      SizedBox(width: 4),
+                      Text("Add new Address",
+                          style: TextStyle(
+                            fontFamily: 'GothamMedium',
                             color: Color.fromARGB(255, 71, 54, 111),
-                            size: MediaQuery.of(context).size.width / 23,
+                            fontSize: MediaQuery.of(context).size.width / 23,
                           )),
-                          SizedBox(width: 4),
-                          Text("Add new Address",
-                              style: TextStyle(
-                                fontFamily: 'GothamMedium',
-                                color: Color.fromARGB(255, 71, 54, 111),
-                                fontSize: MediaQuery.of(context).size.width / 23,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -1004,9 +1100,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
       Text("Select the Payment method for placing Order",
           textAlign: TextAlign.center,
           style: TextStyle(
+              fontWeight: FontWeight.w500,
               fontFamily: 'GothamMedium',
               color: Color.fromARGB(255, 71, 54, 111),
-              fontSize: MediaQuery.of(context).size.width / 30)),
+              fontSize: 17)),
       SizedBox(height: 10),
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

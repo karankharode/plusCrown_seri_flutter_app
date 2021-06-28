@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:seri_flutter_app/cart/controller/CartController.dart';
 import 'package:seri_flutter_app/cart/models/AddToCartData.dart';
@@ -225,9 +226,42 @@ class SingleProdWL extends StatefulWidget {
 
 class _SingleProdWLState extends State<SingleProdWL> {
   bool checkedValue = false;
+  bool addedToCart = false;
+  var box;
+  List addedList = [];
+
+  initHive() async {
+    box = await Hive.openBox('addedToCart');
+    List localAddedList = box.get('addedList');
+    if (localAddedList != null) addedList = localAddedList;
+    print(addedList);
+  }
+
+  addToAddedList(productId) {
+    addedList.add(productId.toString());
+    box.put('addedList', addedList.toList());
+    setState(() {
+      addedList = box.get('addedList');
+    });
+  }
+
+  // removeFromAddedList(productId) {
+  //   addedList.remove(productId.toString());
+  //   box.put('addedList', addedList.toList());
+  //   addedList = box.get('addedList');
+  //   setState(() {});
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    initHive();
+  }
+
   addProductToCart(AddToCartData addToCartData) async {
     bool response = await CartController().addToCart(addToCartData);
     if (response) {
+      addToAddedList(addToCartData.productId);
       Flushbar(
         margin: EdgeInsets.all(8),
         borderRadius: 8,
@@ -259,44 +293,47 @@ class _SingleProdWLState extends State<SingleProdWL> {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      child: GestureDetector(
-        onTap: () {
-          showLoadingDialog(context);
-          Future futureForProductDetailsPage = ProductController().getProductById(widget.productId);
-          futureForProductDetailsPage.then((value) {
-            Navigator.pop(context);
-            Navigator.push(
-                context, commonRouter(PageOne(value, widget.loginResponse, widget.cartData)));
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
-          child: Stack(
-            children: [
-              Container(
-                // height: 160,
-                width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 2.0,
-                          color: Color(0xaa999999),
-                          spreadRadius: 1.4,
-                          offset: Offset(1, 1))
-                    ],
-                    border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
+        child: Stack(
+          children: [
+            Container(
+              // height: 160,
+              width: double.infinity,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //       blurRadius: 2.0,
+                  //       color: Color(0xaa999999),
+                  //       spreadRadius: 1.4,
+                  //       offset: Offset(1, 1))
+                  // ],
+                  border: Border.all(color: Color.fromARGB(255, 71, 54, 111)),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          showLoadingDialog(context);
+                          Future futureForProductDetailsPage =
+                              ProductController().getProductById(widget.productId);
+                          futureForProductDetailsPage.then((value) {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                commonRouter(
+                                    PageOne(value, widget.loginResponse, widget.cartData)));
+                          });
+                        },
+                        child: Container(
                             alignment: Alignment.center,
                             height: 140,
                             width: MediaQuery.of(context).size.width / 3.6,
@@ -306,220 +343,244 @@ class _SingleProdWLState extends State<SingleProdWL> {
                               border: Border.all(color: Colors.black),
                             ),
                             child: coverPageimageBuilder(widget.image)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                alignment: Alignment.topLeft,
-                                width: MediaQuery.of(context).size.width / 2.2,
-                                //  height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              alignment: Alignment.topLeft,
+                              width: MediaQuery.of(context).size.width / 2.2,
+                              //  height: 30,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showLoadingDialog(context);
+                                  Future futureForProductDetailsPage =
+                                      ProductController().getProductById(widget.productId);
+                                  futureForProductDetailsPage.then((value) {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                        context,
+                                        commonRouter(
+                                            PageOne(value, widget.loginResponse, widget.cartData)));
+                                  });
+                                },
                                 child: Text(
                                   widget.prodName,
                                   style: TextStyle(
                                       fontFamily: 'GothamMedium',
-                                      fontSize: MediaQuery.of(context).size.width / 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                       color: Color.fromARGB(255, 71, 54, 111)),
                                 ),
                               ),
-                              SizedBox(height: 15),
-                              widget.available == true
-                                  ? Container(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            //    crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            //   mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              RichText(
-                                                text: TextSpan(
-                                                    text: "\u20B9 ",
-                                                    style: TextStyle(
-                                                        fontFamily: 'GothamMedium',
-                                                        fontSize:
-                                                            MediaQuery.of(context).size.width / 27,
-                                                        // fontWeight: FontWeight.bold,
-                                                        color: Color.fromARGB(255, 71, 54, 111)),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: widget.final_price,
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    27,
-                                                            color:
-                                                                Color.fromARGB(255, 71, 54, 111)),
-                                                      )
-                                                    ]),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                    text: "\u20B9 ",
-                                                    style: TextStyle(
-                                                        fontFamily: 'GothamMedium',
-                                                        fontSize:
-                                                            MediaQuery.of(context).size.width / 27,
-                                                        decoration: TextDecoration.lineThrough,
-                                                        // fontWeight: FontWeight.bold,
-                                                        color: Color.fromARGB(255, 71, 54, 111)),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: widget.actual_price,
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            decoration: TextDecoration.lineThrough,
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    27,
-                                                            color:
-                                                                Color.fromARGB(255, 71, 54, 111)),
-                                                      )
-                                                    ]),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                    text: widget.percentOff,
-                                                    style: TextStyle(
-                                                        fontFamily: 'GothamMedium',
-                                                        fontSize:
-                                                            MediaQuery.of(context).size.width / 27,
-                                                        // fontWeight: FontWeight.bold,
-                                                        color: Colors.green),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: "% Off",
-                                                        style: TextStyle(
-                                                            fontFamily: 'GothamMedium',
-                                                            fontSize:
-                                                                MediaQuery.of(context).size.width /
-                                                                    27,
-                                                            color: Colors.green),
-                                                      )
-                                                    ]),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            "Price inclusive of all taxes",
-                                            style: TextStyle(
-                                                fontFamily: 'GothamMedium',
-                                                fontSize: MediaQuery.of(context).size.width / 34,
-                                                color: Colors.red),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Column(
+                            ),
+                            SizedBox(height: 15),
+                            widget.available == true
+                                ? Container(
+                                    child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      // alignment: Alignment.bottomRight,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(height: 6),
+                                        SizedBox(height: 3),
                                         Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          //  mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          //    crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          //   mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context).size.width / 50,
+                                            RichText(
+                                              text: TextSpan(
+                                                  text: "\u20B9 ",
+                                                  style: TextStyle(
+                                                      fontFamily: 'GothamMedium',
+                                                      fontSize:
+                                                          MediaQuery.of(context).size.width / 27,
+                                                      // fontWeight: FontWeight.bold,
+                                                      color: Color.fromARGB(255, 71, 54, 111)),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: widget.final_price,
+                                                      style: TextStyle(
+                                                          fontFamily: 'GothamMedium',
+                                                          fontSize:
+                                                              MediaQuery.of(context).size.width /
+                                                                  27,
+                                                          color: Color.fromARGB(255, 71, 54, 111)),
+                                                    )
+                                                  ]),
                                             ),
-                                            currentlyUnavailableBuilder(),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  text: "\u20B9 ",
+                                                  style: TextStyle(
+                                                      fontFamily: 'GothamMedium',
+                                                      fontSize:
+                                                          MediaQuery.of(context).size.width / 27,
+                                                      decoration: TextDecoration.lineThrough,
+                                                      // fontWeight: FontWeight.bold,
+                                                      color: Color.fromARGB(255, 71, 54, 111)),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: widget.actual_price,
+                                                      style: TextStyle(
+                                                          fontFamily: 'GothamMedium',
+                                                          decoration: TextDecoration.lineThrough,
+                                                          fontSize:
+                                                              MediaQuery.of(context).size.width /
+                                                                  27,
+                                                          color: Color.fromARGB(255, 71, 54, 111)),
+                                                    )
+                                                  ]),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  text: widget.percentOff,
+                                                  style: TextStyle(
+                                                      fontFamily: 'GothamMedium',
+                                                      fontSize:
+                                                          MediaQuery.of(context).size.width / 27,
+                                                      // fontWeight: FontWeight.bold,
+                                                      color: Colors.green),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: "% Off",
+                                                      style: TextStyle(
+                                                          fontFamily: 'GothamMedium',
+                                                          fontSize:
+                                                              MediaQuery.of(context).size.width /
+                                                                  27,
+                                                          color: Colors.green),
+                                                    )
+                                                  ]),
+                                            ),
                                           ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          "Price inclusive of all taxes",
+                                          style: TextStyle(
+                                              fontFamily: 'GothamMedium',
+                                              fontSize: MediaQuery.of(context).size.width / 34,
+                                              color: Colors.red),
                                         ),
                                       ],
                                     ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    // alignment: Alignment.bottomRight,
+                                    children: [
+                                      SizedBox(height: 6),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        //  mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width / 50,
+                                          ),
+                                          currentlyUnavailableBuilder(),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.highlight_remove_rounded,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () => widget.showDeleteConfirmationDialog(widget.productId, false)),
-                // PopupMenuButton(
-                //   padding: EdgeInsets.zero,
-                //   itemBuilder: (BuildContext bc) => [
-                //     // PopupMenuItem(
-                //     //     child: Text(
-                //     //       "Edit",
-                //     //       style: TextStyle(
-                //     //           fontFamily: 'GothamMedium',
-                //     //           fontWeight: FontWeight.w600,
-                //     //           color: Color.fromARGB(255, 71, 54, 111)),
-                //     //     ),
-                //     //     value: "1"),
-                //     PopupMenuItem(
-                //         child: Text(
-                //           "Delete",
-                //           style: TextStyle(
-                //               fontFamily: 'GothamMedium',
-                //               fontWeight: FontWeight.w600,
-                //               color: Color.fromARGB(255, 71, 54, 111)),
-                //         ),
-                //         value: "2"),
-                //   ],
-                //   onSelected: (value) {
-                //     if (value == "2") {
-                //       widget.showDeleteConfirmationDialog(widget.productId, false);
-                //     }
-                //   },
-                //   // onSelected: (route) {
-                //   //   Navigator.pushNamed(context, route);
-                //   // },
-                // ),
-              ),
-              widget.available == true
-                  ? Positioned(
-                      right: 9,
-                      bottom: 9,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 25,
-                        // alignment: Alignment.bottomRight,
-                        child: ElevatedButton(
-                          child: Text("Add to cart",
-                              style: TextStyle(
-                                  fontFamily: 'GothamMedium',
-                                  color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.width / 25)),
-                          onPressed: () {
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    Icons.highlight_remove_rounded,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () => widget.showDeleteConfirmationDialog(widget.productId, false)),
+              // PopupMenuButton(
+              //   padding: EdgeInsets.zero,
+              //   itemBuilder: (BuildContext bc) => [
+              //     // PopupMenuItem(
+              //     //     child: Text(
+              //     //       "Edit",
+              //     //       style: TextStyle(
+              //     //           fontFamily: 'GothamMedium',
+              //     //           fontWeight: FontWeight.w600,
+              //     //           color: Color.fromARGB(255, 71, 54, 111)),
+              //     //     ),
+              //     //     value: "1"),
+              //     PopupMenuItem(
+              //         child: Text(
+              //           "Delete",
+              //           style: TextStyle(
+              //               fontFamily: 'GothamMedium',
+              //               fontWeight: FontWeight.w600,
+              //               color: Color.fromARGB(255, 71, 54, 111)),
+              //         ),
+              //         value: "2"),
+              //   ],
+              //   onSelected: (value) {
+              //     if (value == "2") {
+              //       widget.showDeleteConfirmationDialog(widget.productId, false);
+              //     }
+              //   },
+              //   // onSelected: (route) {
+              //   //   Navigator.pushNamed(context, route);
+              //   // },
+              // ),
+            ),
+            widget.available == true
+                ? Positioned(
+                    right: 9,
+                    bottom: 9,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 25,
+                      // alignment: Alignment.bottomRight,
+                      child: ElevatedButton(
+                        child: Text(
+                            addedToCart || addedList.contains(widget.productId.toString())
+                                ? "Added"
+                                : "Add to cart",
+                            style: TextStyle(
+                                fontFamily: 'GothamMedium',
+                                color: Colors.white,
+                                fontSize: MediaQuery.of(context).size.width / 25)),
+                        onPressed: () {
+                          if (!addedToCart || !addedList.contains(widget.productId.toString())) {
                             AddToCartData add = new AddToCartData(
                                 customerId: widget.loginResponse.id, productId: widget.productId);
                             addProductToCart(add);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 71, 54, 111),
-                          ),
+                            setState(() {
+                              addedToCart = true;
+                            });
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: addedToCart || addedList.contains(widget.productId.toString())
+                              ? Color.fromARGB(155, 71, 74, 131)
+                              : Color.fromARGB(255, 71, 54, 111),
                         ),
                       ),
-                    )
-                  : Container()
-            ],
-          ),
+                    ),
+                  )
+                : Container()
+          ],
         ),
       ),
     );

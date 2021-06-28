@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:intent/category.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
@@ -13,6 +15,12 @@ import 'package:seri_flutter_app/homescreen/controller/products_controller.dart'
 import 'package:seri_flutter_app/homescreen/data/product_data.dart';
 import 'package:seri_flutter_app/homescreen/data/title.dart';
 import 'package:seri_flutter_app/homescreen/models/product_class.dart';
+import 'package:seri_flutter_app/homescreen/others/biography_screen.dart';
+import 'package:seri_flutter_app/homescreen/others/books.dart';
+import 'package:seri_flutter_app/homescreen/others/competitve_screen.dart';
+import 'package:seri_flutter_app/homescreen/others/stationary.dart';
+import 'package:seri_flutter_app/homescreen/others/story_screen.dart';
+import 'package:seri_flutter_app/listing-pages/screens/8_std_page.dart';
 import 'package:seri_flutter_app/login&signup/models/LoginResponse.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -38,6 +46,10 @@ class _BodyState extends State<Body> {
 
   var productController;
   Future futureForProducts;
+  Future futureForStoryTellers;
+  Future futureForBiography;
+  Future futureForNotebooks;
+  Future futureForStationary;
   TextEditingController _queryController = TextEditingController();
   bool fetched = false;
 
@@ -49,6 +61,19 @@ class _BodyState extends State<Body> {
   String lastError = "";
   String lastStatus = "";
   String _currentLocaleId = "";
+
+  var box;
+  List favList = [];
+
+  initHive() async {
+    box = Hive.box('favBox');
+
+    List localFavList = box.get('favList');
+    print(localFavList);
+    print(localFavList == []);
+    if (localFavList != null) favList = localFavList;
+  }
+
   // ignore: unused_field
   List<LocaleName> _localeNames = [];
   final SpeechToText speech = SpeechToText();
@@ -153,10 +178,16 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    super.initState();
     initSpeech();
+    initHive();
     productController = Provider.of<ProductController>(context, listen: false);
+    futureForStoryTellers =
+        productController.getProductByCategory(new ProductData(category_id: 10));
+    futureForBiography = productController.getProductByCategory(new ProductData(category_id: 9));
+    futureForNotebooks = productController.getProductByCategory(new ProductData(category_id: 8));
+    futureForStationary = productController.getProductByCategory(new ProductData(category_id: 7));
     getFutureForProducts();
+    super.initState();
   }
 
   @override
@@ -240,7 +271,6 @@ class _BodyState extends State<Body> {
         fetched
             ? Expanded(
                 child: ListView(
-                physics: BouncingScrollPhysics(),
                 children: [
                   Stack(children: [
                     Padding(
@@ -255,14 +285,34 @@ class _BodyState extends State<Body> {
                           child: new Carousel(
                             boxFit: BoxFit.cover,
                             images: [
-                              AssetImage("assets/icons/9th standard.png"),
-                              AssetImage("assets/icons/banner.png"),
-                              AssetImage("assets/icons/9th standard.png"),
-                              AssetImage("assets/icons/banner.png"),
-                              AssetImage("assets/icons/9th standard.png"),
+                              getCorouselWidget(context, "assets/banners/Stationary.gif",
+                                  Stationary(loginResponse: loginResponse, cartData: cartData)),
+                              getCorouselWidget(
+                                  context,
+                                  "assets/banners/11th Standard.gif",
+                                  ListingPageForClasses(
+                                    loginResponse: loginResponse,
+                                    cartData: cartData,
+                                    above10th: true,
+                                    catId: "3",
+                                  )),
+                              getCorouselWidget(
+                                  context,
+                                  "assets/banners/12th Standard.gif",
+                                  ListingPageForClasses(
+                                    loginResponse: loginResponse,
+                                    cartData: cartData,
+                                    above10th: true,
+                                    catId: "4",
+                                  )),
+                              getCorouselWidget(context, "assets/banners/Competitive.gif",
+                                  Competitive(loginResponse, cartData)),
+                              getCorouselWidget(context, "assets/banners/NoteBook.gif",
+                                  Books(loginResponse, cartData)),
+                              // AssetImage("assets/icons/9th standard.png"),
                             ],
                             autoplay: true,
-                            autoplayDuration: Duration(seconds: 4),
+                            autoplayDuration: Duration(seconds: 6),
                             animationCurve: Curves.easeIn,
                             animationDuration: Duration(milliseconds: 800),
                             indicatorBgPadding: 2,
@@ -285,6 +335,7 @@ class _BodyState extends State<Body> {
                       //     )
                       //     ),
                     ),
+
                     // Positioned(
                     //   right: MediaQuery.of(context).size.width / 14,
                     //   bottom: MediaQuery.of(context).size.height / 20,
@@ -402,6 +453,107 @@ class _BodyState extends State<Body> {
                             return Container();
                         }
                       }),
+
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding / 1.6,
+                        vertical: kDefaultPadding / 1.9,
+                      ),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 4.27,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          child: Image.asset(
+                            "assets/banners/Deal.gif",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )),
+                  SizedBox(height: 10),
+
+                  // story teller
+
+                  buildCategoryRowsHomePage(size, 10, 'Story Tellers', futureForStoryTellers),
+                  buildCategoryRowsHomePage(size, 9, 'Biography Books', futureForBiography),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: kDefaultPadding / 1.6,
+                      vertical: kDefaultPadding / 1.9,
+                    ),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 4.27,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        child: new Carousel(
+                          boxFit: BoxFit.cover,
+                          images: [
+                            getCorouselWidget(context, "assets/banners/StoryTeller.gif",
+                                Story(loginResponse, cartData)),
+                            getCorouselWidget(
+                                context,
+                                "assets/banners/8th Standard.gif",
+                                ListingPageForClasses(
+                                  loginResponse: loginResponse,
+                                  cartData: cartData,
+                                  above10th: false,
+                                  catId: "1",
+                                )),
+                            getCorouselWidget(
+                                context,
+                                "assets/banners/9th Standard.gif",
+                                ListingPageForClasses(
+                                  loginResponse: loginResponse,
+                                  cartData: cartData,
+                                  above10th: false,
+                                  catId: "2",
+                                )),
+                            getCorouselWidget(
+                                context,
+                                "assets/banners/10th Standard.gif",
+                                ListingPageForClasses(
+                                  loginResponse: loginResponse,
+                                  cartData: cartData,
+                                  above10th: false,
+                                  catId: "5",
+                                )),
+                            getCorouselWidget(
+                                context,
+                                "assets/banners/Biography.gif",
+                                Biography(
+                                  loginResponse: loginResponse,
+                                  cartData: cartData,
+                                )),
+                            // AssetImage("assets/icons/9th standard.png"),
+                          ],
+                          autoplay: true,
+                          autoplayDuration: Duration(seconds: 6),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: Duration(milliseconds: 800),
+                          indicatorBgPadding: 2,
+                          dotSize: 2,
+                        ),
+                      ),
+                    ),
+                    //     child: ClipRRect(
+                    //       child: CarouselSlider(
+                    //         options: CarouselOptions(),
+                    //         items: imgList
+                    //             .map((item) => Container(
+                    //                   child: Image.asset(
+                    //                     item,
+                    //                     fit: BoxFit.fill,
+                    //                   ),
+                    //                 ))
+                    //             .toList(),
+                    //       ),
+                    //     )
+                    //     ),
+                  ),
+                  buildCategoryRowsHomePage(size, 8, 'NoteBooks', futureForNotebooks),
+                  buildCategoryRowsHomePage(size, 7, 'Stationary', futureForStationary),
+
                   TitleHome(
                     title: 'Shop By Brand',
                   ),
@@ -463,5 +615,53 @@ class _BodyState extends State<Body> {
             : bookLoader(),
       ],
     );
+  }
+
+  FutureBuilder<dynamic> buildCategoryRowsHomePage(
+      Size size, int category_id, String title, future) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+            case ConnectionState.active:
+              return Container();
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                List<ProductData> proList = snapshot.data;
+
+                if (proList.length > 0) {
+                  return Column(
+                    children: [
+                      proList.length > 0
+                          ? buildCategoryProductList(context, size, proList, title,
+                              category_id.toString(), "1", loginResponse, cartData,
+                              future: future)
+                          : Container(),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              } else {
+                return Container();
+              }
+              break;
+            default:
+              return Container();
+          }
+        });
+  }
+
+  GestureDetector getCorouselWidget(BuildContext context, String asset, destination) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(context, commonRouter(destination));
+        },
+        child: Image.asset(
+          asset,
+          fit: BoxFit.cover,
+        ));
   }
 }

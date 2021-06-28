@@ -103,6 +103,19 @@ class _RequestBookState extends State<RequestBook> {
                     decoration: getInputDecoration("Book Name"),
                   ),
                   gapBox,
+                  TextFormField(
+                    controller: descriptionTextEditingController,
+                    cursorColor: Color.fromARGB(255, 71, 54, 111),
+                    maxLength: 150,
+                    minLines: 1,
+                    maxLines: 6,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    validator: (val) {
+                      return val.length > 2 ? null : "  Please provide description";
+                    },
+                    decoration: getInputDecoration("Book Description"),
+                  ),
+                  SizedBox(height: 2),
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -203,18 +216,6 @@ class _RequestBookState extends State<RequestBook> {
                     ),
                   ),
                   gapBox,
-                  TextFormField(
-                    controller: descriptionTextEditingController,
-                    cursorColor: Color.fromARGB(255, 71, 54, 111),
-                    maxLength: 150,
-                    minLines: 1,
-                    maxLines: 6,
-                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                    validator: (val) {
-                      return val.length > 2 ? null : "  Please provide description";
-                    },
-                    decoration: getInputDecoration("Book Description"),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

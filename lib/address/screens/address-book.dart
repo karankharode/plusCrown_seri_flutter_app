@@ -229,18 +229,15 @@ class _SingleAddressState extends State<SingleAddress> {
                   SizedBox(
                     height: 8,
                     width: 8,
-                    child: Transform.scale(
-                      scale: 1,
-                      child: Checkbox(
-                        activeColor: Color.fromARGB(255, 71, 54, 111),
-                        value: widget.selected_add_id == widget.add_id,
-                        onChanged: (newValue) {
-                          setState(() {
-                            checkValue = newValue;
-                          });
-                          widget.updateAddressId(widget.add_id, widget.addressData);
-                        },
-                      ),
+                    child: Checkbox(
+                      activeColor: Color.fromARGB(255, 71, 54, 111),
+                      value: widget.selected_add_id == widget.add_id,
+                      onChanged: (newValue) {
+                        setState(() {
+                          checkValue = newValue;
+                        });
+                        widget.updateAddressId(widget.add_id, widget.addressData);
+                      },
                     ),
                   ),
                   SizedBox(width: 8),
@@ -307,65 +304,68 @@ class _SingleAddressState extends State<SingleAddress> {
             ]),
             Padding(
               padding: const EdgeInsets.only(left: 22.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.isDefault)
-                    Column(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Default Address",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontFamily: 'GothamMedium',
-                                  fontSize: MediaQuery.of(context).size.width / 26,
-                                ))),
-                        SizedBox(height: 6),
-                      ],
-                    ),
-                  SizedBox(height: 4),
-                  Text("Plot no. - " + widget.flatNo + ", " + widget.area + ", ",
-                      //  textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'GothamMedium',
-                          fontSize: MediaQuery.of(context).size.width / 27)),
-                  if (widget.landmark != null)
-                    Text(widget.landmark + ", ",
-                        textAlign: TextAlign.center,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.isDefault)
+                      Column(
+                        children: [
+                          Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Default Address",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontFamily: 'GothamMedium',
+                                    fontSize: MediaQuery.of(context).size.width / 26,
+                                  ))),
+                          SizedBox(height: 6),
+                        ],
+                      ),
+                    SizedBox(height: 4),
+                    Text("Plot no. - " + widget.flatNo + ", " + widget.area + ", ",
+                        //  textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 71, 54, 111),
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'GothamMedium',
+                            fontSize: MediaQuery.of(context).size.width / 27)),
+                    if (widget.landmark != null)
+                      Text(widget.landmark + ", ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'GothamMedium',
+                              color: Color.fromARGB(255, 71, 54, 111),
+                              fontWeight: FontWeight.w600,
+                              fontSize: MediaQuery.of(context).size.width / 27)),
+                    SizedBox(height: 4),
+                    Text("City - " + widget.city + ", " + "Dist - " + widget.district + ", ",
+                        //  textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: 'GothamMedium',
                             color: Color.fromARGB(255, 71, 54, 111),
                             fontWeight: FontWeight.w600,
                             fontSize: MediaQuery.of(context).size.width / 27)),
-                  SizedBox(height: 4),
-                  Text("City - " + widget.city + ", " + "Dist - " + widget.district + ", ",
-                      //  textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'GothamMedium',
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontWeight: FontWeight.w600,
-                          fontSize: MediaQuery.of(context).size.width / 27)),
-                  SizedBox(height: 4),
-                  Text("PinCode - " + widget.pinCode,
-                      //  textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'GothamMedium',
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontWeight: FontWeight.w600,
-                          fontSize: MediaQuery.of(context).size.width / 27)),
-                  SizedBox(height: 4),
-                  Text("Phone Number - " + widget.phoneNo,
-                      style: TextStyle(
-                          fontFamily: 'GothamMedium',
-                          color: Color.fromARGB(255, 71, 54, 111),
-                          fontWeight: FontWeight.w600,
-                          fontSize: MediaQuery.of(context).size.width / 27))
-                ],
+                    SizedBox(height: 4),
+                    Text("PinCode - " + widget.pinCode,
+                        //  textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'GothamMedium',
+                            color: Color.fromARGB(255, 71, 54, 111),
+                            fontWeight: FontWeight.w600,
+                            fontSize: MediaQuery.of(context).size.width / 27)),
+                    SizedBox(height: 4),
+                    Text("Phone Number - " + widget.phoneNo,
+                        style: TextStyle(
+                            fontFamily: 'GothamMedium',
+                            color: Color.fromARGB(255, 71, 54, 111),
+                            fontWeight: FontWeight.w600,
+                            fontSize: MediaQuery.of(context).size.width / 27))
+                  ],
+                ),
               ),
             )
           ],

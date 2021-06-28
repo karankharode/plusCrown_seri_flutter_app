@@ -171,7 +171,7 @@ class _MyAccountState extends State<MyAccount> {
       children: [
         Divider(
           color: Color.fromARGB(255, 71, 54, 111),
-          height: 15,
+          height: 18,
           thickness: 0.05,
         ),
         Padding(
@@ -181,12 +181,17 @@ class _MyAccountState extends State<MyAccount> {
               navigator(destination);
             },
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text("   $title",
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 71, 54, 111),
-                      fontFamily: 'GothamMedium',
-                      fontWeight: FontWeight.w600,
-                      fontSize: MediaQuery.of(context).size.width / 18)),
+              Row(
+                children: [
+                  Icon(Icons.account_balance),
+                  Text("   $title",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 71, 54, 111),
+                          fontFamily: 'GothamMedium',
+                          fontWeight: FontWeight.w600,
+                          fontSize: MediaQuery.of(context).size.width / 18)),
+                ],
+              ),
               Row(
                 children: [
                   Icon(

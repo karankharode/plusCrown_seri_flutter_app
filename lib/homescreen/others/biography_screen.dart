@@ -80,15 +80,11 @@ class _BiographyState extends State<Biography> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             search == true
-                ? SearchBar(
-                    context,
-                    size,
-                    () {
-                      setState(() {
-                        search = false;
-                      });
-                    }, loginResponse, cartData
-                  )
+                ? SearchBar(context, size, () {
+                    setState(() {
+                      search = false;
+                    });
+                  }, loginResponse, cartData)
                 : Container(),
             buildListingPoster(context, 'assets/images/biography.png', "9"),
             fetched

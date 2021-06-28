@@ -203,7 +203,7 @@ class _CartState extends State<Cart> {
                                   child: Column(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(8, 4, 8, 10),
+                                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -279,7 +279,7 @@ class _CartState extends State<Cart> {
                                           // ),
 
                                           Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor: MaterialStateProperty.all(

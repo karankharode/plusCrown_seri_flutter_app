@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:seri_flutter_app/cart/models/CartData.dart';
 import 'package:seri_flutter_app/common/services/routes/commonRouter.dart';
 import 'package:seri_flutter_app/common/widgets/commonWidgets/networkImageBuilder.dart';
@@ -30,12 +31,38 @@ class _ProductListState extends State<ProductList> {
 
   _ProductListState(this.loginResponse, this.cartData, this.myProduct);
 
+  var box;
+  List favList = [];
+
+  initHive() async {
+    box = await Hive.openBox('favBox');
+    List localFavList = box.get('favList');
+    if (localFavList != null) favList = localFavList;
+  }
+
+  addToFavList(productId) {
+    favList.add(productId.toString());
+    box.put('favList', favList.toList());
+    setState(() {
+      favList = box.get('favList');
+    });
+  }
+
+  removeFromFavList(productId) {
+    favList.remove(productId.toString());
+    box.put('favList', favList.toList());
+    favList = box.get('favList');
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    initHive();
   }
 
   bool wishlist = false;
+
   addToWishList(productId) async {
     setState(() {
       wishlist = true;
@@ -46,6 +73,7 @@ class _ProductListState extends State<ProductList> {
       wishlist = response;
     });
     if (response) {
+      addToFavList(productId);
       showCustomFlushBar(context, "Added Successfully", 2);
     } else {
       showCustomFlushBar(context, "Error Adding to WishList", 2);
@@ -62,6 +90,7 @@ class _ProductListState extends State<ProductList> {
       wishlist = !response;
     });
     if (response) {
+      removeFromFavList(productId);
       showCustomFlushBar(context, "Removed Product", 2);
     } else {
       showCustomFlushBar(context, "Error removing from WishList", 2);
@@ -122,14 +151,14 @@ class _ProductListState extends State<ProductList> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (wishlist == false)
+                      if (wishlist == false || favList.contains(myProduct.id.toString()))
                         addToWishList(myProduct.id);
                       else
                         removeFromWishList(myProduct.id);
                     },
                     child: Padding(
                       padding: EdgeInsets.only(right: kDefaultPadding / 2.7),
-                      child: wishlist == true
+                      child: wishlist == true || favList.contains(myProduct.id.toString())
                           ? Image.asset(
                               'assets/images/wishlisted.png',
                               width: MediaQuery.of(context).size.width * 0.08,

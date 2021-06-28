@@ -4,6 +4,7 @@ import 'package:seri_flutter_app/constants.dart';
 import 'package:seri_flutter_app/homescreen/models/category_class.dart';
 
 String urlToAppend = "https://swaraj.pythonanywhere.com";
+
 Container buildListingPoster(BuildContext context, String assetName, String catId) {
   CategoryData category = globalCategoryData.firstWhere((element) {
     if (element.id.toString() == catId)
